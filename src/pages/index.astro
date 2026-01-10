@@ -1,16 +1,39 @@
 ---
-
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { Image } from "astro:assets";
+import logo from "../assets/logo.svg";
+import { siteConfig } from "../config/site";
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<BaseLayout title="Inicio">
+	<main class="container">
+		<h1>Bienvenido a {siteConfig.name}</h1>
+		<p>{siteConfig.description}</p>
+
+		<!-- Optimized local SVG image rendering -->
+		<div class="logo-wrapper">
+			<Image
+				src={logo}
+				alt="Astro Starter Logo"
+				width={100}
+				height={100}
+				loading="eager"
+			/>
+		</div>
+	</main>
+</BaseLayout>
+
+<style>
+	.container {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		min-height: 100vh;
+		text-align: center;
+		font-family: system-ui, sans-serif;
+	}
+	.logo-wrapper {
+		margin-top: 2rem;
+	}
+</style>
