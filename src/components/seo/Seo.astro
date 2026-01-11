@@ -4,6 +4,7 @@ interface Props {
     description?: string;
     canonical?: string;
     ogImage?: string;
+    ignoreTitleTemplate?: boolean;
 }
 
 import { siteConfig } from "../../config/site";
@@ -13,9 +14,13 @@ const {
     description = siteConfig.description,
     canonical,
     ogImage = siteConfig.ogImage,
+    ignoreTitleTemplate = false,
 } = Astro.props;
 
-const fullTitle = title ? `${title} | ${siteConfig.name}` : siteConfig.name;
+const fullTitle =
+    title && !ignoreTitleTemplate
+        ? `${title} | ${siteConfig.name}`
+        : title || siteConfig.name;
 const canonicalURL =
     canonical ?? new URL(Astro.url.pathname, siteConfig.url).toString();
 ---
