@@ -1,9 +1,10 @@
 ---
 import { siteConfig } from "../../config/site";
+import ThemeToggle from "../ui/ThemeToggle.astro";
 ---
 
 <nav
-    class="sticky top-0 z-50 w-full border-b border-white/10 bg-black/50 backdrop-blur-md"
+    class="sticky top-0 z-50 w-full border-b border-border bg-background/50 backdrop-blur-md"
 >
     <div
         class="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8"
@@ -11,7 +12,7 @@ import { siteConfig } from "../../config/site";
         <div class="flex items-center gap-2">
             <a
                 href="/"
-                class="text-xl font-bold tracking-tight text-white transition-colors hover:text-blue-400"
+                class="text-xl font-bold tracking-tight text-foreground transition-colors hover:text-primary"
             >
                 {siteConfig.name}
             </a>
@@ -43,10 +44,11 @@ import { siteConfig } from "../../config/site";
                 href="https://github.com/angelop47/astro-starter-template"
                 target="_blank"
                 rel="noopener noreferrer"
-                class="rounded-full bg-white/10 px-4 py-2 text-sm font-semibold text-white transition-all hover:bg-white/20"
+                class="rounded-full bg-foreground/10 px-4 py-2 text-sm font-semibold text-foreground transition-all hover:bg-foreground/20"
             >
                 GitHub
             </a>
+            <ThemeToggle />
         </div>
 
         <!-- Mobile Menu Button -->
@@ -90,13 +92,16 @@ import { siteConfig } from "../../config/site";
                         d="M6 18L18 6M6 6l12 12"></path>
                 </svg>
             </button>
+            <div class="ml-2">
+                <ThemeToggle />
+            </div>
         </div>
     </div>
 
     <!-- Mobile Menu -->
     <div class="hidden md:hidden" id="mobile-menu">
         <div
-            class="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-black/90 border-b border-white/10"
+            class="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-background/90 border-b border-border"
         >
             <a
                 href="/"
