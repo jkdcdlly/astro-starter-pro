@@ -72,20 +72,20 @@ export const siteConfig = {
 
 ## Comandos
 
-| Comando             | Acción                                                  |
-| :------------------ | :------------------------------------------------------ |
-| `npm run dev`       | Inicia el servidor de desarrollo en `localhost:4321`.   |
-| `npm run build`     | Genera el sitio estático en la carpeta `dist/`.         |
-| `npm run preview`   | Previsualiza la build de producción localmente.         |
-| `npm run lint`      | Ejecuta ESLint para asegurar la calidad del código.     |
-| `npm run format`    | Formatea el código con Prettier.                        |
-| `npm run typecheck` | Verifica los tipos de TypeScript.                       |
+| Comando             | Acción                                                |
+| :------------------ | :---------------------------------------------------- |
+| `npm run dev`       | Inicia el servidor de desarrollo en `localhost:4321`. |
+| `npm run build`     | Genera el sitio estático en la carpeta `dist/`.       |
+| `npm run preview`   | Previsualiza la build de producción localmente.       |
+| `npm run lint`      | Ejecuta ESLint para asegurar la calidad del código.   |
+| `npm run format`    | Formatea el código con Prettier.                      |
+| `npm run typecheck` | Verifica los tipos de TypeScript.                     |
 
 <br>
 
 ## Contribuciones
 
-¡Las contribuciones son bienvenidas! Si tienes ideas, sugerencias o encuentras algún error, no dudes en abrir un *issue* o crear un *pull request*.
+¡Las contribuciones son bienvenidas! Si tienes ideas, sugerencias o encuentras algún error, no dudes en abrir un _issue_ o crear un _pull request_.
 
 1. Haz un Fork del proyecto.
 2. Crea una rama para tu feature (`git checkout -b feature/AmazingFeature`).
