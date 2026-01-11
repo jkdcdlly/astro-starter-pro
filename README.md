@@ -1,72 +1,99 @@
 # 🚀 Astro Starter Pro
 
-Una plantilla de Astro optimizada para **SEO**, **Performance** y **Experiencia de Desarrollo**.
+**Astro Starter Pro** es una plantilla profesional y de código abierto para construir sitios web ultra rápidos utilizando **[Astro 5](https://astro.build/) + [Tailwind CSS 4](https://tailwindcss.com/)**. Diseñada con las mejores prácticas de la industria, SEO de clase mundial y una experiencia de desarrollo premium.
 
-## 🛠️ Cómo usar esta plantilla
+<br>
 
-### 1. Configuración del Sitio
+[![License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](./LICENSE)
+[![Astro](https://img.shields.io/badge/Astro-5.0-orange?style=flat-square&logo=astro)](https://astro.build/)
+[![Tailwind](https://img.shields.io/badge/Tailwind-4.0-38B2AC?style=flat-square&logo=tailwind-css)](https://tailwindcss.com/)
+[![Maintainer](https://img.shields.io/badge/maintainer-angelop-purple?style=flat-square)](https://github.com/angelop47)
+
+<br>
+
+<details open>
+<summary>Tabla de Contenidos</summary>
+
+- [Características](#características)
+- [Inicio Rápido](#inicio-rápido)
+- [Configuración](#configuración)
+- [Comandos](#comandos)
+- [Contribuciones](#contribuciones)
+- [Licencia](#licencia)
+
+</details>
+
+<br>
+
+## Características
+
+- ✅ **Dark & Light Mode**: Implementación limpia sin parpadeos (FOUC).
+- ✅ **SEO Optimizado**: Meta tags automáticos, Open Graph, Twitter Cards y Sitemap nativo.
+- ✅ **Performance Extremo**: Optimización automática de imágenes y pre-fetching de rutas.
+- ✅ **Clean Architecture**: Código organizado y fácil de escalar.
+- ✅ **Componentes Reutilizables**: Navbar, Footer y Layouts modernos con Tailwind v4.
+
+<br>
+
+## Inicio Rápido
+
+Para comenzar con este proyecto localmente, clona el repositorio e instala las dependencias:
+
+```bash
+git clone https://github.com/angelop47/astro-starter-template.git
+cd astro-starter-template
+npm install
+npm run dev
+```
+
+<br>
+
+## Configuración
 
 Toda la información global del sitio se gestiona en `src/config/site.ts`. Actualiza este archivo con tus datos:
 
 ```typescript
 // src/config/site.ts
 export const siteConfig = {
-  name: "Tu Nombre de Sitio",
+  name: "Astro Starter Pro",
   description: "Tu descripción para SEO",
-  url: "https://tudominio.com",
-  locale: "es_UY",
-  author: "Tu Nombre",
-  twitter: "@tu_usuario",
-  ogImage: "/og-image.jpg", // Imagen por defecto para redes sociales
+  url: "https://devgelo.com",
+  author: "Angelo Pescetto",
+  // ...
 };
 ```
 
-### 2. Estructura de Páginas
+<br>
 
-Para crear una nueva página, simplemente crea un archivo `.astro` en `src/pages/`. Usa el `BaseLayout` para mantener la consistencia y el SEO:
-
-```astro
----
-import BaseLayout from '../layouts/BaseLayout.astro';
----
-
-<BaseLayout title="Título de la Página" description="Descripción opcional">
-    <main>
-        <h1>Mi nueva página</h1>
-    </main>
-</BaseLayout>
-```
-
-### 3. SEO Avanzado
-
-El componente `Seo.astro` se encarga de generar automáticamente:
-
-- Meta tags de título y descripción.
-- Open Graph (para Facebook/WhatsApp).
-- Twitter Cards.
-- URLs canónicas.
-- Robots meta tags y sitemap.
-
-## 🧞 Comandos
+## Comandos
 
 | Comando             | Acción                                                  |
 | :------------------ | :------------------------------------------------------ |
 | `npm run dev`       | Inicia el servidor de desarrollo en `localhost:4321`.   |
 | `npm run build`     | Genera el sitio estático en la carpeta `dist/`.         |
 | `npm run preview`   | Previsualiza la build de producción localmente.         |
-| `npm run check`     | Ejecuta comprobaciones de Astro y accesibilidad.        |
-| `npm run typecheck` | Verifica los tipos de TypeScript sin emitir archivos.   |
-| `npm run test`      | Ejecuta la suite de tests con Vitest.                   |
-| `npm run format`    | Formatea el código usando Prettier.                     |
-| `npm run lint`      | Busca errores de estilo y mejores prácticas con ESLint. |
+| `npm run lint`      | Ejecuta ESLint para asegurar la calidad del código.     |
+| `npm run format`    | Formatea el código con Prettier.                        |
+| `npm run typecheck` | Verifica los tipos de TypeScript.                       |
 
-## 📈 Optimizaciones Incluidas
+<br>
 
-- **Prefetching**: Las páginas se cargan automáticamente al entrar en el viewport para una navegación instantánea.
-- **Sitemap**: Generación automática de `sitemap-index.xml`.
-- **Robots.txt**: Configurado para una indexación óptima.
-- **Image Optimization**: Uso de `astro:assets` para servir imágenes en formatos modernos.
+## Contribuciones
+
+¡Las contribuciones son bienvenidas! Si tienes ideas, sugerencias o encuentras algún error, no dudes en abrir un *issue* o crear un *pull request*.
+
+1. Haz un Fork del proyecto.
+2. Crea una rama para tu feature (`git checkout -b feature/AmazingFeature`).
+3. Haz commit de tus cambios (`git commit -m 'feat: Add some AmazingFeature'`).
+4. Haz Push a la rama (`git push origin feature/AmazingFeature`).
+5. Abre un Pull Request.
+
+<br>
+
+## Licencia
+
+Este proyecto está bajo la licencia **MIT**. Consulta el archivo [LICENSE](./LICENSE) para más detalles.
 
 ---
 
-Creado con ❤️ para desarrolladores que buscan rapidez y calidad.
+Diseñado con ❤️ por [Angelo Pescetto](https://github.com/angelop47)
