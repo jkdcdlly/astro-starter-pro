@@ -1,9 +1,9 @@
 export const siteConfig = {
   name: "Astro Starter Pro",
   description: "Starter template optimizado para SEO y performance",
-  url: "https://example.com",
+  url: "https://astro-starter.devgelo.com",
   locale: "es_UY",
-  author: "example",
-  twitter: "@example",
+  author: "Devgelo",
+  twitter: "@Devgelo",
   ogImage: "/og-image.jpg",
 };
