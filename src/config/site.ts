@@ -1,3 +1,5 @@
+import ogImage from "../assets/og-image.png";
+
 export const siteConfig = {
   name: "Astro Starter Pro",
   description: "Starter template optimizado para SEO y performance",
@@ -5,5 +7,5 @@ export const siteConfig = {
   locale: "es_UY",
   author: "Devgelo",
   twitter: "@Devgelo",
-  ogImage: "/og-image.jpg",
+  ogImage: ogImage,
 };
