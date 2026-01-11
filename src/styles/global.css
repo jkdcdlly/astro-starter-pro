@@ -1,1 +1,39 @@
 @import "tailwindcss";
+
+@theme {
+    --color-background: var(--background);
+    --color-foreground: var(--foreground);
+    --color-primary: var(--primary);
+    --color-border: var(--border);
+    --color-muted: var(--muted);
+    --color-muted-foreground: var(--muted-foreground);
+    --color-card: var(--card);
+}
+
+:root {
+    --background: #ffffff;
+    --foreground: #0a0a0a;
+    --primary: #3b82f6;
+    --border: #e5e7eb;
+    --muted: #f4f4f5;
+    --muted-foreground: #71717a;
+    --card: #ffffff;
+}
+
+:root[data-theme="dark"] {
+    --background: #030303;
+    --foreground: #e5e7eb;
+    --primary: #60a5fa;
+    --border: #262626;
+    --muted: #171717;
+    --muted-foreground: #a1a1aa;
+    --card: #0a0a0a;
+}
+
+/* Base styles using variables */
+@layer base {
+    body {
+        background-color: var(--background);
+        color: var(--foreground);
+    }
+}
