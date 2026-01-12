@@ -1,0 +1,59 @@
+---
+import type { Service } from "../../types/types";
+
+interface Props {
+    title?: string;
+    description?: string;
+    services: Service[];
+}
+
+const {
+    title = "Nuestros Servicios",
+    description,
+    services = [],
+} = Astro.props;
+---
+
+<section class="max-w-7xl mx-auto px-4 py-24 md:py-32 text-center">
+    {
+        title && (
+            <h1 class="text-4xl md:text-6xl font-bold text-foreground mb-6">
+                {title}
+            </h1>
+        )
+    }
+    {
+        description && (
+            <p class="text-xl text-muted-foreground mb-16 max-w-2xl mx-auto">
+                {description}
+            </p>
+        )
+    }
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        {
+            services.map((s) => (
+                <div class="group relative p-8 rounded-3xl bg-card border border-border hover:bg-muted/50 transition-all overflow-hidden shadow-sm hover:shadow-md">
+                    <div class="absolute -right-4 -top-4 text-8xl opacity-10 transition-transform group-hover:scale-110 group-hover:rotate-12 select-none">
+                        {s.icon}
+                    </div>
+                    <div class="text-left relative z-10">
+                        <div class="text-4xl mb-6">{s.icon}</div>
+                        <h3 class="text-2xl font-bold text-foreground mb-4">
+                            {s.title}
+                        </h3>
+                        <p class="text-muted-foreground leading-relaxed">
+                            {s.description}
+                        </p>
+                        <button class="mt-8 text-primary font-semibold flex items-center gap-2 group/btn hover:underline transition-all">
+                            Saber más
+                            <span class="transition-transform group-hover/btn:translate-x-1">
+                                →
+                            </span>
+                        </button>
+                    </div>
+                </div>
+            ))
+        }
+    </div>
+</section>
