@@ -2,6 +2,7 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { siteConfig } from "../config/site";
 import Hero from "../components/widgets/Hero.astro";
+import Features from "../components/widgets/Features.astro";
 const metadata = {
 	title: `${siteConfig.name} — El siguiente paso para tu proyecto`,
 	description:
@@ -27,81 +28,30 @@ const metadata = {
 			},
 		]}
 	>
-		<div class="mt-24 grid grid-cols-1 md:grid-cols-3 gap-8">
-			<div
-				class="p-8 rounded-2xl bg-card border border-border hover:border-primary/50 transition-all shadow-sm"
-			>
-				<div
-					class="w-12 h-12 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-400 mb-6"
-				>
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						class="w-6 h-6"
-						viewBox="0 0 24 24"
-						fill="none"
-						stroke="currentColor"
-						stroke-width="2"
-						><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"
-						></path></svg
-					>
-				</div>
-				<h3 class="text-xl font-bold text-foreground mb-3">
-					SEO de Elite
-				</h3>
-				<p class="text-muted-foreground text-sm">
-					Meta tags automáticos, Open Graph, Twitter Cards y Sitemap
-					indexado perfectamente.
-				</p>
-			</div>
-			<div
-				class="p-8 rounded-2xl bg-card border border-border hover:border-primary/50 transition-all shadow-sm"
-			>
-				<div
-					class="w-12 h-12 rounded-lg bg-purple-500/10 flex items-center justify-center text-purple-400 mb-6"
-				>
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						class="w-6 h-6"
-						viewBox="0 0 24 24"
-						fill="none"
-						stroke="currentColor"
-						stroke-width="2"
-						><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path></svg
-					>
-				</div>
-				<h3 class="text-xl font-bold text-foreground mb-3">
-					Performance Extremo
-				</h3>
-				<p class="text-muted-foreground text-sm">
-					Prefetching de páginas, imágenes optimizadas y 0kb de JS
-					innecesario por defecto.
-				</p>
-			</div>
-			<div
-				class="p-8 rounded-2xl bg-card border border-border hover:border-primary/50 transition-all shadow-sm"
-			>
-				<div
-					class="w-12 h-12 rounded-lg bg-pink-500/10 flex items-center justify-center text-pink-400 mb-6"
-				>
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						class="w-6 h-6"
-						viewBox="0 0 24 24"
-						fill="none"
-						stroke="currentColor"
-						stroke-width="2"
-						><path d="M12 3v19M5 8l7-7 7 7M5 16l7 7 7-7"
-						></path></svg
-					>
-				</div>
-				<h3 class="text-xl font-bold text-foreground mb-3">
-					Tailwind v4
-				</h3>
-				<p class="text-muted-foreground text-sm">
-					Estilos modernos y rápidos con la última versión de Tailwind
-					CSS vía Vite plugin.
-				</p>
-			</div>
-		</div>
+		<Features
+			features={[
+				{
+					title: "SEO de Elite",
+					description:
+						"Meta tags automáticos, Open Graph, Twitter Cards y Sitemap indexado perfectamente.",
+					icon: `<svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>`,
+					iconClass: "bg-blue-500/10 text-blue-400",
+				},
+				{
+					title: "Performance Extremo",
+					description:
+						"Prefetching de páginas, imágenes optimizadas y 0kb de JS innecesario por defecto.",
+					icon: `<svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path></svg>`,
+					iconClass: "bg-purple-500/10 text-purple-400",
+				},
+				{
+					title: "Tailwind v4",
+					description:
+						"Estilos modernos y rápidos con la última versión de Tailwind CSS vía Vite plugin.",
+					icon: `<svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v19M5 8l7-7 7 7M5 16l7 7 7-7"></path></svg>`,
+					iconClass: "bg-pink-500/10 text-pink-400",
+				},
+			]}
+		/>
 	</Hero>
 </BaseLayout>
