@@ -1,0 +1,49 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+export async function getStaticPaths() {
+    const posts = import.meta.glob("../../data/posts/*.md", { eager: true });
+
+    return Object.values(posts).map((post: any) => {
+        const slug = post.file.split("/").pop().split(".").shift();
+        return {
+            params: { slug },
+            props: { post },
+        };
+    });
+}
+
+const { post } = Astro.props;
+const { Content } = post;
+const { title, description, pubDate, author } = post.frontmatter;
+
+const metadata = {
+    title: title,
+    description: description,
+};
+---
+
+<BaseLayout metadata={metadata}>
+    <section class="relative px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
+        <div class="relative mx-auto max-w-3xl">
+            <div class="mb-10 text-center">
+                <p
+                    class="text-sm font-semibold tracking-wide text-primary uppercase"
+                >
+                    {pubDate} • {author}
+                </p>
+                <h1
+                    class="font-heading mt-2 text-3xl font-bold leading-tight tracking-tighter text-foreground sm:text-4xl md:text-5xl"
+                >
+                    {title}
+                </h1>
+            </div>
+
+            <div
+                class="prose prose-lg dark:prose-invert mx-auto prose-a:text-primary hover:prose-a:underline"
+            >
+                <Content />
+            </div>
+        </div>
+    </section>
+</BaseLayout>
