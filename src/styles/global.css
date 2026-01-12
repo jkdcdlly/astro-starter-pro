@@ -13,17 +13,17 @@
 :root {
   --background: #ffffff;
   --foreground: #0a0a0a;
-  --primary: #3b82f6;
+  --primary: #0062ff;
   --border: #e5e7eb;
   --muted: #f4f4f5;
-  --muted-foreground: #71717a;
+  --muted-foreground: #52525b;
   --card: #ffffff;
 }
 
 :root[data-theme="dark"] {
   --background: #030303;
   --foreground: #e5e7eb;
-  --primary: #60a5fa;
+  --primary: #8bbcff;
   --border: #262626;
   --muted: #171717;
   --muted-foreground: #a1a1aa;
@@ -35,5 +35,10 @@
   body {
     background-color: var(--background);
     color: var(--foreground);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
   }
 }
