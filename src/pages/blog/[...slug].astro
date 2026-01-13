@@ -1,38 +1,25 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 
-import type { MarkdownInstance } from "astro";
-
-interface Frontmatter {
-    title: string;
-    description: string;
-    pubDate: string;
-    author: string;
-    image: string;
-}
+import { getCollection, render } from "astro:content";
 
 export async function getStaticPaths() {
-    const blog = import.meta.glob<MarkdownInstance<Frontmatter>>(
-        "../../data/blog/*.md",
-        { eager: true },
-    );
-
-    return Object.values(blog).map((post) => {
-        const slug = post.file.split("/").pop()?.split(".").shift();
-        return {
-            params: { slug },
-            props: { post },
-        };
-    });
-}
-
-interface Props {
-    post: MarkdownInstance<Frontmatter>;
+    const blog = await getCollection("blog");
+    return blog.map((post) => ({
+        params: { slug: post.id },
+        props: { post },
+    }));
 }
 
 const { post } = Astro.props;
-const { Content } = post;
-const { title, description, pubDate, author, image } = post.frontmatter;
+const { Content } = await render(post);
+const { title, description, pubDate, author, image } = post.data;
+
+const formattedDate = pubDate.toLocaleDateString("es-ES", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+});
 
 const metadata = {
     title: title,
@@ -48,7 +35,7 @@ const metadata = {
                 <p
                     class="text-sm font-semibold tracking-wide text-primary uppercase"
                 >
-                    {pubDate} • {author}
+                    {formattedDate} • {author}
                 </p>
                 <h1
                     class="font-heading mt-2 text-3xl font-bold leading-tight tracking-tighter text-foreground sm:text-4xl md:text-5xl"
@@ -70,7 +57,7 @@ const metadata = {
             }
 
             <div
-                class="prose prose-lg dark:prose-invert mx-auto prose-a:text-primary hover:prose-a:underline"
+                class="prose prose-lg dark:prose-invert mx-auto prose-headings:text-foreground prose-a:text-primary hover:prose-a:underline prose-p:text-muted-foreground prose-strong:text-foreground prose-li:text-muted-foreground prose-code:text-primary"
             >
                 <Content />
             </div>
