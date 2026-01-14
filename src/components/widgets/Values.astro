@@ -1,5 +1,6 @@
 ---
 import type { Value } from "../../types/types";
+import Card from "../ui/Card.astro";
 
 interface Props {
     items: Value[];
@@ -19,7 +20,7 @@ const gridCols = {
 <div class={`grid ${gridCols[columns]} gap-8 mt-16 text-left`}>
     {
         items.map((item) => (
-            <div class="bg-card p-8 rounded-2xl border border-border shadow-sm hover:border-primary/50 transition-all">
+            <Card>
                 {item.icon && (
                     <div class="mb-4 text-primary text-4xl">
                         <Fragment set:html={item.icon} />
@@ -29,7 +30,7 @@ const gridCols = {
                     {item.title}
                 </h3>
                 <p class="text-sm text-muted-foreground">{item.description}</p>
-            </div>
+            </Card>
         ))
     }
 </div>
