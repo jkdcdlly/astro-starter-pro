@@ -101,4 +101,4 @@ Este proyecto está bajo la licencia **MIT**. Consulta el archivo [LICENSE](./LI
 
 ---
 
-Diseñado con ❤️ por [Angelo Pescetto](https://github.com/angelop47)
+Diseñado por [Angelo Pescetto](https://github.com/angelop47)
