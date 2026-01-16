@@ -1,0 +1,49 @@
+---
+interface Props {
+    title?: string;
+    subtitle?: string;
+    tagline?: string;
+    classes?: {
+        container?: string;
+        title?: string;
+        subtitle?: string;
+    };
+}
+
+const {
+    title = await Astro.slots.render("title"),
+    subtitle = await Astro.slots.render("subtitle"),
+    tagline,
+    classes = {},
+} = Astro.props;
+
+const {
+    container = "max-w-xl",
+    title: titleClass = "text-3xl md:text-4xl",
+    subtitle: subtitleClass = "text-xl",
+} = classes;
+---
+
+{
+    (title || subtitle || tagline) && (
+        <div class={`mb-4 ${container}`}>
+            {tagline && (
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-semibold mb-6">
+                    {tagline}
+                </div>
+            )}
+            {title && (
+                <h2
+                    class={`font-bold tracking-tight text-foreground mb-4 ${titleClass}`}
+                    set:html={title}
+                />
+            )}
+            {subtitle && (
+                <p
+                    class={`text-muted-foreground ${subtitleClass}`}
+                    set:html={subtitle}
+                />
+            )}
+        </div>
+    )
+}
