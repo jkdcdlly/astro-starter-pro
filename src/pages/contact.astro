@@ -1,19 +1,33 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import ContactWidget from "../components/widgets/Contact.astro";
 import Features from "../components/widgets/Features.astro";
+import Content from "../components/widgets/Content.astro";
+import Form from "../components/ui/Form.astro";
 
 const metadata = {
     title: "Contacto",
     description:
         "Ponte en contacto con nosotros para discutir tu próximo proyecto.",
 };
+
+const visionText = [
+    "Ponte en contacto con nosotros para discutir tu próximo proyecto.",
+];
 ---
 
 <BaseLayout {metadata}>
-    <ContactWidget />
-    <Features
+    <Content
         tagline="Contacto"
+        title="Contacto"
+        description={visionText}
+        class="pb-8 md:pb-12"
+    />
+    <div
+        class="mx-auto max-w-xl bg-card border border-border rounded-3xl p-8 shadow-sm mb-24 md:mb-32"
+    >
+        <Form />
+    </div>
+    <Features
         title="Estamos aquí para ayudarte"
         subtitle="Elige el canal de comunicación que prefieras. Respondemos en menos de 24 horas."
         class="pt-0 md:pt-0"
