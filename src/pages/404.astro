@@ -11,12 +11,35 @@ const metadata = {
 
 <BaseLayout {metadata}>
     <section
-        class="flex h-[calc(100vh-200px)] flex-col items-center justify-center px-4 text-center"
+        class="flex min-h-[calc(100vh-200px)] flex-col items-center justify-center px-4 py-16 text-center relative overflow-hidden"
     >
-        <h1 class="font-heading mb-4 text-6xl font-bold text-primary">404</h1>
-        <p class="mb-8 text-2xl font-medium text-foreground">
-            Ups! No encontramos esa página.
-        </p>
-        <Button href="/" variant="primary" size="lg"> Volver al Inicio </Button>
+        <!-- Background decoration -->
+        <div
+            class="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_center,rgba(59,130,246,0.15)_0,transparent_70%)] opacity-40"
+        >
+        </div>
+
+        <div class="space-y-6 max-w-2xl mx-auto relative z-10 mt-15">
+            <h1
+                class="text-9xl font-extrabold tracking-tighter bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent"
+            >
+                404
+            </h1>
+            <h2 class="text-3xl md:text-4xl font-bold text-foreground">
+                Página no encontrada
+            </h2>
+            <p class="text-lg md:text-xl text-muted-foreground leading-relaxed">
+                Lo sentimos, no podemos encontrar la página que buscas. Puede
+                que haya sido movida o eliminada.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center pt-8">
+                <Button href="/" variant="primary" size="lg">
+                    Volver al Inicio
+                </Button>
+                <Button href="/contact" variant="secondary" size="lg">
+                    Contactar Soporte
+                </Button>
+            </div>
+        </div>
     </section>
 </BaseLayout>
