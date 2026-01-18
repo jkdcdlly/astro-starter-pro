@@ -31,3 +31,11 @@ export interface NavLink {
   text: string;
   href: string;
 }
+
+export interface Widget {
+  id?: string;
+  isDark?: boolean;
+  bg?: string;
+  containerClass?: string;
+  classes?: Record<string, string>;
+}
