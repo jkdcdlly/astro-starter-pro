@@ -1,0 +1,118 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Hero from "../components/widgets/Hero.astro";
+import Features from "../components/widgets/Features.astro";
+import Content from "../components/widgets/Content.astro";
+import ServiceList from "../components/widgets/ServiceList.astro";
+import Values from "../components/widgets/Values.astro";
+import aboutImage from "../assets/images/about-office.png";
+
+const heroProps = {
+    title: "Lorem Ipsum Dolor Sit Amet",
+    tagline: "Consectetur Adipiscing",
+    description:
+        "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+    actions: [
+        { text: "Get Started", href: "#", variant: "primary" },
+        { text: "Learn More", href: "#", variant: "secondary" },
+    ],
+};
+
+const featuresProps = {
+    title: "Quis Nostrud Exercitation",
+    subtitle: "Ullamco laboris nisi ut aliquip ex ea commodo",
+    tagline: "Duis aute irure",
+    features: [
+        {
+            title: "Lorem Ipsum",
+            description: "Dolor sit amet, consectetur adipiscing elit.",
+            icon: "lucide:box",
+        },
+        {
+            title: "Sed Do Eiusmod",
+            description: "Tempor incididunt ut labore et dolore magna aliqua.",
+            icon: "lucide:check",
+        },
+        {
+            title: "Ut Enim Ad",
+            description: "Minim veniam, quis nostrud exercitation ullamco.",
+            icon: "lucide:eye",
+        },
+    ],
+};
+
+const contentProps = {
+    title: "Duis Aute Irure Dolor",
+    description: [
+        "In reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+        "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.",
+    ],
+    tagline: "Excepteur Sint",
+    image: aboutImage,
+    imageAlt: "Placeholder image",
+};
+
+const serviceListProps = {
+    services: [
+        {
+            title: "Voluptatem Accusantium",
+            description: "Doloremque laudantium, totam rem aperiam.",
+            icon: "🚀",
+        },
+        {
+            title: "Ipsa Quae Ab",
+            description: "Illo inventore veritatis et quasi architecto.",
+            icon: "💡",
+        },
+        {
+            title: "Beatae Vitae Dicta",
+            description: "Sunt explicabo. Nemo enim ipsam voluptatem.",
+            icon: "🛠️",
+        },
+    ],
+};
+
+const valuesProps = {
+    items: [
+        {
+            title: "Corporate",
+            description:
+                "Curabitur dignissim, felis non sollicitudin molestie, urna mauris pellentesque velit, ut eleifend.",
+        },
+        {
+            title: "Creative",
+            description:
+                "Aenean condimentum finibus mauris, a fermentum justo pan eget. Sed ultricies, neque quis.",
+        },
+        {
+            title: "Startups",
+            description:
+                "Donec sed orci tincidunt, aliquam nisl a, condimentum nunc. Nulla varius ex nec ante feugiat.",
+        },
+        {
+            title: "SaaS",
+            description:
+                "Phasellus tristique, elit dapibus cursus facilisis, lorem augue fringilla nunc, vitae fermentum.",
+        },
+        {
+            title: "Education",
+            description:
+                "In hac habitasse platea dictumst. Vivamus adipiscing fermentum quam volutpat aliquam. Integer et.",
+        },
+        {
+            title: "Real Estate",
+            description:
+                "Fusce at massa nec sapien auctor gravida in in tellus. Vivamus a tristique metus, et molestie.",
+        },
+    ],
+    columns: 3 as const,
+};
+---
+
+<BaseLayout>
+    <Hero {...heroProps} />
+    <Features {...featuresProps} />
+    <Content {...contentProps} />
+    <ServiceList {...serviceListProps} />
+    <Values {...valuesProps} />
+</BaseLayout>
