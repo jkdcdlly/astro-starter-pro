@@ -7,6 +7,7 @@ interface Props {
         container?: string;
         title?: string;
         subtitle?: string;
+        tagline?: string;
     };
 }
 
@@ -21,6 +22,7 @@ const {
     container = "max-w-xl",
     title: titleClass = "text-3xl md:text-4xl",
     subtitle: subtitleClass = "text-xl",
+    tagline: taglineClass = "",
 } = classes;
 ---
 
@@ -28,7 +30,9 @@ const {
     (title || subtitle || tagline) && (
         <div class={`mb-4 ${container}`}>
             {tagline && (
-                <div class="inline-flex items-center gap-2 px-3 py-1 text-primary text-lg font-semibold">
+                <div
+                    class={`inline-flex items-center gap-2 px-3 py-1 text-primary text-lg font-semibold ${taglineClass}`}
+                >
                     {tagline}
                 </div>
             )}
