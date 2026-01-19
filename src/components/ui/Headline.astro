@@ -9,6 +9,7 @@ interface Props {
         subtitle?: string;
         tagline?: string;
     };
+    titleAs?: string;
 }
 
 const {
@@ -16,6 +17,7 @@ const {
     subtitle = await Astro.slots.render("subtitle"),
     tagline,
     classes = {},
+    titleAs = "h2",
 } = Astro.props;
 
 const {
@@ -24,6 +26,8 @@ const {
     subtitle: subtitleClass = "text-xl",
     tagline: taglineClass = "",
 } = classes;
+
+const Title = titleAs as any;
 ---
 
 {
@@ -37,7 +41,7 @@ const {
                 </div>
             )}
             {title && (
-                <h2
+                <Title
                     class={`font-bold tracking-tight text-foreground mb-4 ${titleClass}`}
                     set:html={title}
                 />
