@@ -1,16 +1,5 @@
 ---
-interface Props {
-    title?: string;
-    subtitle?: string;
-    tagline?: string;
-    classes?: {
-        container?: string;
-        title?: string;
-        subtitle?: string;
-        tagline?: string;
-    };
-    titleAs?: string;
-}
+import type { HeadlineProps } from "../../types/types";
 
 const {
     title = await Astro.slots.render("title"),
@@ -18,7 +7,7 @@ const {
     tagline,
     classes = {},
     titleAs = "h2",
-} = Astro.props;
+} = Astro.props as HeadlineProps;
 
 const {
     container = "max-w-xl",

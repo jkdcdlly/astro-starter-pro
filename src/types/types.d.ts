@@ -38,6 +38,7 @@ export interface HeadlineProps extends Widget {
   title?: string;
   subtitle?: string;
   tagline?: string;
+  titleAs?: string;
 }
 
 export interface HeroProps extends HeadlineProps {
