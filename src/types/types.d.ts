@@ -5,7 +5,6 @@ export interface CallToAction {
   icon?: string;
 }
 
-
 export interface Feature {
   title: string;
   description: string;
@@ -60,6 +59,7 @@ export interface ContentProps extends HeadlineProps {
   isReversed?: boolean;
   isAfterContent?: boolean;
   description?: string[]; // Adding back description as string array for compatibility
+  actions?: string | CallToAction[];
 }
 
 export interface ServiceListProps extends HeadlineProps {
