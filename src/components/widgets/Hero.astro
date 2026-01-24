@@ -15,7 +15,7 @@ const {
     bg = await Astro.slots.render("bg"),
 } = Astro.props as HeroProps;
 
-const { container: containerClassProp = "", ...otherClasses } = classes;
+const { container: containerClassProp = "" } = classes;
 ---
 
 <WidgetWrapper

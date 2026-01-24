@@ -3,7 +3,14 @@ import { siteConfig } from "../../config/site";
 
 interface Props {
     type: "WebSite" | "BlogPosting" | "BreadcrumbList";
-    data: Record<string, any>;
+    data: {
+        title?: string;
+        description?: string;
+        image?: string;
+        pubDate?: Date;
+        author?: string;
+        url?: string;
+    };
 }
 
 const { type, data } = Astro.props;
