@@ -3,6 +3,7 @@ import WidgetWrapper from "./WidgetWrapper.astro";
 import type { HeroProps } from "../../types/types";
 import Headline from "../ui/Headline.astro";
 import Button from "../ui/Button.astro";
+import { Icon } from "astro-icon/components";
 
 const {
     title = await Astro.slots.render("title"),
@@ -65,6 +66,12 @@ const { container: containerClassProp = "" } = classes;
                             size="lg"
                             class="w-full sm:w-auto"
                         >
+                            {action.icon && (
+                                <Icon
+                                    name={action.icon}
+                                    class="w-5 h-5 mr-2 -ml-1"
+                                />
+                            )}
                             {action.text}
                         </Button>
                     ))
