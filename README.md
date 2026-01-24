@@ -27,7 +27,7 @@
 
 ## Demo
 
-📌 [https://astro-starter.devgelo.com/](https://astro-starter.devgelo.com/)
+📌 [https://astrostarterpro.com/](https://astrostarterpro.com/)
 
 ## Características
 
@@ -44,8 +44,8 @@
 Para comenzar con este proyecto localmente, clona el repositorio e instala las dependencias:
 
 ```bash
-git clone https://github.com/devgelo-labs/astro-starter-template.git
-cd astro-starter-template
+git clone https://github.com/devgelo-labs/astro-starter-pro.git
+cd astro-starter-pro
 npm install
 npm run dev
 ```

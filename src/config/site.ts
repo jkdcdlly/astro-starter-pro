@@ -3,7 +3,7 @@ import ogImage from "../assets/og-image.png";
 export const siteConfig = {
   name: "Astro Starter Pro",
   description: "Starter template optimizado para SEO y performance",
-  url: "https://astro-starter.devgelo.com",
+  url: "https://astrostarterpro.com",
   lang: "es",
   locale: "es_UY",
   author: "Devgelo",
@@ -11,7 +11,7 @@ export const siteConfig = {
   ogImage: ogImage,
   socialLinks: {
     twitter: "https://twitter.com",
-    github: "https://github.com/devgelo-labs/astro-starter-template",
+    github: "https://github.com/devgelo-labs/astro-starter-pro",
     discord: "https://discord.com",
   },
   navLinks: [
