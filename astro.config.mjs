@@ -12,7 +12,8 @@ export default defineConfig({
       remarkReadingTime,
       () => {
         return function (tree, file) {
-          file.data.astro.frontmatter.minutesRead = file.data.readingTime.minutes;
+          file.data.astro.frontmatter.minutesRead =
+            file.data.readingTime.minutes;
         };
       },
     ],

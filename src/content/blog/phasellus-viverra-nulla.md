@@ -10,7 +10,7 @@ image: "/blog/blog_post_3_1768848720552.webp"
 
 # Phasellus Viverra Nulla Ut Metus
 
-Varius laoreet. Quisque rutrum. *Aenean imperdiet*. Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi. Nam eget dui.
+Varius laoreet. Quisque rutrum. _Aenean imperdiet_. Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi. Nam eget dui.
 
 ```javascript
 function helloWorld() {
