@@ -10,7 +10,7 @@ import aboutImage from "../assets/images/about-office.webp";
 
 const heroProps = {
     title: "Lorem Ipsum Dolor Sit Amet",
-    tagline: "Consectetur Adipiscing",
+    tagline: "Hero",
     description:
         "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
     actions: [
@@ -32,7 +32,7 @@ const heroProps = {
 const featuresProps = {
     title: "Quis Nostrud Exercitation",
     subtitle: "Ullamco laboris nisi ut aliquip ex ea commodo",
-    tagline: "Duis aute irure",
+    tagline: "Features",
     features: [
         {
             title: "Lorem Ipsum",
@@ -58,7 +58,7 @@ const contentProps = {
         "In reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
         "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.",
     ],
-    tagline: "Excepteur Sint",
+    tagline: "Content",
     image: aboutImage,
     imageAlt: "Placeholder image",
     isReversed: false,
@@ -84,7 +84,7 @@ const content2Props = {
         "In reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
         "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.",
     ],
-    tagline: "Excepteur Sint",
+    tagline: "Content2",
     image: aboutImage,
     imageAlt: "Placeholder image",
     isReversed: false,
@@ -102,6 +102,53 @@ const content2Props = {
             icon: "lucide:arrow-right",
         },
     ],
+};
+
+const content2InvertedProps = {
+    items: [
+        {
+            title: "Open Source",
+            description:
+                "Developed under the MIT license, free for personal and commercial use.",
+            icon: "lucide:github",
+            iconClass: "bg-indigo-500/10 text-indigo-400",
+        },
+        {
+            title: "Community Driven",
+            description:
+                "Built with the feedback and contributions of the developer community.",
+            icon: "lucide:users",
+            iconClass: "bg-orange-500/10 text-orange-400",
+        },
+        {
+            title: "Regular Updates",
+            description:
+                "Continuously improved with the latest technologies and best practices.",
+            icon: "lucide:refresh-cw",
+            iconClass: "bg-teal-500/10 text-teal-400",
+        },
+    ],
+    image: aboutImage,
+    imageAlt: "Community and Open Source",
+    isReversed: true,
+    actions: [
+        {
+            text: "Call to Action",
+            href: "#",
+            variant: "primary",
+            icon: "lucide:github",
+        },
+        {
+            text: "Learn more",
+            href: "#",
+            variant: "secondary",
+            icon: "lucide:arrow-right",
+        },
+    ],
+    title: "Open Source",
+    subtitle:
+        "Built with the feedback and contributions of the developer community.",
+    tagline: "Content2",
 };
 
 const serviceListProps = {
@@ -124,7 +171,7 @@ const serviceListProps = {
     ],
     title: "Services that will help you achieve your goals",
     subtitle: "What we offer",
-    tagline: "Our services",
+    tagline: "Services",
 };
 
 const valuesProps = {
@@ -161,7 +208,7 @@ const valuesProps = {
         },
     ],
     columns: 3 as const,
-    tagline: "Our Values",
+    tagline: "Values",
     title: "What defines us",
     subtitle: "Principles that guide our daily work",
 };
@@ -178,6 +225,7 @@ const metadata = {
     <Features {...featuresProps} />
     <Content {...contentProps} />
     <Content2 {...content2Props} />
+    <Content2 {...content2InvertedProps} />
     <ServiceList {...serviceListProps} />
     <Values {...valuesProps} />
 </BaseLayout>
