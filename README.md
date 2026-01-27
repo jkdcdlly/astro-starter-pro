@@ -36,7 +36,10 @@
 - ✅ **Clean Architecture**: Organized and scalable code.
 - ✅ **Reusable Components**: Navbar, Footer, and modern Layouts with Tailwind v4.
 
-<img alt="PageSpeed Insights Score 100/100" src="https://github.com/user-attachments/assets/541d4bfc-bcb9-4287-bd91-08564108d706" />
+<br>
+
+<img alt="Image" src="https://github.com/user-attachments/assets/4378718a-2ca7-4317-b24e-0e5a0f379b38" />
+
 <br>
 
 ## Quick Start
@@ -66,6 +69,9 @@ export const siteConfig = {
   // ...
 };
 ```
+<br>
+
+<img alt="PageSpeed Insights Score 100/100" src="https://github.com/user-attachments/assets/541d4bfc-bcb9-4287-bd91-08564108d706" />
 
 <br>
 
