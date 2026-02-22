@@ -38,7 +38,7 @@
 
 <br>
 
-<img alt="Image" src="https://github.com/user-attachments/assets/4378718a-2ca7-4317-b24e-0e5a0f379b38" />
+<img alt="Image" src="./github/astro-starter-pro.png" />
 
 <br>
 
