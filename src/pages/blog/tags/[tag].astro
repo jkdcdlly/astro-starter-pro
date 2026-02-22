@@ -29,8 +29,8 @@ export async function getStaticPaths() {
 const { tag, posts } = Astro.props;
 
 const metadata = {
-    title: `Posts etiquetados con '${tag}'`,
-    description: `Explora nuestros artículos sobre ${tag}.`,
+    title: `Posts tagged with '${tag}'`,
+    description: `Explore our articles about ${tag}.`,
 };
 ---
 
@@ -40,7 +40,7 @@ const metadata = {
             <Headline
                 tagline="Tag"
                 title={`#${tag}`}
-                subtitle={`Mostrando ${posts.length} artículo${posts.length === 1 ? "" : "s"}.`}
+                subtitle={`Showing ${posts.length} article${posts.length === 1 ? "" : "s"}.`}
                 classes={{
                     container: "mb-12 text-center",
                     title: "font-heading mb-4 text-4xl font-bold tracking-tight text-foreground md:text-6xl capitalized",
@@ -50,7 +50,7 @@ const metadata = {
 
             <div class="mb-8 text-center">
                 <a href="/blog" class="text-primary hover:underline"
-                    >← Volver al blog</a
+                    >← Back to blog</a
                 >
             </div>
 
