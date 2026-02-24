@@ -4,6 +4,7 @@
 
 <br>
 
+[![GitHub stars](https://img.shields.io/github/stars/devgelo-labs/astro-starter-pro?style=social)](https://github.com/devgelo-labs/astro-starter-pro)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](./LICENSE)
 [![Astro](https://img.shields.io/badge/Astro-5.0-orange?style=flat-square&logo=astro)](https://astro.build/)
 [![Tailwind](https://img.shields.io/badge/Tailwind-4.0-38B2AC?style=flat-square&logo=tailwind-css)](https://tailwindcss.com/)
@@ -47,7 +48,10 @@
 To start with this project locally, clone the repository and install dependencies:
 
 ```bash
+# Clone the repository
 git clone https://github.com/devgelo-labs/astro-starter-pro.git
+
+# If you like it, don't forget to leave a star! ⭐
 cd astro-starter-pro
 npm install
 npm run dev
@@ -87,6 +91,12 @@ export const siteConfig = {
 | `npm run fix`       | Runs format and lint auto-fix.                     |
 | `npm run check`     | Runs astro check for diagnostics.                  |
 | `npm run typecheck` | Verifies TypeScript types.                         |
+
+<br>
+
+## Support the Project
+
+If you find this starter useful, please consider giving it a ⭐ on GitHub! It helps more people discover the project.
 
 <br>
 
