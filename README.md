@@ -4,7 +4,7 @@
 
 <br>
 
-[![GitHub stars](https://img.shields.io/github/stars/devgelo-labs/astro-starter-pro?style=social)](https://github.com/devgelo-labs/astro-starter-pro)
+[![GitHub stars](https://badgen.net/github/stars/devgelo-labs/astro-starter-pro?icon=github&label=Star)](https://github.com/devgelo-labs/astro-starter-pro)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](./LICENSE)
 [![Astro](https://img.shields.io/badge/Astro-5.0-orange?style=flat-square&logo=astro)](https://astro.build/)
 [![Tailwind](https://img.shields.io/badge/Tailwind-4.0-38B2AC?style=flat-square&logo=tailwind-css)](https://tailwindcss.com/)
