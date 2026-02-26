@@ -55,30 +55,34 @@
     "tagline": "博客"
   },
   "about": {
-    "title": "关于我们",
-    "description": "了解更多关于我们的愿景、价值观和Astro Starter Pro背后的团队。",
+    "title": "关于 War3Map.net",
+    "description": "了解 War3Map.net 的故事、使命和愿景。",
     "tagline": "关于",
-    "vision": {
-      "title": "我们的愿景",
-      "description1": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-      "description2": "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+    "story": {
+      "title": "我们的故事",
+      "content": "War3Map.net 的诞生源于一个简单的原因：对《魔兽争霸 III》的热爱。和许多玩家一样，我们也是伴随着自定义地图长大的——RPG冒险、塔防游戏、生存挑战，以及由充满热情的制作者们创造的无数实验性世界。这些年来，我们逐渐意识到：《魔兽争霸 III》不仅仅是一款游戏。它是一个创作者构建世界、玩家在其中体验故事的平台。然而，许多精彩的地图散落在不同的网站，消失在论坛中，或正在慢慢消失。我们创立 War3Map.net，就是为了帮助保存这些创作——更重要的是，帮助社区继续创造新的世界。"
+    },
+    "finalWords": {
+      "title": "最后的寄语",
+      "tagline": "致永不落幕的艾泽拉斯",
+      "content": "时光荏苒，但《魔兽争霸 III》给予我们的感动从未褪色。那些在地图编辑器里诞生的奇妙世界，那些与好友并肩作战的深夜，构成了我们共同的青春记忆。我们不愿看到这些充满创意与热情的作品，随着时间流逝而消散。因此，War3Map.net 不仅仅是一个存档站点——它是我们为所有热爱这片土地的人建立的家园。在这里，每一张被保存的地图，都是对创作者心血的致敬；每一次真诚的分享与讨论，都是在延续这个社区的生命力。这条路，我们才刚刚启程。而它的未来，正握在每个愿意停留、愿意贡献的你手中。因为真正让这个游戏永恒的，从来不是代码或引擎，而是屏幕背后，一个个依然怀有热爱的你。感谢所有让这里变得特别的人。"
     },
     "values": {
       "tagline": "我们的价值观",
       "title": "我们的准则",
       "subtitle": "指导我们日常工作的原则",
-      "innovation": "创新",
-      "innovationDesc": "Curabitur dignissim, felis non sollicitudin molestie, urna mauris pellentesque velit, ut eleifend.",
-      "commitment": "承诺",
-      "commitmentDesc": "Aenean condimentum finibus mauris, a fermentum justo pan eget. Sed ultricies, neque quis.",
-      "quality": "质量",
-      "qualityDesc": "Donec sed orci tincidunt, aliquam nisl a, condimentum nunc. Nulla varius ex nec ante feugiat.",
-      "transparency": "透明",
-      "transparencyDesc": "Phasellus tristique, elit dapibus cursus facilisis, lorem augue fringilla nunc, vitae fermentum.",
-      "teamwork": "团队合作",
-      "teamworkDesc": "In hac habitasse platea dictumst. Vivamus adipiscing fermentum quam volutpat aliquam. Integer et.",
-      "excellence": "卓越",
-      "excellenceDesc": "Fusce at massa nec sapien auctor gravida in in tellus. Vivamus a tristique metus, et molestie."
+      "mission": "我们的使命",
+      "missionDesc": "我们的使命很简单：建立一个玩家与创作者共同成长的家园。War3Map.net 不仅仅是一个下载站。它是一个社区，在这里：- 玩家可以发现、分享和讨论地图- 创作者可以展示作品并建立声誉- 贡献者可以添加教程、翻译、配音等- 每个人都可以帮助塑造平台的未来我们相信，最好的社区不是由一个人建立的，而是由所有人共同建立的。",
+      "community": "社区驱动的开发",
+      "communityDesc": "社区驱动的开发我们的核心原则之一是：这个网站是与社区一起构建的，而不仅仅是为社区构建的。我们提供了一个公共功能投票系统，在这里：- 任何人都可以提议新功能- 用户和创作者可以就最重要的事项进行投票- 最受期待的功能将被优先开发这意味着，你不仅仅是用户。你是建设团队的一部分。你的声音直接决定着 War3Map.net 的未来。",
+      "forPlayers": "对于玩家",
+      "forPlayersDesc": "如果你是玩家，War3Map.net 可以帮助你：- 找到高质量的地图- 发现隐藏的宝藏- 通过指南和教程学习- 与他人分享你的游戏体验",
+      "forCreators": "对于创作者",
+      "forCreatorsDesc": "如果你是地图创作者，War3Map.net 可以帮助你：- 向全球观众展示你的作品- 建立你的创作者个人资料- 分享更新、教程和视频- 提升你的声誉和观众群 我们的长期目标是尽可能地为创作者提供支持。",
+      "vision": "长期愿景",
+      "visionDesc": "我们希望 War3Map.net 能够成为：- 《魔兽争霸 III》自定义地图的完整档案馆- 一个创作者得以成长并获得认可的平台- 一个让玩家感到宾至如归的地方- 一个让《魔兽争霸 III》为未来世代保持活力的社区",
+      "builtByCommunity": "由社区构建",
+      "builtByCommunityDesc": "War3Map.net 是一个独立的项目。它由玩家构建。由创作者支持。并由每一位参与其中的人共同塑造。如果你想做出贡献——无论是分享地图、报告问题、提议功能还是帮助他人——我们随时欢迎。"
     },
     "actions": {
       "contact": "联系我们",

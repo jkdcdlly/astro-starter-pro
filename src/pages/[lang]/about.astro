@@ -1,11 +1,12 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import { getImage } from "astro:assets";
-import Content2 from "../../components/widgets/Content2.astro";
-import Values from "../../components/widgets/Values.astro";
-import aboutImage from "../../assets/images/about-office.webp";
-import { useTranslations, getLangFromUrl } from "../../i18n";
-import { ui, defaultLang } from "../../i18n";
+import Content2 from "@/components/widgets/Content2.astro";
+import Values from "@/components/widgets/Values.astro";
+import azerothImage from "@/assets/images/about/azeroth.jpg";
+import lichkingImage from "@/assets/images/about/lichking.jpg";
+import { useTranslations, getLangFromUrl } from "@/i18n";
+import { ui, defaultLang } from "@/i18n";
 
 // Export getStaticPaths function
 export function getStaticPaths() {
@@ -29,33 +30,33 @@ const metadata = {
 
 const values = [
     {
-        title: t('about.values.innovation'),
-        description: t('about.values.innovationDesc'),
+        title: t('about.values.mission'),
+        description: t('about.values.missionDesc'),
     },
     {
-        title: t('about.values.commitment'),
-        description: t('about.values.commitmentDesc'),
+        title: t('about.values.community'),
+        description: t('about.values.communityDesc'),
     },
     {
-        title: t('about.values.quality'),
-        description: t('about.values.qualityDesc'),
+        title: t('about.values.forPlayers'),
+        description: t('about.values.forPlayersDesc'),
     },
     {
-        title: t('about.values.transparency'),
-        description: t('about.values.transparencyDesc'),
+        title: t('about.values.forCreators'),
+        description: t('about.values.forCreatorsDesc'),
     },
     {
-        title: t('about.values.teamwork'),
-        description: t('about.values.teamworkDesc'),
+        title: t('about.values.vision'),
+        description: t('about.values.visionDesc'),
     },
     {
-        title: t('about.values.excellence'),
-        description: t('about.values.excellenceDesc'),
+        title: t('about.values.builtByCommunity'),
+        description: t('about.values.builtByCommunityDesc'),
     },
 ];
 
 const optimizedImage = await getImage({
-    src: aboutImage,
+    src: azerothImage,
     format: "webp",
 });
 ---
@@ -63,27 +64,20 @@ const optimizedImage = await getImage({
 <BaseLayout {metadata} lang={lang}>
     <link slot="head" rel="preload" href={optimizedImage.src} as="image" />
     <Content2
-        title={t('about.vision.title')}
+        title={t('about.title')}
         description={[
-            t('about.vision.description1'),
-            t('about.vision.description2'),
+            t('about.story.content')
         ]}
-        tagline={t('about.tagline')}
-        image={aboutImage}
-        imageAlt="Modern web development office"
+        tagline={t('about.story.title')}
+        image={azerothImage}
+        imageAlt="Azeroth landscape"
         actions={[
             {
                 text: t('about.actions.contact'),
                 href: `/${lang}/contact`,
                 variant: "primary",
                 icon: "lucide:mail",
-            },
-            {
-                text: t('about.actions.viewDetails'),
-                href: "#",
-                variant: "secondary",
-                icon: "lucide:arrow-right",
-            },
+            }
         ]}
     />
     <Values
@@ -93,4 +87,17 @@ const optimizedImage = await getImage({
         title={t('about.values.title')}
         subtitle={t('about.values.subtitle')}
     />
+    
+    <Content2
+        title={t('about.finalWords.title')}
+        description={[
+            t('about.finalWords.content')
+        ]}
+        tagline={t('about.finalWords.tagline')}
+        image={lichkingImage}
+        isReversed={true}
+        imageAlt="Lich King"
+        
+    />
+    <!-- <link slot="head" rel="preload" href={optimizedImage.src} as="image" /> -->
 </BaseLayout>

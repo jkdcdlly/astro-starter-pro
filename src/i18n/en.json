@@ -55,30 +55,34 @@
     "tagline": "Blog"
   },
   "about": {
-    "title": "About us",
-    "description": "Learn more about our vision, values, and the team behind Astro Starter Pro.",
+    "title": "About War3Map.net",
+    "description": "Learn about War3Map.net's story, mission, and vision.",
     "tagline": "About",
-    "vision": {
-      "title": "Our Vision",
-      "description1": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-      "description2": "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+    "story": {
+      "title": "Our Story",
+      "content": "War3Map.net was born from a simple reason: a love for Warcraft III. Like many players, we grew up with custom maps — RPG adventures, tower defense games, survival challenges, and countless experimental worlds created by passionate makers. Over the years, we came to realize: Warcraft III is more than just a game. It's a platform where creators build worlds and players experience stories. Yet, many wonderful maps are scattered across different websites, lost in forums, or slowly disappearing. We created War3Map.net to help preserve these creations — and more importantly, to help the community continue creating new worlds."
+    },
+    "finalWords": {
+      "title": "Final Words",
+      "tagline": "To the Everlasting Azeroth",
+      "content": "Time flies, but the emotions Warcraft III gave us never fade. Those wonderful worlds born in the map editor, those late nights fighting alongside friends — these form our shared youth memories. We refuse to see these creative and passionate works disappear with time. Therefore, War3Map.net is more than just an archive — it's a home we've built for everyone who loves this land. Here, every preserved map is a tribute to the creators' efforts; every sincere share and discussion continues the vitality of this community. We've only just begun this journey. Its future is in the hands of every one of you who is willing to stay and contribute. Because what truly makes this game eternal is never the code or engine, but the countless yous behind the screen who still hold love. Thank you to everyone who makes this place special."
     },
     "values": {
       "tagline": "Our Values",
-      "title": "What Defines Us",
-      "subtitle": "Principles that guide our daily work",
-      "innovation": "Innovation",
-      "innovationDesc": "Curabitur dignissim, felis non sollicitudin molestie, urna mauris pellentesque velit, ut eleifend.",
-      "commitment": "Commitment",
-      "commitmentDesc": "Aenean condimentum finibus mauris, a fermentum justo pan eget. Sed ultricies, neque quis.",
-      "quality": "Quality",
-      "qualityDesc": "Donec sed orci tincidunt, aliquam nisl a, condimentum nunc. Nulla varius ex nec ante feugiat.",
-      "transparency": "Transparency",
-      "transparencyDesc": "Phasellus tristique, elit dapibus cursus facilisis, lorem augue fringilla nunc, vitae fermentum.",
-      "teamwork": "Teamwork",
-      "teamworkDesc": "In hac habitasse platea dictumst. Vivamus adipiscing fermentum quam volutpat aliquam. Integer et.",
-      "excellence": "Excellence",
-      "excellenceDesc": "Fusce at massa nec sapien auctor gravida in in tellus. Vivamus a tristique metus, et molestie."
+      "title": "Our Principles",
+      "subtitle": "Guiding principles for our daily work",
+      "mission": "Our Mission",
+      "missionDesc": "Our mission is simple: To build a home where players and creators grow together. War3Map.net is more than just a download site. It's a community where: - Players can discover, share, and discuss maps - Creators can showcase their work and build reputation - Contributors can add tutorials, translations, voiceovers, and more - Everyone can help shape the platform's future We believe the best communities are not built by one person, but by everyone together.",
+      "community": "Community-Driven Development",
+      "communityDesc": "Community-Driven Development One of our core principles: This website is built with the community, not just for the community. We provide a public feature voting system where: - Anyone can suggest new features - Users and creators can vote on what matters most - The most requested features are prioritized for development This means you're not just a user. You're part of the building team. Your voice directly shapes the future of War3Map.net.",
+      "forPlayers": "For Players",
+      "forPlayersDesc": "If you're a player, War3Map.net can help you: - Find high-quality maps - Discover hidden gems - Learn through guides and tutorials - Share your gaming experiences with others",
+      "forCreators": "For Creators",
+      "forCreatorsDesc": "If you're a map creator, War3Map.net can help you: - Showcase your work to a global audience - Build your creator profile - Share updates, tutorials, and videos - Grow your reputation and audience Our long-term goal is to support creators as much as possible.",
+      "vision": "Long-Term Vision",
+      "visionDesc": "We hope War3Map.net will become: - A complete archive of Warcraft III custom maps - A platform where creators can grow and gain recognition - A place where players feel at home - A community that keeps Warcraft III alive for future generations",
+      "builtByCommunity": "Built by the Community",
+      "builtByCommunityDesc": "War3Map.net is an independent project. It's built by players. Supported by creators. And shaped by everyone who participates. If you want to contribute — whether by sharing maps, reporting issues, suggesting features, or helping others — we're always welcome."
     },
     "actions": {
       "contact": "Contact Us",
