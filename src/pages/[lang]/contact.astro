@@ -1,0 +1,83 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Features from "../../components/widgets/Features.astro";
+import Content from "../../components/widgets/Content.astro";
+import Form from "../../components/ui/Form.astro";
+import { useTranslations, getLangFromUrl } from "../../i18n";
+import { ui, defaultLang } from "../../i18n";
+
+// Export getStaticPaths function
+export function getStaticPaths() {
+  // Include all languages, including default language
+  const languages = Object.keys(ui);
+  
+  return languages.map(lang => ({
+    params: { lang },
+    props: { lang },
+  }));
+}
+
+// Get current language from URL
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+const metadata = {
+    title: t('contact.title'),
+    description: t('contact.description'),
+};
+
+const visionText = [t('contact.description')];
+---
+
+<BaseLayout {metadata} lang={lang}>
+    <Content tagline={t('contact.tagline')} title={t('contact.title')} description={visionText} />
+    <div
+        class="mx-auto max-w-xl bg-card border border-border rounded-3xl p-8 shadow-sm mb-12 md:mb-16"
+    >
+        <Form />
+    </div>
+    <Features
+        tagline={t('contact.means.tagline')}
+        title={t('contact.means.title')}
+        subtitle={t('contact.means.subtitle')}
+        classes={{ container: "pt-0 md:pt-0" }}
+        features={[
+            {
+                title: t('contact.means.phone'),
+                description: t('contact.means.phoneNumber'),
+                icon: "lucide:phone",
+                iconClass: "bg-green-500/10 text-green-400",
+            },
+            {
+                title: t('contact.means.email'),
+                description: t('contact.means.emailAddress'),
+                icon: "lucide:mail",
+                iconClass: "bg-yellow-500/10 text-yellow-400",
+            },
+            {
+                title: t('contact.means.location'),
+                description: t('contact.means.locationText'),
+                icon: "lucide:map-pin",
+                iconClass: "bg-red-500/10 text-red-400",
+            },
+            {
+                title: t('contact.means.personalized'),
+                description: t('contact.means.personalizedDesc'),
+                icon: "lucide:user-check",
+                iconClass: "bg-blue-500/10 text-blue-400",
+            },
+            {
+                title: t('contact.means.technical'),
+                description: t('contact.means.technicalDesc'),
+                icon: "lucide:wrench",
+                iconClass: "bg-purple-500/10 text-purple-400",
+            },
+            {
+                title: t('contact.means.strategic'),
+                description: t('contact.means.strategicDesc'),
+                icon: "lucide:briefcase",
+                iconClass: "bg-pink-500/10 text-pink-400",
+            },
+        ]}
+    />
+</BaseLayout>

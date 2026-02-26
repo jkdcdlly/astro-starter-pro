@@ -1,0 +1,167 @@
+{
+  "nav": {
+    "home": "首页",
+    "about": "关于",
+    "services": "服务",
+    "blog": "博客",
+    "contact": "联系我们",
+    "widgets": "组件"
+  },
+  "hero": {
+    "title": "War3玩家和作者的共同家园",
+    "tagline": "由玩家构建，为玩家而生，与作者共同成长的 Warcraft III 地图社区",
+    "description": "这个网站的未来，不由我们单独决定，而由所有人共同决定。",
+    "getStarted": "开始使用",
+    "ourServices": "我们的服务"
+  },
+  "features": {
+    "tagline": "特性",
+    "title": "开放+共赢",
+    "subtitle": "我们是一个开放共赢的 Warcraft III 地图社区，玩家和作者可以在这里互动、分享、成长。",
+    "optimizedSeo": "用户上传好玩地图",
+    "optimizedSeoDesc": "如果你是普通用户，你可以在这里上传 Warcraft III 地图，并与其他用户分享。你可以上传地图文件、网盘链接、甚至可以分享自己的游戏视频。",
+    "highPerformance": "作者认领地图",
+    "highPerformanceDesc": "如果你是 Warcraft III 地图作者，你可以在这里认领你的地图。这这里你可以分享你的地图、分享你的教程、开发进程、收集粉丝的反馈。甚至引入个人社交媒体等。",
+    "tailwind": "参与社区建设",
+    "tailwindDesc": "不管你是普通用户还是地图作者，你都可以在这里参与社区建设。你可以在这里分享你的地图、教程、甚至投票决定网站增加哪些功能。"
+  },
+  "development": {
+    "title": "地图1",
+    "description": "这是一个经典地图xxxxxxx"
+  },
+  "openSource": {
+    "title": "开源与社区",
+    "description": "加入现代Web开发革命。这个项目对所有人开放，可以使用、学习和贡献。",
+    "openSource": "开源",
+    "openSourceDesc": "在MIT许可证下开发，免费用于个人和商业用途。",
+    "communityDriven": "社区驱动",
+    "communityDrivenDesc": "基于开发者社区的反馈和贡献构建。",
+    "regularUpdates": "定期更新",
+    "regularUpdatesDesc": "不断改进，采用最新技术和最佳实践。"
+  },
+  "search": {
+    "placeholder": "搜索魔兽争霸3地图...",
+    "button": "搜索"
+  },
+  "blog": {
+    "title": "我们的出版物",
+    "subtitle": "探索我们团队的最新新闻、教程和文章。",
+    "filter": "筛选",
+    "sortBy": "排序方式",
+    "latest": "最新",
+    "popular": "热门",
+    "category": "分类",
+    "tags": "标签",
+    "tagline": "博客"
+  },
+  "about": {
+    "title": "关于我们",
+    "description": "了解更多关于我们的愿景、价值观和Astro Starter Pro背后的团队。",
+    "tagline": "关于",
+    "vision": {
+      "title": "我们的愿景",
+      "description1": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+      "description2": "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+    },
+    "values": {
+      "tagline": "我们的价值观",
+      "title": "我们的准则",
+      "subtitle": "指导我们日常工作的原则",
+      "innovation": "创新",
+      "innovationDesc": "Curabitur dignissim, felis non sollicitudin molestie, urna mauris pellentesque velit, ut eleifend.",
+      "commitment": "承诺",
+      "commitmentDesc": "Aenean condimentum finibus mauris, a fermentum justo pan eget. Sed ultricies, neque quis.",
+      "quality": "质量",
+      "qualityDesc": "Donec sed orci tincidunt, aliquam nisl a, condimentum nunc. Nulla varius ex nec ante feugiat.",
+      "transparency": "透明",
+      "transparencyDesc": "Phasellus tristique, elit dapibus cursus facilisis, lorem augue fringilla nunc, vitae fermentum.",
+      "teamwork": "团队合作",
+      "teamworkDesc": "In hac habitasse platea dictumst. Vivamus adipiscing fermentum quam volutpat aliquam. Integer et.",
+      "excellence": "卓越",
+      "excellenceDesc": "Fusce at massa nec sapien auctor gravida in in tellus. Vivamus a tristique metus, et molestie."
+    },
+    "actions": {
+      "contact": "联系我们",
+      "viewDetails": "查看详情"
+    }
+  },
+  "contact": {
+    "title": "联系我们",
+    "description": "与我们联系，讨论您的下一个项目。",
+    "tagline": "联系",
+    "means": {
+      "tagline": "联系方式",
+      "title": "我们随时为您服务",
+      "subtitle": "选择您喜欢的沟通渠道。我们会在24小时内回复。",
+      "phone": "电话",
+      "phoneNumber": "+123 456 7890",
+      "email": "邮箱",
+      "emailAddress": "contact@company.com",
+      "location": "地址",
+      "locationText": "城市，国家",
+      "personalized": "个性化关注",
+      "personalizedDesc": "我们了解您的需求，提供量身定制的解决方案。",
+      "technical": "技术支持",
+      "technicalDesc": "我们快速解决任何疑问或技术问题。",
+      "strategic": "战略咨询",
+      "strategicDesc": "我们为您提供建议，确保项目成功。"
+    }
+  },
+  "services": {
+    "title": "我们的服务",
+    "description": "探索我们的Web开发、SEO优化和技术咨询服务。",
+    "tagline": "服务",
+    "intro": {
+      "description": "旨在最大化您数字存在潜力的综合解决方案。"
+    },
+    "webDevelopment": {
+      "title": "Web开发",
+      "tagline": "Web开发",
+      "description": "为现代时代构建的静态和动态网站。",
+      "longDescription": "我们专注于使用最新技术构建快速、安全和可扩展的网站。我们将您的愿景转化为有影响力的数字体验。",
+      "responsive": "响应式设计",
+      "responsiveDesc": "您的网站在任何设备上都能完美显示，从手机到桌面屏幕。",
+      "performance": "优化性能",
+      "performanceDesc": "快速加载，改善用户体验和SEO定位。"
+    },
+    "seo": {
+      "title": "SEO优化",
+      "description": "我们确保您的内容被寻找它的人发现。",
+      "longDescription": "我们帮助您的企业被合适的人发现。我们的有机定位策略旨在提高您的有机可见性。",
+      "audit": "SEO审计",
+      "auditDesc": "我们深入分析您的网站，识别技术和内容改进机会。",
+      "content": "内容策略",
+      "contentDesc": "我们创建相关的内容计划，吸引和留住您的目标受众。"
+    },
+    "consulting": {
+      "title": "IT咨询",
+      "description": "技术建议，将您的项目扩展到新的水平。",
+      "longDescription": "我们陪伴您做出关键决策。我们评估您当前的基础设施，设计个性化路线图，将您的公司带到下一个技术水平。",
+      "transformation": "数字化转型",
+      "transformationDesc": "我们指导您采用新技术，优化业务流程。",
+      "architecture": "软件架构",
+      "architectureDesc": "我们设计健壮且可扩展的系统，为未来增长做准备。"
+    }
+  },
+  "widgets":{
+    "hero":{
+      "title":"痛苦本身就是爱"
+    }
+  },
+  "404":{
+    "title":"404 - 页面未找到",
+    "description":"抱歉，我们找不到您要查找的页面。它可能已被移动或删除。"
+  },
+  "site": {
+    "name": "War3玩家和作者的共同家园",
+    "description": "这个网站的未来，不由我们单独决定，而由所有人共同决定。",
+    "nav": [
+      { "text": "首页", "href": "/" },
+      { "text": "关于", "href": "/about" },
+      { "text": "服务", "href": "/services" },
+      { "text": "博客", "href": "/blog" },
+      { "text": "联系我们", "href": "/contact" },
+      { "text": "组件", "href": "/widgets" }
+    ]
+  }
+}

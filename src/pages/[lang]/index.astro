@@ -1,0 +1,201 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { siteConfig } from "@/config/site";
+import Hero from "@/components/widgets/Hero.astro";
+import Features from "@/components/widgets/Features.astro";
+import FeatureVote from "@/components/widgets/FeatureVote.astro";
+import devImg from "@/assets/images/dev_balanced.png";
+import openSourceImg from "@/assets/images/open-source.png";
+import war31 from "@/assets/images/index-war3map/war3-1.jpg";
+import war32 from "@/assets/images/index-war3map/war3-2.jpg";
+import war33 from "@/assets/images/index-war3map/war3-3.jpg";
+import war34 from "@/assets/images/index-war3map/war3-4.jpg";
+import war35 from "@/assets/images/index-war3map/war3-5.jpg";
+import war36 from "@/assets/images/index-war3map/war3-6.jpg";
+import Content from "@/components/widgets/Content.astro";
+import Content3 from "@/components/widgets/Content3.astro";
+import ServiceList from "@/components/widgets/ServiceList.astro";
+import { useTranslations, getLangFromUrl, ui, defaultLang } from "@/i18n";
+
+// Export getStaticPaths function
+export function getStaticPaths() {
+  // Filter out default language (handled by root pages)
+  const languages = Object.keys(ui).filter(lang => lang !== defaultLang);
+  
+  return languages.map(lang => ({
+    params: { lang },
+    props: { lang },
+  }));
+}
+
+// Get current language from URL
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+const metadata = {
+    title: `${siteConfig.name} — The next step for your project`,
+    description:
+        "A modern and professional template for your web projects with Astro and Tailwind CSS. Boost your development with a solid foundation.",
+    ignoreTitleTemplate: true,
+};
+const services = [
+    {
+        title: t('services.webDevelopment.title'),
+        description: t('services.webDevelopment.description'),
+        icon: "lucide:globe",
+    },
+    {
+        title: t('services.seo.title'),
+        description: t('services.seo.description'),
+        icon: "lucide:search",
+    },
+    {
+        title: t('services.consulting.title'),
+        description: t('services.consulting.description'),
+        icon: "lucide:rocket",
+    },
+];
+---
+
+<BaseLayout metadata={metadata} lang={lang}>
+  <!-- Search Bar -->
+    <section class="py-12 bg-muted/50">
+        <div class="container mx-auto px-4">
+            <div class="max-w-3xl mx-auto">
+                <form class="relative">
+                    <input
+                        type="text"
+                        placeholder={t('search.placeholder')}
+                        class="w-full px-6 py-4 pr-12 rounded-full border border-border bg-background shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                    />
+                    <button
+                        type="submit"
+                        class="absolute right-2 top-1/2 transform -translate-y-1/2 px-4 py-2 rounded-full bg-primary text-white font-medium transition-colors hover:bg-primary/90"
+                    >
+                        {t('search.button')}
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+    <Hero
+        title={`${t('hero.title')}`}
+        tagline={t('hero.tagline')}
+        description={t('hero.description')}
+        actions={[
+            {
+                text: t('hero.getStarted'),
+                href: "https://github.com/devgelo-labs/astro-starter-pro",
+                variant: "primary",
+                icon: "lucide:github",
+            },
+            {
+                text: t('hero.ourServices'),
+                href: `/${lang}/services`,
+                variant: "secondary",
+                icon: "lucide:arrow-right",
+                ariaLabel: "Learn more about our services",
+            },
+        ]}
+    >
+         <Features
+        tagline={t('features.tagline')}
+        title={t('features.title')}
+        subtitle={t('features.subtitle')}
+        features={[
+            {
+                title: t('features.optimizedSeo'),
+                description:
+                    t('features.optimizedSeoDesc'),
+                icon: "lucide:scan-search",
+                iconClass: "bg-blue-500/10 text-blue-400",
+            },
+            {
+                title: t('features.highPerformance'),
+                description: t('features.highPerformanceDesc'),
+                icon: "lucide:zap",
+                iconClass: "bg-purple-500/10 text-purple-400",
+            },
+            {
+                title: t('features.tailwind'),
+                description:
+                    t('features.tailwindDesc'),
+                icon: "lucide:palette",
+                iconClass: "bg-pink-500/10 text-pink-400",
+            },
+        ]}
+    />
+    </Hero>
+
+    <Content
+        tagline='地图推荐'
+        title='精选地图推荐'
+        classes={{ container: "pb-0 md:pb-0" }}
+    />
+   
+    <Content3
+        items={[
+            {
+                title: "地图尺寸",
+                description:"176x208",
+                icon: "lucide:ruler",
+                iconClass: "bg-blue-500/10 text-blue-400",
+                image:war31,
+                
+            },
+            {
+                title: "支持",
+                description: "经典与重制版",
+                icon: "lucide:zap",
+                iconClass: "bg-purple-500/10 text-purple-400",
+                image:war32,
+            }
+        ]}
+    >
+    </Content3>
+
+    <Content3
+        items={[
+            {
+                title: "地图尺寸",
+                description:"176x208",
+                icon: "lucide:ruler",
+                iconClass: "bg-blue-500/10 text-blue-400",
+                image:war33,
+                
+            },
+            {
+                title: "支持",
+                description: "经典与重制版",
+                icon: "lucide:zap",
+                iconClass: "bg-purple-500/10 text-purple-400",
+                image:war34,
+            }
+        ]}
+    >
+    </Content3>
+
+    <Content3
+        items={[
+            {
+                title: "地图尺寸",
+                description:"176x208",
+                icon: "lucide:ruler",
+                iconClass: "bg-blue-500/10 text-blue-400",
+                image:war35,
+                
+            },
+            {
+                title: "支持",
+                description: "经典与重制版",
+                icon: "lucide:zap",
+                iconClass: "bg-purple-500/10 text-purple-400",
+                image:war36,
+            }
+        ]}
+    >
+    </Content3>
+
+    <!-- Feature Vote Section -->
+    <FeatureVote lang={lang} />
+</BaseLayout>

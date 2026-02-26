@@ -1,18 +1,18 @@
 import ogImage from "../assets/og-image.png";
 
 export const siteConfig = {
-  name: "Astro Starter Pro",
-  description: "Starter template optimized for SEO and performance. A solid foundation to start your projects with best practices.",
-  url: "https://astrostarterpro.com",
+  name: "War 3 Maps",
+  description: "不只是地图下载站，而是属于所有War3玩家和作者的共同家园",
+  url: "https://war3maps.net",
   lang: "en",
   locale: "en_US",
-  author: "Devgelo",
-  twitter: "@Devgelo",
+  author: "War3Maps",
+  twitter: "@War3Maps",
   ogImage: ogImage,
   socialLinks: {
     twitter: "https://twitter.com",
     github: "https://github.com/devgelo-labs/astro-starter-pro",
-    discord: "https://discord.com",
+    discord: "https://discord.gg/Uk6xsSFE",
   },
   navLinks: [
     { text: "Home", href: "/" },

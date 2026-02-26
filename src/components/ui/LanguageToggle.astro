@@ -1,0 +1,26 @@
+---
+import type { Locale } from '../../i18n';
+import { getLocalizedPath, languages } from '../../i18n';
+
+interface Props {
+  currentLocale: Locale;
+}
+
+const { currentLocale } = Astro.props;
+const otherLocale = currentLocale === 'en' ? 'zh' : 'en';
+const currentUrl = new URL(Astro.request.url);
+let path = currentUrl.pathname;
+
+// Remove existing language prefix if present
+path = path.replace(/^\/(en|zh)\//, '/');
+
+const otherLocaleUrl = getLocalizedPath(path, otherLocale as Locale);
+---
+
+<a 
+  href={otherLocaleUrl} 
+  class="flex items-center gap-2 px-3 py-2 text-sm font-medium rounded-md transition-colors hover:bg-muted"
+>
+  <span class="sr-only">Switch to {languages[otherLocale]}</span>
+  <span>{otherLocale === 'en' ? 'EN' : '中文'}</span>
+</a>

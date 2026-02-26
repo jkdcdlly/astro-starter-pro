@@ -1,0 +1,122 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import { getCollection } from "astro:content";
+import Headline from "../../../components/ui/Headline.astro";
+import PostItem from "../../../components/blog/PostItem.astro";
+import { Icon } from "astro-icon/components";
+import { useTranslations, getLangFromUrl } from "../../../i18n";
+import { ui, defaultLang } from "../../../i18n";
+
+// Export getStaticPaths function
+export async function getStaticPaths() {
+  // Include all languages, including default language
+  const languages = Object.keys(ui);
+  
+  // Generate paths for each language
+  const paths = [];
+  
+  for (const lang of languages) {
+    // Add the root blog path for each language
+    paths.push({
+      params: { lang, page: undefined },
+      props: { lang },
+    });
+    
+    // Add paginated paths for each language (up to 3 pages for now)
+    for (let i = 2; i <= 3; i++) {
+      paths.push({
+        params: { lang, page: i.toString() },
+        props: { lang },
+      });
+    }
+  }
+  
+  return paths;
+}
+
+// Get current language from URL
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+// Get blog entries
+const blogEntries = await getCollection("blog");
+const sortedPosts = blogEntries
+  .filter((post) => post.data && post.data.pubDate)
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+// Get current page number from params
+const pageParam = Astro.params.page;
+const currentPage = pageParam ? parseInt(pageParam) : 1;
+const pageSize = 6;
+const startIndex = (currentPage - 1) * pageSize;
+const endIndex = startIndex + pageSize;
+const blog = sortedPosts.slice(startIndex, endIndex);
+const lastPage = Math.ceil(sortedPosts.length / pageSize);
+
+// Generate pagination URLs
+const prevPage = currentPage > 1 ? currentPage - 1 : null;
+const nextPage = currentPage < lastPage ? currentPage + 1 : null;
+const prevUrl = prevPage ? `/${lang}/blog/${prevPage}` : null;
+const nextUrl = nextPage ? `/${lang}/blog/${nextPage}` : null;
+
+const metadata = {
+    title: t('blog.title'),
+    description: t('blog.description'),
+};
+---
+
+<BaseLayout metadata={metadata} lang={lang}>
+    <section class="relative px-4 py-8 sm:px-6 lg:px-8 md:py-12">
+        <div class="absolute inset-0 z-0">
+            <div
+                class="absolute inset-0 bg-linear-to-br from-blue-500/5 via-transparent to-pink-500/5"
+            >
+            </div>
+        </div>
+        <div class="relative mx-auto max-w-5xl">
+            <Headline
+                tagline={t('blog.tagline')}
+                title={t('blog.title')}
+                subtitle={t('blog.subtitle')}
+                classes={{
+                    container: "mb-12 text-center",
+                    title: "font-heading mb-4 text-4xl font-bold tracking-tight text-foreground md:text-6xl",
+                    subtitle: "mx-auto max-w-3xl text-xl text-muted-foreground",
+                }}
+            />
+
+            <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+                {blog.map((post) => <PostItem post={post} />)}
+            </div>
+            {(prevUrl || nextUrl) && (
+                <div class="flex justify-between mt-12">
+                    {prevUrl ? (
+                        <a
+                            href={prevUrl}
+                            class="inline-flex items-center px-4 py-2 text-sm font-medium text-muted-foreground bg-card border border-border rounded-lg hover:bg-muted hover:text-foreground transition-colors"
+                        >
+                            <Icon name="tabler:arrow-left" class="w-4 h-4 mr-2" />
+                            Previous
+                        </a>
+                    ) : (
+                        <span />
+                    )}
+                    <div class="flex items-center text-sm text-muted-foreground">
+                        Page {currentPage} of {lastPage}
+                    </div>
+                    {nextUrl ? (
+                        <a
+                            href={nextUrl}
+                            class="inline-flex items-center px-4 py-2 text-sm font-medium text-muted-foreground bg-card border border-border rounded-lg hover:bg-muted hover:text-foreground transition-colors"
+                        >
+                            Next
+                            <Icon name="tabler:arrow-right" class="w-4 h-4 ml-2" />
+                        </a>
+                    ) : (
+                        <span />
+                    )}
+                </div>
+            )}
+        </div>
+    </section>
+</BaseLayout>

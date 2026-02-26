@@ -1,6 +1,28 @@
 ---
 import { siteConfig } from "../../config/site";
 import ThemeToggle from "../ui/ThemeToggle.astro";
+import LanguageToggle from "../ui/LanguageToggle.astro";
+import type { Locale } from "../../i18n";
+import { getLangFromUrl, getLocalizedPath, useTranslations } from "../../i18n";
+
+const currentUrl = new URL(Astro.request.url);
+const currentLocale = getLangFromUrl(currentUrl);
+const t = useTranslations(currentLocale);
+
+// Define link type
+interface NavLink {
+    text: string;
+    href: string;
+}
+
+// Get localized navigation links
+const navLinks: NavLink[] = Array.isArray(t('site.nav')) ? t('site.nav') : siteConfig.navLinks;
+
+// Helper function to get localized URL
+function getLocalizedHref(href: string, locale: Locale): string {
+    if (href.startsWith("http")) return href;
+    return getLocalizedPath(href, locale);
+}
 ---
 
 <nav
@@ -11,7 +33,7 @@ import ThemeToggle from "../ui/ThemeToggle.astro";
     >
         <div class="flex items-center gap-2">
             <a
-                href="/"
+                href={getLocalizedHref("/", currentLocale)}
                 class="text-xl font-bold tracking-tight text-foreground transition-colors hover:text-primary"
             >
                 {siteConfig.name}
@@ -22,9 +44,9 @@ import ThemeToggle from "../ui/ThemeToggle.astro";
         <div class="hidden md:block">
             <div class="ml-10 flex items-baseline space-x-8">
                 {
-                    siteConfig.navLinks.map((link) => (
+                    navLinks.map((link) => (
                         <a
-                            href={link.href}
+                            href={getLocalizedHref(link.href, currentLocale)}
                             class="text-sm font-medium text-foreground transition-colors hover:text-primary"
                         >
                             {link.text}
@@ -35,6 +57,7 @@ import ThemeToggle from "../ui/ThemeToggle.astro";
         </div>
 
         <div class="hidden md:flex items-center gap-4">
+            <LanguageToggle currentLocale={currentLocale} />
             <a
                 href={siteConfig.socialLinks.github}
                 target="_blank"
@@ -48,6 +71,7 @@ import ThemeToggle from "../ui/ThemeToggle.astro";
 
         <!-- Mobile Menu Button -->
         <div class="md:hidden flex items-center">
+            <LanguageToggle currentLocale={currentLocale} />
             <button
                 id="mobile-menu-button"
                 type="button"
@@ -97,16 +121,14 @@ import ThemeToggle from "../ui/ThemeToggle.astro";
         <div
             class="space-y-1 border-b border-border bg-background/90 px-2 pb-3 pt-2 sm:px-3"
         >
-            {
-                siteConfig.navLinks.map((link) => (
+            {navLinks.map((link) => (
                     <a
-                        href={link.href}
+                        href={getLocalizedHref(link.href, currentLocale)}
                         class="block rounded-md px-3 py-2 text-base font-medium text-foreground transition-colors hover:bg-white/10 hover:text-primary"
                     >
                         {link.text}
                     </a>
-                ))
-            }
+                ))}
             <a
                 href={siteConfig.socialLinks.github}
                 target="_blank"

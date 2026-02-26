@@ -11,6 +11,7 @@ export interface Feature {
   description: string;
   icon?: string;
   iconClass?: string;
+  image?: string;
 }
 
 export type Value = Feature;
@@ -56,6 +57,8 @@ export interface ContentProps extends HeadlineProps {
   content?: string;
   image?: ImageMetadata;
   imageAlt?: string;
+  images?: ImageMetadata;
+  imageAlts?: string;
   items?: Feature[];
   isReversed?: boolean;
   isAfterContent?: boolean;

@@ -1,0 +1,167 @@
+{
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "services": "Services",
+    "blog": "Blog",
+    "contact": "Contact",
+    "widgets": "Widgets"
+  },
+  "hero": {
+    "title": "Starter Template for Web Developers",
+    "tagline": "Astro v5 + Tailwind v4",
+    "description": "Starter template optimized for SEO and performance. A solid foundation to start your projects with best practices.",
+    "getStarted": "Get Started",
+    "ourServices": "Our Services"
+  },
+  "features": {
+    "tagline": "Features",
+    "title": "What's Included",
+    "subtitle": "A selection of tools and configurations to streamline your workflow.",
+    "optimizedSeo": "Optimized SEO",
+    "optimizedSeoDesc": "Base configuration for Meta tags, Open Graph, and Sitemap generation.",
+    "highPerformance": "High Performance",
+    "highPerformanceDesc": "Lightweight structure for fast load times.",
+    "tailwind": "Tailwind v4",
+    "tailwindDesc": "Integrated configuration with the latest version of Tailwind CSS."
+  },
+  "development": {
+    "title": "Development",
+    "description": "We provide a solid foundation to start your projects with best practices."
+  },
+  "openSource": {
+    "title": "Open Source & Community",
+    "description": "Join the revolution of modern web development. This project is open for everyone to use, learn from, and contribute to.",
+    "openSource": "Open Source",
+    "openSourceDesc": "Developed under the MIT license, free for personal and commercial use.",
+    "communityDriven": "Community Driven",
+    "communityDrivenDesc": "Built with the feedback and contributions of the developer community.",
+    "regularUpdates": "Regular Updates",
+    "regularUpdatesDesc": "Continuously improved with the latest technologies and best practices."
+  },
+  "search": {
+    "placeholder": "Search Warcraft 3 maps...",
+    "button": "Search"
+  },
+  "blog": {
+    "title": "Our Publications",
+    "subtitle": "Explore the latest news, tutorials, and articles from our team.",
+    "filter": "Filter",
+    "sortBy": "Sort by",
+    "latest": "Latest",
+    "popular": "Popular",
+    "category": "Category",
+    "tags": "Tags",
+    "tagline": "Blog"
+  },
+  "about": {
+    "title": "About us",
+    "description": "Learn more about our vision, values, and the team behind Astro Starter Pro.",
+    "tagline": "About",
+    "vision": {
+      "title": "Our Vision",
+      "description1": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+      "description2": "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+    },
+    "values": {
+      "tagline": "Our Values",
+      "title": "What Defines Us",
+      "subtitle": "Principles that guide our daily work",
+      "innovation": "Innovation",
+      "innovationDesc": "Curabitur dignissim, felis non sollicitudin molestie, urna mauris pellentesque velit, ut eleifend.",
+      "commitment": "Commitment",
+      "commitmentDesc": "Aenean condimentum finibus mauris, a fermentum justo pan eget. Sed ultricies, neque quis.",
+      "quality": "Quality",
+      "qualityDesc": "Donec sed orci tincidunt, aliquam nisl a, condimentum nunc. Nulla varius ex nec ante feugiat.",
+      "transparency": "Transparency",
+      "transparencyDesc": "Phasellus tristique, elit dapibus cursus facilisis, lorem augue fringilla nunc, vitae fermentum.",
+      "teamwork": "Teamwork",
+      "teamworkDesc": "In hac habitasse platea dictumst. Vivamus adipiscing fermentum quam volutpat aliquam. Integer et.",
+      "excellence": "Excellence",
+      "excellenceDesc": "Fusce at massa nec sapien auctor gravida in in tellus. Vivamus a tristique metus, et molestie."
+    },
+    "actions": {
+      "contact": "Contact Us",
+      "viewDetails": "View Details"
+    }
+  },
+  "contact": {
+    "title": "Contact",
+    "description": "Get in touch with us to discuss your next project.",
+    "tagline": "Contact",
+    "means": {
+      "tagline": "Contact Means",
+      "title": "We are here to help you",
+      "subtitle": "Choose the communication channel you prefer. We respond in less than 24 hours.",
+      "phone": "Phone",
+      "phoneNumber": "+123 456 7890",
+      "email": "Email",
+      "emailAddress": "contact@company.com",
+      "location": "Location",
+      "locationText": "City, Country",
+      "personalized": "Personalized Attention",
+      "personalizedDesc": "We understand your needs to offer tailored solutions.",
+      "technical": "Technical Support",
+      "technicalDesc": "We resolve any doubt or technical incident quickly.",
+      "strategic": "Strategic Consulting",
+      "strategicDesc": "We advise you to ensure the success of your project."
+    }
+  },
+  "services": {
+    "title": "Our Services",
+    "description": "Discover our web development, SEO optimization, and technology consulting services.",
+    "tagline": "Services",
+    "intro": {
+      "description": "Comprehensive solutions designed to maximize the potential of your digital presence."
+    },
+    "webDevelopment": {
+      "title": "Web Development",
+      "tagline": "Web Development",
+      "description": "Static and dynamic sites built for the modern era.",
+      "longDescription": "We specialize in building fast, secure, and scalable websites using the latest technologies. We transform your vision into an impactful digital experience.",
+      "responsive": "Responsive Design",
+      "responsiveDesc": "Your site will look perfect on any device, from mobiles to desktop screens.",
+      "performance": "Optimized Performance",
+      "performanceDesc": "Fast loading to improve user experience and SEO positioning."
+    },
+    "seo": {
+      "title": "SEO Optimization",
+      "description": "We ensure your content is found by those looking for it.",
+      "longDescription": "We help your business get found by the right people. Our organic positioning strategies are designed to improve your organic visibility.",
+      "audit": "SEO Audit",
+      "auditDesc": "We deeply analyze your website to identify technical and content improvement opportunities.",
+      "content": "Content Strategy",
+      "contentDesc": "We create relevant content plans that attract and retain your target audience."
+    },
+    "consulting": {
+      "title": "IT Consulting",
+      "description": "Technical advice to scale your projects to the next level.",
+      "longDescription": "We accompany you in critical decision-making. We evaluate your current infrastructure and design personalized roadmaps to take your company to the next technological level.",
+      "transformation": "Digital Transformation",
+      "transformationDesc": "We guide you in adopting new technologies to optimize your business processes.",
+      "architecture": "Software Architecture",
+      "architectureDesc": "We design robust and scalable systems prepared for future growth."
+    }
+  },
+  "widgets":{
+    "hero":{
+      "title":"Lorem Ipsum Dolor Sit Amet"
+    }
+  },
+  "404":{
+    "title":"404 - Page Not Found",
+    "description":"We're sorry, we can't find the page you're looking for. It may have been moved or deleted."
+  },
+  "site": {
+    "name": "Astro Starter Pro",
+    "description": "Starter template optimized for SEO and performance. A solid foundation to start your projects with best practices.",
+    "nav": [
+      { "text": "Home", "href": "/" },
+      { "text": "About", "href": "/about" },
+      { "text": "Services", "href": "/services" },
+      { "text": "Blog", "href": "/blog" },
+      { "text": "Contact", "href": "/contact" },
+      { "text": "Widgets", "href": "/widgets" }
+    ]
+  }
+}

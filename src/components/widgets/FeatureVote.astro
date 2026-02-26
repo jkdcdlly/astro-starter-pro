@@ -1,0 +1,57 @@
+---
+import { Icon } from "astro-icon/components";
+import Headline from "@/components/ui/Headline.astro";
+interface Props {
+  lang: string;
+}
+
+const { lang } = Astro.props;
+
+// 模拟待增加功能的数据
+const features = [
+  { id: 1, title: "增加粉丝关注", votes: 120 },
+  { id: 2, title: "增加BUG收集", votes: 98 },
+  { id: 3, title: "增加地图评分系统", votes: 85 },
+  { id: 4, title: "增加用户评论功能", votes: 76 },
+  { id: 5, title: "增加地图分类筛选", votes: 65 },
+  { id: 6, title: "增加地图作者页面", votes: 54 },
+  { id: 7, title: "增加地图下载统计", votes: 43 },
+  { id: 8, title: "增加地图推荐系统", votes: 32 },
+  { id: 9, title: "增加地图收藏功能", votes: 21 },
+  { id: 10, title: "增加地图分享功能", votes: 10 },
+];
+
+// 按投票数排序
+const sortedFeatures = [...features].sort((a, b) => b.votes - a.votes);
+---
+
+<section class="py-16">
+  <div class="container mx-auto px-4">
+    <div class="max-w-7xl mx-auto">
+      <Headline
+        title={lang === 'zh' ? '你希望先增加哪些功能？' : 'Upcoming Features Vote ?'}
+        
+        tagline={lang === 'zh' ? '优先开发高投票功能' : 'Features with more votes will be prioritized'}
+        classes={{
+            container: "max-w-3xl mx-auto text-center",
+        }}
+    />
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        {sortedFeatures.map((feature) => (
+          <div class="bg-card border border-border rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow" data-id={feature.id}>
+            <div class="flex justify-between items-center mb-4">
+              <h3 class="text-lg font-medium">{feature.title}</h3>
+              <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm font-medium">
+                {feature.votes} 票
+              </span>
+            </div>
+            <button class="w-full flex items-center justify-center gap-2 px-4 py-2 bg-background border border-border rounded-md hover:bg-muted transition-colors">
+              <Icon name="lucide:thumbs-up" class="w-4 h-4" />
+              {lang === 'zh' ? '投票' : 'Vote'}
+            </button>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>

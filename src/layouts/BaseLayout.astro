@@ -11,6 +11,7 @@ interface Props {
         canonical?: string;
         ignoreTitleTemplate?: boolean;
     };
+    lang?: string;
 }
 
 import Seo from "../components/seo/Seo.astro";
@@ -23,17 +24,18 @@ import Analytics from "@vercel/analytics/astro";
 
 import { siteConfig } from "../config/site";
 
-const { title, description, ogImage, canonical, metadata } = Astro.props;
+const { title, description, ogImage, canonical, metadata, lang } = Astro.props;
 
 const finalTitle = metadata?.title || title;
 const finalDescription = metadata?.description || description;
 const finalOgImage = metadata?.ogImage || ogImage;
 const finalCanonical = metadata?.canonical || canonical;
 const finalIgnoreTitleTemplate = metadata?.ignoreTitleTemplate || false;
+const finalLang = lang || siteConfig.lang;
 ---
 
 <!doctype html>
-<html lang={siteConfig.lang} class="scroll-smooth">
+<html lang={finalLang} class="scroll-smooth">
     <head>
         <Seo
             title={finalTitle}
@@ -41,6 +43,7 @@ const finalIgnoreTitleTemplate = metadata?.ignoreTitleTemplate || false;
             ogImage={finalOgImage}
             canonical={finalCanonical}
             ignoreTitleTemplate={finalIgnoreTitleTemplate}
+            lang={finalLang}
         />
         <Schema type="WebSite" data={{}} />
         <slot name="head" />
