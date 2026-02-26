@@ -14,6 +14,14 @@
     "getStarted": "开始使用",
     "ourServices": "我们的服务"
   },
+  "index": {
+    "mapRecommendation": "地图推荐",
+    "featuredMaps": "精选地图推荐",
+    "mapSize": "地图尺寸",
+    "mapSizeValue": "176x208",
+    "support": "支持",
+    "supportValue": "经典与重制版"
+  },
   "features": {
     "tagline": "特性",
     "title": "开放+共赢",

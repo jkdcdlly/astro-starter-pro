@@ -8,30 +8,38 @@
     "widgets": "Widgets"
   },
   "hero": {
-    "title": "Starter Template for Web Developers",
-    "tagline": "Astro v5 + Tailwind v4",
-    "description": "Starter template optimized for SEO and performance. A solid foundation to start your projects with best practices.",
+    "title": "A Home for War3 Players and Creators",
+    "tagline": "A Warcraft III map community built by players, for players, and growing together with creators",
+    "description": "The future of this website is not decided by us alone, but by everyone together.",
     "getStarted": "Get Started",
     "ourServices": "Our Services"
   },
+  "index": {
+    "mapRecommendation": "Map Recommendation",
+    "featuredMaps": "Featured Maps",
+    "mapSize": "Map Size",
+    "mapSizeValue": "176x208",
+    "support": "Support",
+    "supportValue": "Classic & Reforged"
+  },
   "features": {
     "tagline": "Features",
-    "title": "What's Included",
-    "subtitle": "A selection of tools and configurations to streamline your workflow.",
-    "optimizedSeo": "Optimized SEO",
-    "optimizedSeoDesc": "Base configuration for Meta tags, Open Graph, and Sitemap generation.",
-    "highPerformance": "High Performance",
-    "highPerformanceDesc": "Lightweight structure for fast load times.",
-    "tailwind": "Tailwind v4",
-    "tailwindDesc": "Integrated configuration with the latest version of Tailwind CSS."
+    "title": "Open + Win-Win",
+    "subtitle": "We are an open and win-win Warcraft III map community where players and creators can interact, share, and grow together.",
+    "optimizedSeo": "Users Upload Fun Maps",
+    "optimizedSeoDesc": "If you are a regular user, you can upload Warcraft III maps here and share them with other users. You can upload map files, cloud storage links, or even share your own game videos.",
+    "highPerformance": "Creator Map Claiming",
+    "highPerformanceDesc": "If you are a Warcraft III map creator, you can claim your maps here. Here you can share your maps, share your tutorials, development progress, and collect feedback from fans. You can even link to your personal social media.",
+    "tailwind": "Community Building",
+    "tailwindDesc": "Whether you are a regular user or a map creator, you can participate in community building here. You can share your maps, tutorials, and even vote on which features to add to the website."
   },
   "development": {
-    "title": "Development",
-    "description": "We provide a solid foundation to start your projects with best practices."
+    "title": "Map 1",
+    "description": "This is a classic mapxxxxxxx"
   },
   "openSource": {
     "title": "Open Source & Community",
-    "description": "Join the revolution of modern web development. This project is open for everyone to use, learn from, and contribute to.",
+    "description": "Join the modern web development revolution. This project is open for everyone to use, learn from, and contribute to.",
     "openSource": "Open Source",
     "openSourceDesc": "Developed under the MIT license, free for personal and commercial use.",
     "communityDriven": "Community Driven",
@@ -157,8 +165,8 @@
     "description":"We're sorry, we can't find the page you're looking for. It may have been moved or deleted."
   },
   "site": {
-    "name": "Astro Starter Pro",
-    "description": "Starter template optimized for SEO and performance. A solid foundation to start your projects with best practices.",
+    "name": "A Home for War3 Players and Creators",
+    "description": "The future of this website is not decided by us alone, but by everyone together.",
     "nav": [
       { "text": "Home", "href": "/" },
       { "text": "About", "href": "/about" },
