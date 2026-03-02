@@ -169,6 +169,7 @@
     "description": "The future of this website is not decided by us alone, but by everyone together.",
     "nav": [
       { "text": "Home", "href": "/" },
+      { "text": "Maps", "href": "/maps" },
       { "text": "About", "href": "/about" },
       { "text": "Services", "href": "/services" },
       { "text": "Blog", "href": "/blog" },
