@@ -84,7 +84,7 @@ try {
       }]
     })
   });
-  console.log(`SELECT COUNT(*) as count FROM wc3maps_map_list ${whereClause};`)
+//   console.log(`SELECT COUNT(*) as count FROM wc3maps_map_list ${whereClause};`)
   const countData = await countResponse.json();
 //   console.log('Count Response:', countData);
 //   console.log('Count Response - Results:', countData?.results);
@@ -108,8 +108,8 @@ let maps = [];
 try {
   const mapsSql = `SELECT id, name, author, users, flags, downloads, hosted_total FROM wc3maps_map_list${whereClause} ORDER BY id DESC LIMIT ? OFFSET ?;`;
   const mapsArgs = [...args, { type: 'integer', value: limit.toString() }, { type: 'integer', value: offset.toString() }];
-  console.log('Maps SQL:', mapsSql);
-  console.log('Maps Args:', mapsArgs);
+//   console.log('Maps SQL:', mapsSql);
+//   console.log('Maps Args:', mapsArgs);
   
   const response = await fetch(DATABASE_URL, {
     method: 'POST',
@@ -160,7 +160,7 @@ const totalPages = Math.ceil(totalCount / limit);
 const generatePageUrl = (pageNum: number) => {
   const newUrl = new URL(Astro.url.toString());
   newUrl.searchParams.set('page', pageNum.toString());
-  console.log('Generated URL for page', pageNum, ':', newUrl.toString());
+//   console.log('Generated URL for page', pageNum, ':', newUrl.toString());
   return newUrl.pathname + newUrl.search;
 };
 
@@ -185,7 +185,7 @@ try {
   });
 
   const authorsData = await authorsResponse.json();
-  console.log('Authors Response:', authorsData);
+//   console.log('Authors Response:', authorsData);
   
   // 解析Turso返回的数组格式数据
   const authorRows = authorsData?.results?.[0]?.response?.rows || [];
