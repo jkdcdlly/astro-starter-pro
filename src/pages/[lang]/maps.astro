@@ -18,13 +18,16 @@ interface Props {
   };
 }
 
-
+const url = new URL(Astro.request.url);
+console.log("Astro.request.url:", url);
+const page = url.searchParams.get("page") ?? "1";
+console.log("url.searchParams:", page);
 const { params } = Astro.props;
 // console.log('Astro searchParams :', Astro.searchParams);
 const lang = getLangFromUrl(Astro.url);
 // 从URL获取筛选参数
-const page = parseInt((Astro.url?.searchParams?.get('page') || '1'));
-console.log('Astro.request.url :', Astro.request.url);
+// const page = parseInt((Astro.url?.searchParams?.get('page') || '1'));
+// console.log('Astro.request.url :', Astro.request.url);
 console.log('Current URL searchParams:', Astro.url?.searchParams);
 console.log('Current Page:', page);
 const author = Astro.url?.searchParams?.get('author');
@@ -58,7 +61,7 @@ if (flags) {
 }
 
 // 计算分页
-const limit = 30;
+const limit = 32;
 const offset = (page - 1) * limit;
 
 // 查询总记录数
@@ -334,7 +337,7 @@ try {
                     <a 
                       key={pageNum} 
                       href={generatePageUrl(pageNum)} 
-                      class={`px-4 py-2 border border-border rounded-md ${pageNum === page ? 'bg-primary text-primary-foreground' : 'hover:bg-muted'} transition-colors`}
+                      class={`px-4 py-2 border border-border rounded-md ${pageNum == page ? 'bg-primary text-primary-foreground' : 'hover:bg-muted'} transition-colors`}
                     >
                       {pageNum}
                     </a>
