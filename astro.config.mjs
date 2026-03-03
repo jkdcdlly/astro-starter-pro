@@ -9,6 +9,9 @@ import remarkReadingTime from "remark-reading-time";
 export default defineConfig({
   output: "server",
   adapter: cloudflare(),
+  image: {
+    service: { type: "compile" }, // ← 这里是对象
+  },
   site: "https://astrostarterpro.com/",
   integrations: [sitemap(), icon()],
   markdown: {
