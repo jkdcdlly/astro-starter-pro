@@ -19,17 +19,17 @@ interface Props {
 }
 
 const url = new URL(Astro.request.url);
-console.log("Astro.request.url:", url);
+// console.log("Astro.request.url:", url);
 const page = url.searchParams.get("page") ?? "1";
-console.log("url.searchParams:", page);
+// console.log("url.searchParams:", page);
 const { params } = Astro.props;
 // console.log('Astro searchParams :', Astro.searchParams);
 const lang = getLangFromUrl(Astro.url);
 // 从URL获取筛选参数
 // const page = parseInt((Astro.url?.searchParams?.get('page') || '1'));
 // console.log('Astro.request.url :', Astro.request.url);
-console.log('Current URL searchParams:', Astro.url?.searchParams);
-console.log('Current Page:', page);
+// console.log('Current URL searchParams:', Astro.url?.searchParams);
+// console.log('Current Page:', page);
 const author = Astro.url?.searchParams?.get('author');
 const users = Astro.url?.searchParams?.get('users');
 const flags = Astro.url?.searchParams?.get('flags');
@@ -39,7 +39,7 @@ const DATABASE_URL = 'https://war3mapsn8n-jkdcdlly-gmail.aws-ap-northeast-1.turs
 const TOKEN = 'eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJhIjoicnciLCJpYXQiOjE3NzIyMTcwMzUsImlkIjoiMDE5Y2EwNWQtMTIwMS03Y2I1LWJmY2YtNjM4OWUyNGVhOWYyIiwicmlkIjoiMGU3NTZmNjUtMzRlNC00NTU0LThhNjAtMDY3ZTA5MzBjMjViIn0.wktVX2ih_Us8qPJBvd1M7IGXe-ih5G5kUGLMWYxIAJPKQv8jtYs3C5Jmno-b0otorksooFX_ikd9XJkcWk_MDA';
 
 // 构建查询条件
-let whereClause = '';
+let whereClause = ' where group_id >0 ';
 const args = [];
 
 if (author) {
@@ -67,8 +67,8 @@ const offset = (page - 1) * limit;
 // 查询总记录数
 let totalCount = 0;
 try {
-  const countSql = `SELECT COUNT(*) as count FROM wc3maps_map_list${whereClause};`;
-//   console.log('Count SQL:', countSql);
+  const countSql = `SELECT COUNT(*) as count FROM wc3maps_map_list ${whereClause};`;
+  console.log('Count SQL:', countSql);
 //   console.log('Count Args:', args);
   
   const countResponse = await fetch(DATABASE_URL, {
