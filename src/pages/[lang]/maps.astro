@@ -25,6 +25,7 @@ const page = url.searchParams.get("page") ?? "1";
 const { params } = Astro.props;
 // console.log('Astro searchParams :', Astro.searchParams);
 const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
 // 从URL获取筛选参数
 // const page = parseInt((Astro.url?.searchParams?.get('page') || '1'));
 // console.log('Astro.request.url :', Astro.request.url);
@@ -199,6 +200,7 @@ try {
 } catch (error) {
   console.error('Error fetching authors:', error);
 }
+
 ---
 
 <BaseLayout title="Browse Maps" lang={lang}>
@@ -206,7 +208,7 @@ try {
     <div class="container mx-auto px-4">
       <!-- Header -->
       <div class="text-center mb-12">
-        <h1 class="text-3xl font-bold mb-4">Browse Maps</h1>
+        <h1 class="text-3xl font-bold mb-4">{t('BrowseMaps')}</h1>
         <p class="text-muted-foreground">Discover custom Warcraft III maps and find your next adventure.</p>
       </div>
 

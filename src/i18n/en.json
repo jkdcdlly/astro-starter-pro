@@ -176,5 +176,6 @@
       { "text": "Contact", "href": "/contact" },
       { "text": "Widgets", "href": "/widgets" }
     ]
-  }
+  },
+  "BrowseMaps":"Browse Maps"
 }

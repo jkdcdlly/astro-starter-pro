@@ -176,5 +176,6 @@
       { "text": "联系我们", "href": "/contact" },
       { "text": "组件", "href": "/widgets" }
     ]
-  }
+  },
+  "BrowseMaps":"浏览地图"
 }
