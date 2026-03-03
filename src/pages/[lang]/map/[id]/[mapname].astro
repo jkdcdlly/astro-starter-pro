@@ -1,0 +1,325 @@
+---
+import BaseLayout from '../../../../layouts/BaseLayout.astro';
+import { siteConfig } from '../../../../config/site';
+import { useTranslations, getLangFromUrl, ui, defaultLang } from "@/i18n";
+// Export getStaticPaths function
+export function getStaticPaths() {
+  // Filter out default language (handled by root pages)
+  const languages = Object.keys(ui).filter(lang => lang !== defaultLang);
+  
+  // Generate paths for each language (dynamic pages will be generated on the fly)
+  return languages.map(lang => ({
+    params: { lang, id: '1', mapname: 'map' },
+    props: { lang },
+  }));
+}
+
+interface Props {
+    lang: string;
+    id: string;
+    mapname: string;
+}
+const params = Astro.params;
+const mapId = params.id;
+const mapName = params.name;
+console.log('Astro.url:', Astro.url.pathname);
+
+const lang = getLangFromUrl(Astro.url);
+
+
+
+
+console.log('Map ID:', mapId);
+console.log('Map Name:', mapName);
+
+// 数据库连接配置
+const DATABASE_URL = 'https://war3mapsn8n-jkdcdlly-gmail.aws-ap-northeast-1.turso.io/v2/pipeline';
+const TOKEN = 'eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJhIjoicnciLCJpYXQiOjE3NzIyMTcwMzUsImlkIjoiMDE5Y2EwNWQtMTIwMS03Y2I1LWJmY2YtNjM4OWUyNGVhOWYyIiwicmlkIjoiMGU3NTZmNjUtMzRlNC00NTU0LThhNjAtMDY3ZTA5MzBjMjViIn0.wktVX2ih_Us8qPJBvd1M7IGXe-ih5G5kUGLMWYxIAJPKQv8jtYs3C5Jmno-b0otorksooFX_ikd9XJkcWk_MDA';
+
+// 查询地图详情数据
+let mapData = null;
+try {
+  const response = await fetch(DATABASE_URL, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${TOKEN}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      requests: [{
+        type: 'execute',
+        stmt: {
+          sql: 'SELECT * FROM wc3_maps_complete WHERE id = ?;',
+          args: [{ type: 'integer', value: mapId.toString() }]
+        }
+      }]
+    })
+  });
+
+  const data = await response.json();
+  console.log('Map Response:', data);
+  
+  // 解析Turso返回的数组格式数据
+  const rows = data?.results?.[0]?.response?.result.rows || [];
+  if (rows.length > 0) {
+    const row = rows[0];
+    mapData = {
+      id: row[0]?.value,
+      path: row[1]?.value,
+      name: row[2]?.value,
+      name2: row[3]?.value,
+      description: row[4]?.value,
+      author: row[5]?.value,
+      first_hosted: row[6]?.value,
+      last_hosted: row[7]?.value,
+      parsed: row[8]?.value,
+      downloads: row[9]?.value,
+      hosted_month: row[10]?.value,
+      hosted_total: row[11]?.value,
+      saves: row[12]?.value,
+      sha1: row[13]?.value,
+      tileset: row[14]?.value,
+      format_version: row[15]?.value,
+      editor_ver: row[16]?.value,
+      player_count: row[17]?.value,
+      users: row[18]?.value,
+      flags: row[19]?.value,
+      width: row[20]?.value,
+      height: row[21]?.value,
+      playable_height: row[22]?.value,
+      playable_width: row[23]?.value,
+      team_count: row[24]?.value,
+      team_info: row[25]?.value,
+      loadscreen: row[26]?.value,
+      minimap_data: row[27]?.value,
+      size: row[28]?.value,
+      suggestion: row[29]?.value,
+      slot_info: row[30]?.value,
+      alias: row[31]?.value,
+      script: row[32]?.value,
+      graphics: row[33]?.value,
+      build: row[34]?.value,
+      likes: row[35]?.value,
+      cheats: row[36]?.value,
+      transpiler: row[37]?.value,
+      has_triggers: row[38]?.value,
+      group_id: row[39]?.value,
+      group_hosted_total: row[40]?.value,
+      group_downloads: row[41]?.value,
+      latest: row[42]?.value,
+      group_hosted_month: row[43]?.value,
+      preview: row[44]?.value,
+      history: row[45]?.value,
+      tags: row[46]?.value,
+      created_at: row[47]?.value,
+      updated_at: row[48]?.value,
+      processed_at: row[49]?.value
+    };
+    console.log('Map Data:', mapData['id']);
+  }
+} catch (error) {
+  console.error('Error fetching map data:', error);
+}
+
+// 如果没有找到地图数据，返回404
+if (!mapData) {
+  return Astro.redirect('/404');
+}
+---
+
+<BaseLayout title={mapData.name} lang={lang}>
+  <section class="py-12">
+    <div class="container mx-auto px-4">
+      <!-- Header -->
+      <div class="text-center mb-12">
+        <h1 class="text-3xl font-bold mb-4">{mapData.name}</h1>
+        <p class="text-muted-foreground">by {mapData.author || 'Unknown'}</p>
+      </div>
+
+      <!-- Main Content -->
+      <div class="flex flex-col lg:flex-row gap-8">
+        <!-- Left Column - Map Info -->
+        <div class="w-full lg:w-1/3">
+          <!-- Map Preview -->
+          <div class="mb-6">
+            <img 
+              src={`https://wc3maps.com/static/maps/${mapData.id}/archive/war3mapMap.jpg`} 
+              alt={mapData.name} 
+              class="w-full rounded-lg shadow-md"
+              onerror="this.src='https://via.placeholder.com/400x300?text=No+Preview';"
+            />
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="flex gap-4 mb-6">
+            <a 
+              href={`https://wc3maps.com/download/${mapData.id}`} 
+              target="_blank"
+              rel="noopener noreferrer"
+              class="flex-1 px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors"
+            >
+              Download
+            </a>
+            <a 
+              href={`https://wc3maps.com/map/${mapData.id}`} 
+              target="_blank"
+              rel="noopener noreferrer"
+              class="px-4 py-2 border border-border rounded-md hover:bg-muted transition-colors"
+            >
+              View on WC3Maps
+            </a>
+          </div>
+
+          <!-- Map Details -->
+          <div class="bg-card border border-border rounded-lg p-4 mb-6">
+            <h3 class="font-semibold mb-4">Map Details</h3>
+            
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <p class="text-sm text-muted-foreground">Status</p>
+                <p class="font-medium">{mapData.parsed ? 'Parsed' : 'Not Parsed'}</p>
+              </div>
+              <div>
+                <p class="text-sm text-muted-foreground">Game Version</p>
+                <p class="font-medium">{mapData.build || 'Unknown'}</p>
+              </div>
+              <div>
+                <p class="text-sm text-muted-foreground">Version</p>
+                <p class="font-medium">{mapData.format_version || 'Unknown'}</p>
+              </div>
+              <div>
+                <p class="text-sm text-muted-foreground">Script</p>
+                <p class="font-medium">{mapData.script === 1 ? 'Lua' : 'JASS'}</p>
+              </div>
+              <div>
+                <p class="text-sm text-muted-foreground">Size</p>
+                <p class="font-medium">{mapData.size ? `${(mapData.size / 1024 / 1024).toFixed(2)} MB` : 'Unknown'}</p>
+              </div>
+              <div>
+                <p class="text-sm text-muted-foreground">Saves</p>
+                <p class="font-medium">{mapData.saves || 0}</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Statistics -->
+          <div class="bg-card border border-border rounded-lg p-4">
+            <h3 class="font-semibold mb-4">Statistics</h3>
+            
+            <div class="space-y-4">
+              <div>
+                <div class="flex justify-between mb-1">
+                  <p class="text-sm text-muted-foreground">Downloads</p>
+                  <p class="font-medium">{mapData.downloads || 0}</p>
+                </div>
+                <div class="w-full bg-muted rounded-full h-2">
+                  <div class="bg-primary h-2 rounded-full" style="width: 70%"></div>
+                </div>
+              </div>
+              
+              <div>
+                <div class="flex justify-between mb-1">
+                  <p class="text-sm text-muted-foreground">Hosted Total</p>
+                  <p class="font-medium">{mapData.hosted_total || 0}</p>
+                </div>
+                <div class="w-full bg-muted rounded-full h-2">
+                  <div class="bg-primary h-2 rounded-full" style="width: 50%"></div>
+                </div>
+              </div>
+              
+              <div>
+                <div class="flex justify-between mb-1">
+                  <p class="text-sm text-muted-foreground">Hosted This Month</p>
+                  <p class="font-medium">{mapData.hosted_month || 0}</p>
+                </div>
+                <div class="w-full bg-muted rounded-full h-2">
+                  <div class="bg-primary h-2 rounded-full" style="width: 30%"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column - Description -->
+        <div class="w-full lg:w-2/3">
+          <!-- Description -->
+          <div class="bg-card border border-border rounded-lg p-6 mb-6">
+            <h3 class="font-semibold mb-4">Description</h3>
+            <div class="prose max-w-none">
+              {mapData.description ? (
+                <div dangerouslySetInnerHTML={{ __html: mapData.description.replace(/\n/g, '<br>') }} />
+              ) : (
+                <p>No description available</p>
+              )}
+            </div>
+          </div>
+
+          <!-- Map Information -->
+          <div class="bg-card border border-border rounded-lg p-6 mb-6">
+            <h3 class="font-semibold mb-4">Map Information</h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <h4 class="font-medium mb-2">Basic Info</h4>
+                <ul class="space-y-2">
+                  <li class="flex justify-between">
+                    <span class="text-muted-foreground">Author:</span>
+                    <span>{mapData.author || 'Unknown'}</span>
+                  </li>
+                  <li class="flex justify-between">
+                    <span class="text-muted-foreground">Players:</span>
+                    <span>{mapData.player_count || 1}</span>
+                  </li>
+                  <li class="flex justify-between">
+                    <span class="text-muted-foreground">Tileset:</span>
+                    <span>{mapData.tileset || 'Unknown'}</span>
+                  </li>
+                  <li class="flex justify-between">
+                    <span class="text-muted-foreground">Size:</span>
+                    <span>{mapData.width}x{mapData.height} ({mapData.playable_width}x{mapData.playable_height} playable)</span>
+                  </li>
+                </ul>
+              </div>
+              
+              <div>
+                <h4 class="font-medium mb-2">Technical</h4>
+                <ul class="space-y-2">
+                  <li class="flex justify-between">
+                    <span class="text-muted-foreground">Graphics:</span>
+                    <span>{mapData.graphics === 2 ? 'HD' : mapData.graphics === 1 ? 'SD' : 'SD & HD'}</span>
+                  </li>
+                  <li class="flex justify-between">
+                    <span class="text-muted-foreground">Triggers:</span>
+                    <span>{mapData.has_triggers ? 'Yes' : 'No'}</span>
+                  </li>
+                  <li class="flex justify-between">
+                    <span class="text-muted-foreground">Cheats:</span>
+                    <span>{mapData.cheats ? 'Allowed' : 'Not Allowed'}</span>
+                  </li>
+                  <li class="flex justify-between">
+                    <span class="text-muted-foreground">Team Count:</span>
+                    <span>{mapData.team_count || 1}</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tags -->
+          {mapData.tags && (
+            <div class="bg-card border border-border rounded-lg p-6">
+              <h3 class="font-semibold mb-4">Tags</h3>
+              <div class="flex flex-wrap gap-2">
+                {mapData.tags.split(',').map((tag: string) => (
+                  <span key={tag} class="px-3 py-1 bg-muted text-muted-foreground rounded-full text-sm">
+                    {tag.trim()}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

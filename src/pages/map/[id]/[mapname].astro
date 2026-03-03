@@ -1,0 +1,27 @@
+---
+import MapTemplate from '@/pages/[lang]/map/[id]/[mapname].astro';
+import { defaultLang } from "@/i18n";
+
+// 为默认语言生成路径
+export function getStaticPaths() {
+  const params_str:string = Astro.url.pathname.split("/map/")[1];
+  const params = params_str.split("/")[0];
+
+  return {
+    params: { id: params_str.split("/")[0], mapname: params_str.split("/")[0]||'' },
+  };
+}
+
+interface Props {
+  params: {
+    id: string;
+    mapname: string;
+  };
+}
+
+const { params } = Astro.props;
+// const params = Astro.url.pathname.split("/map/")[1]
+---
+
+<!-- 直接渲染多语言组件，强制传入默认语言 -->
+<MapTemplate lang={defaultLang} params={{ ...params, lang: defaultLang }} />
