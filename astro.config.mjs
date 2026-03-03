@@ -1,4 +1,6 @@
 import { defineConfig } from "astro/config";
+import cloudflare from "@astrojs/cloudflare";
+
 import sitemap from "@astrojs/sitemap";
 import tailwindcss from "@tailwindcss/vite";
 import icon from "astro-icon";
@@ -6,6 +8,7 @@ import remarkReadingTime from "remark-reading-time";
 
 export default defineConfig({
   output: "server",
+  adapter: cloudflare(),
   site: "https://astrostarterpro.com/",
   integrations: [sitemap(), icon()],
   markdown: {
