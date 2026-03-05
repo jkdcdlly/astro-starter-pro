@@ -65,11 +65,7 @@ let authors: string[] = [];
 
 // 获取 D1 数据库实例
 const runtime = Astro.locals?.runtime as Env | undefined;
-let db: D1Database | null = null;
-
-if (runtime?.DB) {
-  db = runtime.DB;
-}
+const db = runtime?.DB as D1Database;
 
 // 尝试获取缓存
 const cacheKey = new URL(url.toString());
@@ -78,7 +74,7 @@ let cache: Cache | null = null;
 try {
   cache = runtime?.CACHE || (typeof caches !== 'undefined' ? await caches.open('astro-cache') : null);
 } catch (e) {
-  console.log('Cache not available in development mode');
+  console.log('Cache not available');
 }
 
 // 检查缓存中是否有数据
@@ -97,7 +93,7 @@ if (cache) {
 }
 
 // 如果缓存中没有数据或缓存不可用，从数据库获取
-if (!maps.length && db) {
+if (!maps.length) {
   try {
     // 查询总数
     const countSql = `SELECT COUNT(*) as count FROM wc3maps_map_list ${whereClause}`;
@@ -132,18 +128,6 @@ if (!maps.length && db) {
   } catch (error) {
     console.error('Error fetching data:', error);
   }
-}
-
-// 如果在本地开发环境且没有数据库，提供一些模拟数据
-if (!db && maps.length === 0) {
-  console.log('Local development mode - using mock data');
-  totalCount = 100;
-  maps = [
-    { id: 1, name: 'Demo Map 1', author: 'DemoAuthor', users: 4, flags: 0, downloads: 1000, hosted_total: 500 },
-    { id: 2, name: 'Demo Map 2', author: 'DemoAuthor', users: 8, flags: 1, downloads: 2000, hosted_total: 1500 },
-    { id: 3, name: 'Demo Map 3', author: 'AnotherAuthor', users: 2, flags: 0, downloads: 500, hosted_total: 200 },
-  ];
-  authors = ['DemoAuthor', 'AnotherAuthor'];
 }
 
 // 设置响应头缓存

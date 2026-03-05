@@ -33,11 +33,7 @@ const lang = getLangFromUrl(Astro.url);
 
 // 获取 D1 数据库实例
 const runtime = Astro.locals?.runtime as Env | undefined;
-let db: D1Database | null = null;
-
-if (runtime?.DB) {
-  db = runtime.DB;
-}
+const db = runtime?.DB as D1Database;
 
 // 尝试获取缓存
 const cacheKey = new URL(Astro.request.url);
@@ -46,7 +42,7 @@ let cache: Cache | null = null;
 try {
   cache = runtime?.CACHE || (typeof caches !== 'undefined' ? await caches.open('astro-cache') : null);
 } catch (e) {
-  console.log('Cache not available in development mode');
+  console.log('Cache not available');
 }
 
 // 查询地图详情数据
@@ -65,7 +61,7 @@ if (cache) {
 }
 
 // 如果缓存中没有数据或缓存不可用，从数据库获取
-if (!mapData && db) {
+if (!mapData) {
   try {
     const sql = 'SELECT * FROM wc3_maps_complete WHERE id = ?';
     mapData = await db.prepare(sql).bind(parseInt(mapId)).first();
@@ -86,36 +82,6 @@ if (!mapData && db) {
   } catch (error) {
     console.error('Error fetching map data:', error);
   }
-}
-
-// 如果在本地开发环境且没有数据库，提供一些模拟数据
-if (!db && !mapData) {
-  console.log('Local development mode - using mock data');
-  mapData = {
-    id: parseInt(mapId) || 1,
-    name: 'Demo Map',
-    author: 'DemoAuthor',
-    description: 'This is a demo map description for local development.',
-    downloads: 1000,
-    hosted_total: 500,
-    hosted_month: 100,
-    saves: 50,
-    player_count: 4,
-    users: 8,
-    flags: 0,
-    width: 64,
-    height: 64,
-    playable_width: 60,
-    playable_height: 60,
-    team_count: 2,
-    graphics: 0,
-    has_triggers: 1,
-    cheats: 0,
-    tags: 'Demo, Test',
-    tileset: 'Lordaeron Summer',
-    build: '1.31',
-    parsed: 1
-  };
 }
 
 // 设置响应头缓存
