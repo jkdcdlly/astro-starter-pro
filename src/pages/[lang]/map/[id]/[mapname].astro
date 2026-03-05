@@ -32,15 +32,27 @@ const mapName = params.name;
 const lang = getLangFromUrl(Astro.url);
 
 // 获取 D1 数据库实例
-const runtime = Astro.locals?.runtime as Env | undefined;
-const db = runtime?.DB as D1Database;
+let db: D1Database | null = null;
+
+// 尝试不同的方式获取数据库实例
+try {
+  if (Astro.locals?.runtime?.DB) {
+    db = Astro.locals.runtime.DB;
+  } else if ((Astro.locals as any)?.DB) {
+    db = (Astro.locals as any).DB;
+  }
+} catch (e) {
+  console.log('Failed to get DB from Astro.locals');
+}
 
 // 尝试获取缓存
 const cacheKey = new URL(Astro.request.url);
 let cache: Cache | null = null;
 
 try {
-  cache = runtime?.CACHE || (typeof caches !== 'undefined' ? await caches.open('astro-cache') : null);
+  if (typeof caches !== 'undefined') {
+    cache = await caches.open('astro-cache');
+  }
 } catch (e) {
   console.log('Cache not available');
 }
@@ -61,7 +73,7 @@ if (cache) {
 }
 
 // 如果缓存中没有数据或缓存不可用，从数据库获取
-if (!mapData) {
+if (!mapData && db) {
   try {
     const sql = 'SELECT * FROM wc3_maps_complete WHERE id = ?';
     mapData = await db.prepare(sql).bind(parseInt(mapId)).first();
@@ -82,6 +94,11 @@ if (!mapData) {
   } catch (error) {
     console.error('Error fetching map data:', error);
   }
+}
+
+// 如果还是没有数据，提供调试信息
+if (!mapData) {
+  console.log('No map data found - db available:', !!db);
 }
 
 // 设置响应头缓存
