@@ -63,19 +63,32 @@ let totalCount = 0;
 let maps: any[] = [];
 let authors: string[] = [];
 
+// 调试信息
+console.log('=== MAPS PAGE DEBUG ===');
+console.log('Astro.locals exists:', !!Astro.locals);
+console.log('Astro.locals.runtime exists:', !!(Astro.locals as any)?.runtime);
+
 // 获取 D1 数据库实例
 let db: D1Database | null = null;
 
 // 尝试不同的方式获取数据库实例
 try {
+  console.log('Trying to get DB from Astro.locals.runtime.DB:', !!(Astro.locals as any)?.runtime?.DB);
   if (Astro.locals?.runtime?.DB) {
     db = Astro.locals.runtime.DB;
+    console.log('Got DB from runtime');
   } else if ((Astro.locals as any)?.DB) {
     db = (Astro.locals as any).DB;
+    console.log('Got DB from locals directly');
+  } else {
+    console.log('DB not found in locals');
+    console.log('All locals keys:', Object.keys(Astro.locals || {}));
   }
 } catch (e) {
-  console.log('Failed to get DB from Astro.locals');
+  console.log('Failed to get DB from Astro.locals:', e);
 }
+
+console.log('DB available:', !!db);
 
 // 尝试获取缓存
 const cacheKey = new URL(url.toString());
@@ -98,6 +111,7 @@ if (cache) {
       totalCount = cachedData.totalCount;
       maps = cachedData.maps;
       authors = cachedData.authors;
+      console.log('Loaded from cache');
     }
   } catch (e) {
     console.log('Cache read failed, fetching fresh data');
@@ -107,21 +121,43 @@ if (cache) {
 // 如果缓存中没有数据或缓存不可用，从数据库获取
 if (!maps.length && db) {
   try {
+    console.log('Fetching from database...');
+    
+    // 先尝试一个简单的查询来测试数据库
+    try {
+      const testResult = await db.prepare('SELECT COUNT(*) as count FROM wc3maps_map_list').first();
+      console.log('Test query result:', testResult);
+    } catch (testErr) {
+      console.log('Test query failed:', testErr);
+      // 尝试另一个表名
+      try {
+        const testResult2 = await db.prepare('SELECT COUNT(*) as count FROM wc3_maps_complete').first();
+        console.log('Test query 2 result:', testResult2);
+      } catch (testErr2) {
+        console.log('Test query 2 failed:', testErr2);
+      }
+    }
+    
     // 查询总数
     const countSql = `SELECT COUNT(*) as count FROM wc3maps_map_list ${whereClause}`;
+    console.log('Count SQL:', countSql);
     const countResult = await db.prepare(countSql).bind(...args).first<{ count: number }>();
     totalCount = countResult?.count || 0;
+    console.log('Total count:', totalCount);
 
     // 查询地图数据
     const mapsSql = `SELECT id, name, author, users, flags, downloads, hosted_total FROM wc3maps_map_list ${whereClause} ORDER BY id DESC LIMIT ? OFFSET ?`;
     const mapsArgs = [...args, limit, offset];
+    console.log('Maps SQL:', mapsSql);
     const mapsResult = await db.prepare(mapsSql).bind(...mapsArgs).all();
     maps = mapsResult.results || [];
+    console.log('Maps found:', maps.length);
 
     // 获取所有作者列表（用于筛选）
     const authorsSql = 'SELECT DISTINCT author FROM wc3maps_map_list WHERE author IS NOT NULL AND author != ? ORDER BY author LIMIT 50';
     const authorsResult = await db.prepare(authorsSql).bind('').all();
     authors = authorsResult.results?.map((row: any) => row.author).filter(Boolean) || [];
+    console.log('Authors found:', authors.length);
 
     // 缓存结果（如果缓存可用）
     if (cache) {
@@ -144,7 +180,8 @@ if (!maps.length && db) {
 
 // 如果还是没有数据，提供调试信息
 if (maps.length === 0) {
-  console.log('No maps found - db available:', !!db);
+  console.log('No maps found at the end - db available:', !!db);
+  console.log('=== END DEBUG ===');
 }
 
 // 设置响应头缓存
