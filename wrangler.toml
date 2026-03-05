@@ -1,0 +1,9 @@
+#:schema node_modules/wrangler/config-schema.json
+name = "astro-starter-pro"
+compatibility_date = "2024-04-01"
+
+# D1 数据库配置
+[[d1_databases]]
+binding = "DB"
+database_name = "wc3maps"
+database_id = "62f121ec-2770-4623-8f10-403de6d3d932"

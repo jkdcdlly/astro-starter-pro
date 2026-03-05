@@ -2,6 +2,12 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { siteConfig } from '../../config/site';
 import { useTranslations, getLangFromUrl, ui, defaultLang } from "@/i18n";
+
+type Env = {
+  DB: D1Database;
+  CACHE: Cache;
+};
+
 // Export getStaticPaths function
 export function getStaticPaths() {
   // Filter out default language (handled by root pages)
@@ -12,150 +18,136 @@ export function getStaticPaths() {
     props: { lang },
   }));
 }
+
 interface Props {
   params: {
     lang: string;
   };
 }
 
-const url = new URL(Astro.request.url);
-// console.log("Astro.request.url:", url);
-const page = url.searchParams.get("page") ?? "1";
-// console.log("url.searchParams:", page);
-const { params } = Astro.props;
-// console.log('Astro searchParams :', Astro.searchParams);
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
+
 // 从URL获取筛选参数
-// const page = parseInt((Astro.url?.searchParams?.get('page') || '1'));
-// console.log('Astro.request.url :', Astro.request.url);
-// console.log('Current URL searchParams:', Astro.url?.searchParams);
-// console.log('Current Page:', page);
+const url = new URL(Astro.request.url);
+const page: number = parseInt(url.searchParams.get("page") || "1");
 const author = Astro.url?.searchParams?.get('author');
 const users = Astro.url?.searchParams?.get('users');
 const flags = Astro.url?.searchParams?.get('flags');
 
-// 数据库连接配置
-const DATABASE_URL = 'https://war3mapsn8n-jkdcdlly-gmail.aws-ap-northeast-1.turso.io/v2/pipeline';
-const TOKEN = 'eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJhIjoicnciLCJpYXQiOjE3NzIyMTcwMzUsImlkIjoiMDE5Y2EwNWQtMTIwMS03Y2I1LWJmY2YtNjM4OWUyNGVhOWYyIiwicmlkIjoiMGU3NTZmNjUtMzRlNC00NTU0LThhNjAtMDY3ZTA5MzBjMjViIn0.wktVX2ih_Us8qPJBvd1M7IGXe-ih5G5kUGLMWYxIAJPKQv8jtYs3C5Jmno-b0otorksooFX_ikd9XJkcWk_MDA';
-
 // 构建查询条件
-let whereClause = ' where group_id >0 ';
-const args = [];
+let whereClause = ' WHERE group_id > 0 ';
+const args: (string | number)[] = [];
 
 if (author) {
-  whereClause += whereClause ? ' AND ' : ' WHERE ';
-  whereClause += 'author = ?';
-  args.push({ type: 'text', value: author });
+  whereClause += ' AND author = ?';
+  args.push(author);
 }
 
 if (users) {
-  whereClause += whereClause ? ' AND ' : ' WHERE ';
-  whereClause += 'users >= ?';
-  args.push({ type: 'integer', value: users.toString() });
+  whereClause += ' AND users >= ?';
+  args.push(parseInt(users));
 }
 
 if (flags) {
-  whereClause += whereClause ? ' AND ' : ' WHERE ';
-  whereClause += 'flags = ?';
-  args.push({ type: 'integer', value: flags.toString() });
+  whereClause += ' AND flags = ?';
+  args.push(parseInt(flags));
 }
 
 // 计算分页
 const limit = 12;
 const offset = (page - 1) * limit;
 
-// 查询总记录数
+// 初始化数据变量
 let totalCount = 0;
-try {
-  const countSql = `SELECT COUNT(*) as count FROM wc3maps_map_list ${whereClause};`;
-  console.log('Count SQL:', countSql);
-//   console.log('Count Args:', args);
-  
-  const countResponse = await fetch(DATABASE_URL, {
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${TOKEN}`,
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      requests: [{
-        type: 'execute',
-        stmt: {
-          sql: countSql,
-          args: args
-        }
-      }]
-    })
-  });
-//   console.log(`SELECT COUNT(*) as count FROM wc3maps_map_list ${whereClause};`)
-  const countData = await countResponse.json();
-//   console.log('Count Response:', countData);
-//   console.log('Count Response - Results:', countData?.results);
-//   console.log('Count Response - First Result:', countData?.results?.[0]);
-//   console.log('Count Response - Response:', countData?.results?.[0]?.response);
-//   console.log('Count Response - Rows:', countData?.results?.[0]?.response?.result?.rows);
-//   console.log('Maps Response - Rows:', data?.results?.[0]?.response?.result?.rows);
-//   maps = data?.results?.[0]?.response?.result?.rows || [];
+let maps: any[] = [];
+let authors: string[] = [];
 
-  
-  // 解析Turso返回的数组格式数据
-  const countRows = countData?.results?.[0]?.response?.result?.rows || [];
-  totalCount = countRows[0]?.[0]?.value || 0;
-  console.log('Total Count:', totalCount);
-} catch (error) {
-  console.error('Error fetching count:', error);
+// 获取 D1 数据库实例
+const runtime = Astro.locals?.runtime as Env | undefined;
+let db: D1Database | null = null;
+
+if (runtime?.DB) {
+  db = runtime.DB;
 }
 
-// 查询地图数据
-let maps = [];
-try {
-  const mapsSql = `SELECT id, name, author, users, flags, downloads, hosted_total FROM wc3maps_map_list${whereClause} ORDER BY id DESC LIMIT ? OFFSET ?;`;
-  const mapsArgs = [...args, { type: 'integer', value: limit.toString() }, { type: 'integer', value: offset.toString() }];
-//   console.log('Maps SQL:', mapsSql);
-//   console.log('Maps Args:', mapsArgs);
-  
-  const response = await fetch(DATABASE_URL, {
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${TOKEN}`,
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      requests: [{
-        type: 'execute',
-        stmt: {
-          sql: mapsSql,
-          args: mapsArgs
-        }
-      }]
-    })
-  });
+// 尝试获取缓存
+const cacheKey = new URL(url.toString());
+let cache: Cache | null = null;
 
-  const data = await response.json();
-//   console.log('Maps Response:', data);
-//   console.log('Maps Response - Results:', data?.results);
-//   console.log('Maps Response - First Result:', data?.results?.[0]);
-//   console.log('Maps Response - Response:', data?.results?.[0]?.response);
-//   console.log('Maps Response - Rows:', data?.results?.[0]?.response?.result?.rows);
-  
-  // 解析Turso返回的数组格式数据
-  const rows = data?.results?.[0]?.response?.result?.rows || [];
-  maps = rows.map((row: any[]) => ({
-    id: row[0]?.value,
-    name: row[1]?.value,
-    author: row[2]?.value,
-    users: row[3]?.value,
-    flags: row[4]?.value,
-    downloads: row[5]?.value,
-    hosted_total: row[6]?.value
-  }));
-  
-//   console.log('Maps Data:', maps);
-  console.log('Maps Count:', maps.length);
-} catch (error) {
-  console.error('Error fetching maps:', error);
+try {
+  cache = runtime?.CACHE || (typeof caches !== 'undefined' ? await caches.open('astro-cache') : null);
+} catch (e) {
+  console.log('Cache not available in development mode');
 }
+
+// 检查缓存中是否有数据
+if (cache) {
+  try {
+    const cachedResponse = await cache.match(cacheKey);
+    if (cachedResponse) {
+      const cachedData = await cachedResponse.json();
+      totalCount = cachedData.totalCount;
+      maps = cachedData.maps;
+      authors = cachedData.authors;
+    }
+  } catch (e) {
+    console.log('Cache read failed, fetching fresh data');
+  }
+}
+
+// 如果缓存中没有数据或缓存不可用，从数据库获取
+if (!maps.length && db) {
+  try {
+    // 查询总数
+    const countSql = `SELECT COUNT(*) as count FROM wc3maps_map_list ${whereClause}`;
+    const countResult = await db.prepare(countSql).bind(...args).first<{ count: number }>();
+    totalCount = countResult?.count || 0;
+
+    // 查询地图数据
+    const mapsSql = `SELECT id, name, author, users, flags, downloads, hosted_total FROM wc3maps_map_list ${whereClause} ORDER BY id DESC LIMIT ? OFFSET ?`;
+    const mapsArgs = [...args, limit, offset];
+    const mapsResult = await db.prepare(mapsSql).bind(...mapsArgs).all();
+    maps = mapsResult.results || [];
+
+    // 获取所有作者列表（用于筛选）
+    const authorsSql = 'SELECT DISTINCT author FROM wc3maps_map_list WHERE author IS NOT NULL AND author != ? ORDER BY author LIMIT 50';
+    const authorsResult = await db.prepare(authorsSql).bind('').all();
+    authors = authorsResult.results?.map((row: any) => row.author).filter(Boolean) || [];
+
+    // 缓存结果（如果缓存可用）
+    if (cache) {
+      try {
+        const cacheData = { totalCount, maps, authors };
+        const response = new Response(JSON.stringify(cacheData), {
+          headers: {
+            'Cache-Control': 'public, max-age=300, s-maxage=300',
+          }
+        });
+        await cache.put(cacheKey, response);
+      } catch (e) {
+        console.log('Cache write failed');
+      }
+    }
+  } catch (error) {
+    console.error('Error fetching data:', error);
+  }
+}
+
+// 如果在本地开发环境且没有数据库，提供一些模拟数据
+if (!db && maps.length === 0) {
+  console.log('Local development mode - using mock data');
+  totalCount = 100;
+  maps = [
+    { id: 1, name: 'Demo Map 1', author: 'DemoAuthor', users: 4, flags: 0, downloads: 1000, hosted_total: 500 },
+    { id: 2, name: 'Demo Map 2', author: 'DemoAuthor', users: 8, flags: 1, downloads: 2000, hosted_total: 1500 },
+    { id: 3, name: 'Demo Map 3', author: 'AnotherAuthor', users: 2, flags: 0, downloads: 500, hosted_total: 200 },
+  ];
+  authors = ['DemoAuthor', 'AnotherAuthor'];
+}
+
+// 设置响应头缓存
+Astro.response.headers.set('Cache-Control', 'public, max-age=300, s-maxage=300');
 
 // 计算总页数
 const totalPages = Math.ceil(totalCount / limit);
@@ -164,42 +156,10 @@ const totalPages = Math.ceil(totalCount / limit);
 const generatePageUrl = (pageNum: number) => {
   const newUrl = new URL(Astro.url.toString());
   newUrl.searchParams.set('page', pageNum.toString());
-//   console.log('Generated URL for page', pageNum, ':', newUrl.toString());
   return newUrl.pathname + newUrl.search;
 };
 
-// 获取所有作者列表（用于筛选）
-let authors = [];
-try {
-  const authorsResponse = await fetch(DATABASE_URL, {
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${TOKEN}`,
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      requests: [{
-        type: 'execute',
-        stmt: {
-          sql: 'SELECT DISTINCT author FROM wc3maps_map_list WHERE author IS NOT NULL AND author != \'\' ORDER BY author LIMIT 50;',
-          args: []
-        }
-      }]
-    })
-  });
 
-  const authorsData = await authorsResponse.json();
-//   console.log('Authors Response:', authorsData);
-  
-  // 解析Turso返回的数组格式数据
-  const authorRows = authorsData?.results?.[0]?.response?.rows || [];
-  authors = authorRows.map((row: any[]) => row[0]?.value).filter(Boolean) || [];
-  
-  console.log('Authors Data:', authors);
-  console.log('Authors Count:', authors.length);
-} catch (error) {
-  console.error('Error fetching authors:', error);
-}
 
 ---
 

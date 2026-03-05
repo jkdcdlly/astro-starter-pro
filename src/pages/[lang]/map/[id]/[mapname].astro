@@ -2,6 +2,12 @@
 import BaseLayout from '../../../../layouts/BaseLayout.astro';
 import { siteConfig } from '../../../../config/site';
 import { useTranslations, getLangFromUrl, ui, defaultLang } from "@/i18n";
+
+type Env = {
+  DB: D1Database;
+  CACHE: Cache;
+};
+
 // Export getStaticPaths function
 export function getStaticPaths() {
   // Filter out default language (handled by root pages)
@@ -22,104 +28,98 @@ interface Props {
 const params = Astro.params;
 const mapId = params.id;
 const mapName = params.name;
-console.log('Astro.url:', Astro.url.pathname);
 
 const lang = getLangFromUrl(Astro.url);
 
+// 获取 D1 数据库实例
+const runtime = Astro.locals?.runtime as Env | undefined;
+let db: D1Database | null = null;
 
+if (runtime?.DB) {
+  db = runtime.DB;
+}
 
+// 尝试获取缓存
+const cacheKey = new URL(Astro.request.url);
+let cache: Cache | null = null;
 
-console.log('Map ID:', mapId);
-console.log('Map Name:', mapName);
-
-// 数据库连接配置
-const DATABASE_URL = 'https://war3mapsn8n-jkdcdlly-gmail.aws-ap-northeast-1.turso.io/v2/pipeline';
-const TOKEN = 'eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJhIjoicnciLCJpYXQiOjE3NzIyMTcwMzUsImlkIjoiMDE5Y2EwNWQtMTIwMS03Y2I1LWJmY2YtNjM4OWUyNGVhOWYyIiwicmlkIjoiMGU3NTZmNjUtMzRlNC00NTU0LThhNjAtMDY3ZTA5MzBjMjViIn0.wktVX2ih_Us8qPJBvd1M7IGXe-ih5G5kUGLMWYxIAJPKQv8jtYs3C5Jmno-b0otorksooFX_ikd9XJkcWk_MDA';
+try {
+  cache = runtime?.CACHE || (typeof caches !== 'undefined' ? await caches.open('astro-cache') : null);
+} catch (e) {
+  console.log('Cache not available in development mode');
+}
 
 // 查询地图详情数据
 let mapData = null;
-try {
-  const response = await fetch(DATABASE_URL, {
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${TOKEN}`,
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      requests: [{
-        type: 'execute',
-        stmt: {
-          sql: 'SELECT * FROM wc3_maps_complete WHERE id = ?;',
-          args: [{ type: 'integer', value: mapId.toString() }]
-        }
-      }]
-    })
-  });
 
-  const data = await response.json();
-  console.log('Map Response:', data);
-  
-  // 解析Turso返回的数组格式数据
-  const rows = data?.results?.[0]?.response?.result.rows || [];
-  if (rows.length > 0) {
-    const row = rows[0];
-    mapData = {
-      id: row[0]?.value,
-      path: row[1]?.value,
-      name: row[2]?.value,
-      name2: row[3]?.value,
-      description: row[4]?.value,
-      author: row[5]?.value,
-      first_hosted: row[6]?.value,
-      last_hosted: row[7]?.value,
-      parsed: row[8]?.value,
-      downloads: row[9]?.value,
-      hosted_month: row[10]?.value,
-      hosted_total: row[11]?.value,
-      saves: row[12]?.value,
-      sha1: row[13]?.value,
-      tileset: row[14]?.value,
-      format_version: row[15]?.value,
-      editor_ver: row[16]?.value,
-      player_count: row[17]?.value,
-      users: row[18]?.value,
-      flags: row[19]?.value,
-      width: row[20]?.value,
-      height: row[21]?.value,
-      playable_height: row[22]?.value,
-      playable_width: row[23]?.value,
-      team_count: row[24]?.value,
-      team_info: row[25]?.value,
-      loadscreen: row[26]?.value,
-      minimap_data: row[27]?.value,
-      size: row[28]?.value,
-      suggestion: row[29]?.value,
-      slot_info: row[30]?.value,
-      alias: row[31]?.value,
-      script: row[32]?.value,
-      graphics: row[33]?.value,
-      build: row[34]?.value,
-      likes: row[35]?.value,
-      cheats: row[36]?.value,
-      transpiler: row[37]?.value,
-      has_triggers: row[38]?.value,
-      group_id: row[39]?.value,
-      group_hosted_total: row[40]?.value,
-      group_downloads: row[41]?.value,
-      latest: row[42]?.value,
-      group_hosted_month: row[43]?.value,
-      preview: row[44]?.value,
-      history: row[45]?.value,
-      tags: row[46]?.value,
-      created_at: row[47]?.value,
-      updated_at: row[48]?.value,
-      processed_at: row[49]?.value
-    };
-    console.log('Map Data:', mapData['id']);
+// 检查缓存中是否有数据
+if (cache) {
+  try {
+    const cachedResponse = await cache.match(cacheKey);
+    if (cachedResponse) {
+      mapData = await cachedResponse.json();
+    }
+  } catch (e) {
+    console.log('Cache read failed, fetching fresh data');
   }
-} catch (error) {
-  console.error('Error fetching map data:', error);
 }
+
+// 如果缓存中没有数据或缓存不可用，从数据库获取
+if (!mapData && db) {
+  try {
+    const sql = 'SELECT * FROM wc3_maps_complete WHERE id = ?';
+    mapData = await db.prepare(sql).bind(parseInt(mapId)).first();
+    
+    // 缓存结果（如果缓存可用）
+    if (cache && mapData) {
+      try {
+        const response = new Response(JSON.stringify(mapData), {
+          headers: {
+            'Cache-Control': 'public, max-age=300, s-maxage=300',
+          }
+        });
+        await cache.put(cacheKey, response);
+      } catch (e) {
+        console.log('Cache write failed');
+      }
+    }
+  } catch (error) {
+    console.error('Error fetching map data:', error);
+  }
+}
+
+// 如果在本地开发环境且没有数据库，提供一些模拟数据
+if (!db && !mapData) {
+  console.log('Local development mode - using mock data');
+  mapData = {
+    id: parseInt(mapId) || 1,
+    name: 'Demo Map',
+    author: 'DemoAuthor',
+    description: 'This is a demo map description for local development.',
+    downloads: 1000,
+    hosted_total: 500,
+    hosted_month: 100,
+    saves: 50,
+    player_count: 4,
+    users: 8,
+    flags: 0,
+    width: 64,
+    height: 64,
+    playable_width: 60,
+    playable_height: 60,
+    team_count: 2,
+    graphics: 0,
+    has_triggers: 1,
+    cheats: 0,
+    tags: 'Demo, Test',
+    tileset: 'Lordaeron Summer',
+    build: '1.31',
+    parsed: 1
+  };
+}
+
+// 设置响应头缓存
+Astro.response.headers.set('Cache-Control', 'public, max-age=300, s-maxage=300');
 
 // 如果没有找到地图数据，返回404
 if (!mapData) {
