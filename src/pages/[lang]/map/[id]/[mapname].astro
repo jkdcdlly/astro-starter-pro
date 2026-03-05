@@ -27,7 +27,7 @@ interface Props {
 }
 const params = Astro.params;
 const mapId = params.id;
-const mapName = params.name;
+const mapName = params.mapname;
 
 const lang = getLangFromUrl(Astro.url);
 
@@ -36,8 +36,8 @@ let db: D1Database | null = null;
 
 // 尝试不同的方式获取数据库实例
 try {
-  if (Astro.locals?.runtime?.DB) {
-    db = Astro.locals.runtime.DB;
+  if (Astro.locals?.runtime?.env?.DB) {
+    db = Astro.locals.runtime.env.DB;
   } else if ((Astro.locals as any)?.DB) {
     db = (Astro.locals as any).DB;
   }
@@ -58,7 +58,7 @@ try {
 }
 
 // 查询地图详情数据
-let mapData = null;
+let mapData: any = null;
 
 // 检查缓存中是否有数据
 if (cache) {
@@ -230,7 +230,7 @@ if (!mapData) {
             <h3 class="font-semibold mb-4">Description</h3>
             <div class="prose max-w-none">
               {mapData.description ? (
-                <div dangerouslySetInnerHTML={{ __html: mapData.description.replace(/\n/g, '<br>') }} />
+                <div set:html={mapData.description.replace(/\n/g, '<br>')} />
               ) : (
                 <p>No description available</p>
               )}
@@ -294,7 +294,7 @@ if (!mapData) {
               <h3 class="font-semibold mb-4">Tags</h3>
               <div class="flex flex-wrap gap-2">
                 {mapData.tags.split(',').map((tag: string) => (
-                  <span key={tag} class="px-3 py-1 bg-muted text-muted-foreground rounded-full text-sm">
+                  <span class="px-3 py-1 bg-muted text-muted-foreground rounded-full text-sm">
                     {tag.trim()}
                   </span>
                 ))}
