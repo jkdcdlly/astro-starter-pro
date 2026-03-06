@@ -7,16 +7,7 @@ type Env = {
   DB: D1Database;
   CACHE: Cache;
 };
-// Export getStaticPaths function
-export function getStaticPaths() {
-  // Filter out default language (handled by root pages)
-  const languages = Object.keys(ui).filter(lang => lang !== defaultLang);
-  
-  return languages.map(lang => ({
-    params: { lang },
-    props: { lang },
-  }));
-}
+
 interface Props {
   params: {
     lang: string;

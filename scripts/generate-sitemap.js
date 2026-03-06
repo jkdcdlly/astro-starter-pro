@@ -22,7 +22,8 @@ import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const rootDir = path.resolve(__dirname, '..');
-const distDir = path.resolve(rootDir, 'dist');
+// 生成到 public 目录，构建时会自动复制到 dist
+const distDir = path.resolve(rootDir, 'public');
 
 const SITE_URL = process.env.SITE_URL || 'https://war3maps.net/';
 
@@ -118,15 +119,9 @@ function generateSitemapXML(maps) {
 
   // 地图页面
   const mapUrls = maps.map(map => {
-    // 使用 encodeURI 而不是 encodeURIComponent，避免过度编码
-    // 但需要手动编码一些特殊字符
-    const safeName = map.name
-      .replace(/#/g, '%23')  // 编码 #
-      .replace(/\?/g, '%3F') // 编码 ?
-      .replace(/</g, '%3C')  // 编码 <
-      .replace(/>/g, '%3E')  // 编码 >
-      .replace(/"/g, '%22')  // 编码 "
-      .replace(/'/g, '%27'); // 编码 '
+    // 使用 encodeURI 编码，但保留一些字符
+    // encodeURI 不会编码：~!@#$&*()=:/,;?+'
+    const safeName = encodeURI(map.name);
     
     return {
       loc: `/map/${map.id}/${safeName}/`,
