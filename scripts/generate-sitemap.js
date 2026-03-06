@@ -13,6 +13,9 @@
  * - SITE_URL: 网站 URL（可选，默认 https://war3maps.net/）
  */
 
+// 加载 .env 文件（本地开发时使用）
+import 'dotenv/config';
+
 import { readFileSync, writeFileSync } from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -65,7 +68,7 @@ async function getMapsFromDB(config) {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          sql: 'SELECT id, name, author FROM wc3_maps_complete WHERE id > 0 ORDER BY id DESC'
+          sql: 'SELECT id, name, author FROM wc3_maps_complete WHERE id > 0 ORDER BY id DESC LIMIT 10000'
         })
       }
     );
@@ -83,8 +86,15 @@ async function getMapsFromDB(config) {
       return [];
     }
 
-    const maps = result.result || [];
+    // API 返回的数据结构是 { result: [{ results: [...] }], success: true, meta: {...} }
+    const maps = result.result?.[0]?.results || [];
     console.log(`✅ 成功获取 ${maps.length} 个地图`);
+    
+    // 调试：打印第一个地图的数据
+    if (maps.length > 0) {
+      console.log('🔍 地图数据示例:', JSON.stringify(maps[0], null, 2));
+    }
+    
     return maps;
   } catch (error) {
     console.error('❌ 查询数据库失败:', error.message);
@@ -107,11 +117,23 @@ function generateSitemapXML(maps) {
   ];
 
   // 地图页面
-  const mapUrls = maps.map(map => ({
-    loc: `/map/${map.id}/${encodeURIComponent(map.name)}/`,
-    changefreq: 'weekly',
-    priority: '0.7'
-  }));
+  const mapUrls = maps.map(map => {
+    // 使用 encodeURI 而不是 encodeURIComponent，避免过度编码
+    // 但需要手动编码一些特殊字符
+    const safeName = map.name
+      .replace(/#/g, '%23')  // 编码 #
+      .replace(/\?/g, '%3F') // 编码 ?
+      .replace(/</g, '%3C')  // 编码 <
+      .replace(/>/g, '%3E')  // 编码 >
+      .replace(/"/g, '%22')  // 编码 "
+      .replace(/'/g, '%27'); // 编码 '
+    
+    return {
+      loc: `/map/${map.id}/${safeName}/`,
+      changefreq: 'weekly',
+      priority: '0.7'
+    };
+  });
 
   const allUrls = [...staticPages, ...mapUrls];
 
@@ -153,6 +175,12 @@ function generateSitemapIndexXML() {
 async function main() {
   console.log('🚀 开始生成 sitemap...');
   console.log(`📍 网站 URL: ${SITE_URL}`);
+  console.log(`📂 当前目录：${process.cwd()}`);
+  console.log(`📂 Dist 目录：${distDir}`);
+  console.log(`🔧 环境变量检查:`);
+  console.log(`   - CLOUDFLARE_ACCOUNT_ID: ${process.env.CLOUDFLARE_ACCOUNT_ID ? '✅ 已设置' : '❌ 未设置'}`);
+  console.log(`   - CLOUDFLARE_API_TOKEN: ${process.env.CLOUDFLARE_API_TOKEN ? '✅ 已设置' : '❌ 未设置'}`);
+  console.log(`   - SITE_URL: ${process.env.SITE_URL || '使用默认值'}`);
 
   // 检查环境变量
   if (!process.env.CLOUDFLARE_ACCOUNT_ID || !process.env.CLOUDFLARE_API_TOKEN) {
@@ -184,6 +212,10 @@ async function main() {
 
   // 写入文件
   try {
+    // 确保 dist 目录存在
+    const { mkdirSync } = await import('fs');
+    mkdirSync(distDir, { recursive: true });
+
     writeFileSync(sitemapIndexPath, generateSitemapIndexXML(), 'utf8');
     console.log(`✅ sitemap 索引已生成：${sitemapIndexPath}`);
 
@@ -191,6 +223,11 @@ async function main() {
     console.log(`✅ sitemap 已生成：${sitemapPath}`);
     console.log(`📊 包含 ${maps.length} 个地图页面`);
     console.log(`📊 总共 ${maps.length + 4} 个 URL`);
+    
+    // 验证文件是否正确写入
+    const stats = readFileSync(sitemapPath, 'utf8');
+    console.log(`📄 sitemap 文件大小：${stats.length} 字节`);
+    console.log(`📄 前 100 个字符：${stats.substring(0, 100)}...`);
   } catch (error) {
     console.error('❌ 写入文件失败:', error.message);
     process.exit(1);
