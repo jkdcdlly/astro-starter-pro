@@ -12,8 +12,8 @@ export default defineConfig({
   image: {
     service: { type: "compile" }, // ← 这里是对象
   },
-  site: "https://astrostarterpro.com/",
-  integrations: [sitemap(), icon()],
+  site: process.env.SITE_URL || "https://war3maps.net/",
+  integrations: [icon()],
   markdown: {
     remarkPlugins: [
       remarkReadingTime,
