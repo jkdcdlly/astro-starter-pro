@@ -61,7 +61,6 @@ const offset = (page - 1) * limit;
 // 初始化数据变量
 let totalCount = 0;
 let maps: any[] = [];
-let authors: string[] = [];
 
 // 获取 D1 数据库实例
 let db: D1Database | null = null;
@@ -90,19 +89,18 @@ try {
 
 // 检查缓存中是否有数据
 if (cache) {
-  try {
-    const cachedResponse = await cache.match(cacheKey);
-    if (cachedResponse) {
-      const cachedData: any = await cachedResponse.json();
-      totalCount = cachedData.totalCount;
-      maps = cachedData.maps;
-      authors = cachedData.authors;
-      console.log('Loaded from cache');
+      try {
+        const cachedResponse = await cache.match(cacheKey);
+        if (cachedResponse) {
+          const cachedData: any = await cachedResponse.json();
+          totalCount = cachedData.totalCount;
+          maps = cachedData.maps;
+          console.log('Loaded from cache');
+        }
+      } catch (e) {
+        console.log('Cache read failed, fetching fresh data');
+      }
     }
-  } catch (e) {
-    console.log('Cache read failed, fetching fresh data');
-  }
-}
 
 // 如果缓存中没有数据或缓存不可用，从数据库获取
 if (!maps.length && db) {
@@ -118,15 +116,10 @@ if (!maps.length && db) {
     const mapsResult = await db.prepare(mapsSql).bind(...mapsArgs).all();
     maps = mapsResult.results || [];
 
-    // 获取所有作者列表（用于筛选）
-    const authorsSql = 'SELECT DISTINCT author FROM wc3maps_map_list WHERE author IS NOT NULL AND author != ? ORDER BY author LIMIT 50';
-    const authorsResult = await db.prepare(authorsSql).bind('').all();
-    authors = authorsResult.results?.map((row: any) => row.author).filter(Boolean) || [];
-
     // 缓存结果（如果缓存可用）
     if (cache) {
       try {
-        const cacheData = { totalCount, maps, authors };
+        const cacheData = { totalCount, maps };
         const response = new Response(JSON.stringify(cacheData), {
           headers: {
             'Cache-Control': 'public, max-age=300, s-maxage=300',
@@ -182,24 +175,73 @@ const generatePageUrl = (pageNum: number) => {
             <h3 class="font-semibold mb-4">Filters</h3>
             
             <!-- Author Filter -->
-            <div class="mb-6">
+            <div class="mb-6 relative">
               <label class="block text-sm font-medium mb-2">Author</label>
-              <select 
-                class="w-full px-3 py-2 border border-border rounded-md bg-background" 
-                onchange="window.location.href = this.value"
-              >
-                <option value="?page=1">All Authors</option>
-                {authors.map((authorName: string) => (
-                  <option 
-                    key={authorName} 
-                    value={`?page=1&author=${encodeURIComponent(authorName)}`}
-                    selected={author === authorName}
-                  >
-                    {authorName}
-                  </option>
-                ))}
-              </select>
+              <input
+                type="text"
+                id="author-input"
+                placeholder="Search author..."
+                value={author || ''}
+                class="w-full px-3 py-2 border border-border rounded-md bg-background"
+                autocomplete="off"
+              />
+              <div 
+                id="author-suggestions" 
+                class="absolute z-10 w-full mt-1 bg-background border border-border rounded-md shadow-lg hidden"
+              ></div>
             </div>
+
+            <script>
+              const authorInput = document.getElementById('author-input');
+              const suggestionsDiv = document.getElementById('author-suggestions');
+              let debounceTimer;
+
+              authorInput?.addEventListener('input', function(e) {
+                clearTimeout(debounceTimer);
+                const query = e.target.value.trim();
+
+                if (!query) {
+                  suggestionsDiv.classList.add('hidden');
+                  return;
+                }
+
+                debounceTimer = setTimeout(async () => {
+                  try {
+                    const response = await fetch(`/api/authors?q=${encodeURIComponent(query)}`);
+                    const authors = await response.json();
+
+                    if (authors.length > 0) {
+                      suggestionsDiv.innerHTML = authors.map(author => `
+                        <div 
+                          class="px-3 py-2 cursor-pointer hover:bg-muted first:rounded-t-md last:rounded-b-md"
+                          data-author="${author}"
+                        >
+                          ${author}
+                        </div>
+                      `).join('');
+                      suggestionsDiv.classList.remove('hidden');
+
+                      document.querySelectorAll('#author-suggestions div').forEach(item => {
+                        item.addEventListener('click', function() {
+                          const selectedAuthor = this.getAttribute('data-author');
+                          window.location.href = `?page=1&author=${encodeURIComponent(selectedAuthor)}`;
+                        });
+                      });
+                    } else {
+                      suggestionsDiv.classList.add('hidden');
+                    }
+                  } catch (error) {
+                    console.error('Error fetching authors:', error);
+                  }
+                }, 300);
+              });
+
+              document.addEventListener('click', function(e) {
+                if (!authorInput?.contains(e.target) && !suggestionsDiv.contains(e.target)) {
+                  suggestionsDiv.classList.add('hidden');
+                }
+              });
+            </script>
 
             <!-- Users Filter -->
             <div class="mb-6">
