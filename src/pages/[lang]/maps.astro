@@ -2,8 +2,8 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { siteConfig } from '../../config/site';
 import { useTranslations, getLangFromUrl, ui, defaultLang } from "@/i18n";
-import { dbService } from '../../services/database';
-
+import { dbService } from '@/services/database';
+const db = Astro.locals.runtime.env.DB;
 interface Props {
   params: {
     lang: string;
@@ -48,7 +48,7 @@ let totalCount = 0;
 let maps: any[] = [];
 
 // 尝试获取缓存
-const cacheKey = new URL(url.toString());
+const cacheKey = new Request(url.toString());
 let cache: Cache | null = null;
 
 try {
@@ -78,12 +78,12 @@ if (cache) {
 if (!maps.length) {
   try {
     // 查询总数
-    totalCount = await dbService.getCount('wc3maps_map_list', whereClause, args);
+    totalCount = await dbService.getCount(db,'wc3maps_map_list', whereClause, args);
 
     // 查询地图数据
     const mapsSql = `SELECT id, name, author, users, flags, downloads, hosted_total FROM wc3maps_map_list ${whereClause} ORDER BY id DESC LIMIT ? OFFSET ?`;
     const mapsArgs = [...args, limit, offset];
-    const mapsResult = await dbService.execute<any>(mapsSql, mapsArgs);
+    const mapsResult = await dbService.execute<any>(db,mapsSql, mapsArgs);
     maps = mapsResult || [];
 
     // 缓存结果（如果缓存可用）
@@ -107,7 +107,7 @@ if (!maps.length) {
 
 // 如果还是没有数据，提供调试信息
 if (maps.length === 0) {
-  console.log('No maps found at the end - db available:', !!dbService.getDB());
+  console.log('No maps found at the end - db available:', !!db);
   console.log('=== END DEBUG ===');
 }
 

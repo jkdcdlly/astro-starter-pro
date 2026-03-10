@@ -2,12 +2,8 @@
 import BaseLayout from '../../../../layouts/BaseLayout.astro';
 import { siteConfig } from '../../../../config/site';
 import { useTranslations, getLangFromUrl, ui, defaultLang } from "@/i18n";
-
-type Env = {
-  DB: D1Database;
-  CACHE: Cache;
-};
-
+import { dbService } from '../../../../services/database';
+const db = Astro.locals.runtime.env.DB;
 // Export getStaticPaths function
 export function getStaticPaths() {
   // Filter out default language (handled by root pages)
@@ -30,20 +26,6 @@ const mapId = params.id;
 const mapName = params.mapname;
 
 const lang = getLangFromUrl(Astro.url);
-
-// 获取 D1 数据库实例
-let db: D1Database | null = null;
-
-// 尝试不同的方式获取数据库实例
-try {
-  if (Astro.locals?.runtime?.env?.DB) {
-    db = Astro.locals.runtime.env.DB;
-  } else if ((Astro.locals as any)?.DB) {
-    db = (Astro.locals as any).DB;
-  }
-} catch (e) {
-  console.log('Failed to get DB from Astro.locals');
-}
 
 // 尝试获取缓存
 const cacheKey = new URL(Astro.request.url);
@@ -73,10 +55,10 @@ if (cache) {
 }
 
 // 如果缓存中没有数据或缓存不可用，从数据库获取
-if (!mapData && db) {
+if (!mapData) {
   try {
     const sql = 'SELECT * FROM wc3_maps_complete WHERE id = ?';
-    mapData = await db.prepare(sql).bind(parseInt(mapId)).first();
+    mapData = await dbService.executeFirst<any>(db,sql, [parseInt(mapId)]);
     
     // 缓存结果（如果缓存可用）
     if (cache && mapData) {
