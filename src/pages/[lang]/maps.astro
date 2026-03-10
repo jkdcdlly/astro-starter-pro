@@ -292,7 +292,7 @@ const generatePageUrl = (pageNum: number) => {
                     src={`https://wc3maps.com/static/maps/${map.id}/archive/war3mapMap.jpg`} 
                     alt={map.name} 
                     class="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                    loading="lazy"
+                    fetchpriority="high" 
                     onerror="this.src='https://via.placeholder.com/400x225?text=No+Preview';"
                   />
                 </div>
