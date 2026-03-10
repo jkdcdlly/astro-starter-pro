@@ -6,6 +6,7 @@ export class DatabaseService {
    */
   getDB(): D1Database | null {
     try {
+      // 首先尝试从 Astro.locals 获取（生产环境）
       if (typeof Astro !== 'undefined' && Astro.locals) {
         if (Astro.locals?.runtime?.env?.DB) {
           return Astro.locals.runtime.env.DB;
@@ -13,8 +14,13 @@ export class DatabaseService {
           return (Astro.locals as any).DB;
         }
       }
+      
+      // 然后尝试从全局 env 获取（本地开发环境）
+      if (typeof env !== 'undefined' && env.DB) {
+        return env.DB;
+      }
     } catch (e) {
-      console.log('Failed to get DB from Astro.locals:', e);
+      console.log('Failed to get DB:', e);
     }
     return null;
   }
