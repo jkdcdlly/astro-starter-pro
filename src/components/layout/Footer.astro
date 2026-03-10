@@ -1,5 +1,9 @@
 ---
 import { siteConfig } from "@/config/site";
+import { getLangFromUrl } from "@/i18n";
+
+const lang = getLangFromUrl(Astro.url);
+const siteDescription = siteConfig.getDescription(lang);
 ---
 
 <footer class="mt-20 border-t border-border bg-card">
@@ -12,7 +16,7 @@ import { siteConfig } from "@/config/site";
                     >{siteConfig.name}</span
                 >
                 <p class="text-sm text-muted-foreground">
-                    {siteConfig.description}
+                    {siteDescription}
                 </p>
             </div>
             <div class="flex items-center gap-6">

@@ -1,5 +1,6 @@
 ---
 import { siteConfig } from "../../config/site";
+import { getLangFromUrl } from "../../i18n";
 
 interface Props {
     type: "WebSite" | "BlogPosting" | "BreadcrumbList";
@@ -14,6 +15,7 @@ interface Props {
 }
 
 const { type, data } = Astro.props;
+const lang = getLangFromUrl(Astro.url);
 
 let schema = {};
 
@@ -23,7 +25,7 @@ if (type === "WebSite") {
         "@type": "WebSite",
         name: siteConfig.name,
         url: siteConfig.url,
-        description: siteConfig.description,
+        description: siteConfig.getDescription(lang),
         author: {
             "@type": "Person",
             name: siteConfig.author,

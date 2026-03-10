@@ -158,6 +158,24 @@
   "widgets":{
     "hero":{
       "title":"Lorem Ipsum Dolor Sit Amet"
+    },
+    "featureVote": {
+      "title": "Which features would you like to add first?",
+      "tagline": "Features with more votes will be prioritized",
+      "vote": "Vote",
+      "votes": "votes",
+      "features": [
+        "Add fan following",
+        "Add bug collection",
+        "Add map rating system",
+        "Add user comment functionality",
+        "Add map category filtering",
+        "Add map author page",
+        "Add map download statistics",
+        "Add map recommendation system",
+        "Add map collection functionality",
+        "Add map sharing functionality"
+      ]
     }
   },
   "404":{
@@ -166,7 +184,7 @@
   },
   "site": {
     "name": "A Home for War3 Players and Creators",
-    "description": "The future of this website is not decided by us alone, but by everyone together.",
+    "description": "Not just a map download site, but a common home for all War3 players and creators.",
     "nav": [
       { "text": "Home", "href": "/" },
       { "text": "Maps", "href": "/maps" },
