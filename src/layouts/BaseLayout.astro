@@ -67,15 +67,7 @@ const finalLang = lang || siteConfig.lang;
             }
             window.localStorage.setItem("theme", theme);
         </script>
-        <!-- Google tag (gtag.js) -->
-        <script is:inline src="https://www.googletagmanager.com/gtag/js?id=G-H7WJNW0X2L"></script>
-        <script is:inline>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
 
-        gtag('config', 'G-H7WJNW0X2L');
-        </script>
     </head>
     <body
         class="bg-background text-foreground antialiased selection:bg-blue-500/30 dark:selection:text-blue-200"
@@ -106,5 +98,14 @@ const finalLang = lang || siteConfig.lang;
             </main>
             <Footer />
         </div>
+                <!-- Google tag (gtag.js) -->
+        <script is:inline src="https://www.googletagmanager.com/gtag/js?id=G-H7WJNW0X2L"></script>
+        <script is:inline>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-H7WJNW0X2L');
+        </script>
     </body>
 </html>
