@@ -19,10 +19,16 @@ const page: number = parseInt(url.searchParams.get("page") || "1");
 const author = Astro.url?.searchParams?.get('author');
 const users = Astro.url?.searchParams?.get('users');
 const flags = Astro.url?.searchParams?.get('flags');
+const search = Astro.url?.searchParams?.get('search');
 
 // 构建查询条件
 let whereClause = ' WHERE group_id > 0 ';
 const args: (string | number)[] = [];
+
+if (search) {
+  whereClause += ' AND name LIKE ?';
+  args.push(`%${search}%`);
+}
 
 if (author) {
   whereClause += ' AND author = ?';
