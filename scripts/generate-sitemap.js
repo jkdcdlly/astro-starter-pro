@@ -109,7 +109,7 @@ async function getMapsFromDB(config) {
 function sanitizeMapName(name) {
   // 先解码（以防已经有编码）
   let sanitized = name;
-
+ 
   // 替换空格为下划线
   sanitized = sanitized.replace(/\s+/g, '_');
   
