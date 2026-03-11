@@ -13,17 +13,35 @@ let sitemapContent = fs.readFileSync(sitemapPath, 'utf8');
 // 处理 URL 中的特殊字符
 function fixUrl(url) {
   // 首先解码 URL 编码的字符
+  let print_log=false;
+  if (url.includes('&')) {
+    print_log=true;
+  }
   let decodedUrl = decodeURIComponent(url);
+  if(print_log){
+     console.log('1-decodedUrl', decodedUrl);
+  }
   
   // 替换空格为下划线
   decodedUrl = decodedUrl.replace(/\s+/g, '_');
-  
-  // 移除或替换可能影响 XML 的特殊字符
-  decodedUrl = decodedUrl.replace(/[|%]/g, '');
-  
-  // 将 & 替换为 and（XML 中 & 需要转义）
-  decodedUrl = decodedUrl.replace(/&/g, 'and');
-  
+  if(print_log){
+     console.log('2-decodedUrl', decodedUrl);
+  }
+  // 移除管道符 |
+  decodedUrl = decodedUrl.replace(/\|/g, '');
+  if(print_log){
+     console.log('3-decodedUrl', decodedUrl);
+  }
+  // 将 & 替换为 下划线
+  decodedUrl = decodedUrl.replace(/&/g, '_');
+  if(print_log){
+     console.log('4-decodedUrl', decodedUrl);
+  }
+  decodedUrl = decodedUrl.replace(/_-_/g, '_');
+  decodedUrl = decodedUrl.replace(/_+/g, '_');
+  if(print_log){
+     console.log('5-decodedUrl', decodedUrl);
+  }
   // 重新编码 URL
   return encodeURI(decodedUrl);
 }

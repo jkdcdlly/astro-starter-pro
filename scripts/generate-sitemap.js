@@ -104,6 +104,30 @@ async function getMapsFromDB(config) {
 }
 
 /**
+ * 处理地图名称中的特殊字符，确保 URL 和 XML 格式正确
+ */
+function sanitizeMapName(name) {
+  // 先解码（以防已经有编码）
+  let sanitized = name;
+
+  // 替换空格为下划线
+  sanitized = sanitized.replace(/\s+/g, '_');
+  
+  // 移除管道符 |
+  sanitized = sanitized.replace(/\|/g, '');
+  
+  // 将 & 替换为下划线（XML 中 & 需要转义）
+  sanitized = sanitized.replace(/&/g, '_');
+
+  sanitized = sanitized.replace(/_-_/g, '_');
+  // 移除重复的___
+  sanitized = sanitized.replace(/_+/g, '_');
+  
+  // 重新编码
+  return encodeURI(sanitized);
+}
+
+/**
  * 生成 sitemap XML
  */
 function generateSitemapXML(maps) {
@@ -119,9 +143,8 @@ function generateSitemapXML(maps) {
 
   // 地图页面
   const mapUrls = maps.map(map => {
-    // 使用 encodeURI 编码，但保留一些字符
-    // encodeURI 不会编码：~!@#$&*()=:/,;?+'
-    const safeName = encodeURI(map.name);
+    // 使用 sanitizeMapName 处理特殊字符
+    const safeName = sanitizeMapName(map.name);
     
     return {
       loc: `/map/${map.id}/${safeName}/`,
