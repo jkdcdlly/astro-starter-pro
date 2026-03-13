@@ -143,7 +143,7 @@ If you want to study how experienced creators build maps, downloading existing m
 You can explore hundreds of custom maps here:
 
 👉 Browse Warcraft 3 maps  
-`/maps`
+[maps](https://war3maps.net/maps)
 
 Popular map types include:
 
