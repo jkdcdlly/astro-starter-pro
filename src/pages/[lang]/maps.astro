@@ -84,10 +84,10 @@ if (cache) {
 if (!maps.length) {
   try {
     // 查询总数
-    totalCount = await dbService.getCount(db,'wc3maps_map_list', whereClause, args);
+    totalCount = await dbService.getCount(db,'wc3_maps_complete', whereClause, args);
 
     // 查询地图数据
-    const mapsSql = `SELECT id, name, author, users, flags, downloads, hosted_total FROM wc3maps_map_list ${whereClause} ORDER BY id DESC LIMIT ? OFFSET ?`;
+    const mapsSql = `SELECT id, name2 as name, author, users, flags, downloads, hosted_total FROM wc3_maps_complete ${whereClause} ORDER BY id DESC LIMIT ? OFFSET ?`;
     const mapsArgs = [...args, limit, offset];
     const mapsResult = await dbService.execute<any>(db,mapsSql, mapsArgs);
     maps = mapsResult || [];
