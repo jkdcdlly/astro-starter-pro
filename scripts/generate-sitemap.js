@@ -69,7 +69,7 @@ async function getMapsFromDB(config) {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          sql: 'SELECT id, name, author FROM wc3_maps_complete WHERE id > 0 ORDER BY id DESC LIMIT 10000'
+          sql: 'SELECT id, name2 as name, author FROM wc3_maps_complete WHERE id > 0 ORDER BY id DESC LIMIT 10000'
         })
       }
     );
