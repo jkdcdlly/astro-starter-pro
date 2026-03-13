@@ -183,16 +183,16 @@
     "description":"We're sorry, we can't find the page you're looking for. It may have been moved or deleted."
   },
   "site": {
-    "name": "A Home for War3 Players and Creators",
+    "name": "A Home for War3 Players and Creators - Warcraft 3 Maps",
     "description": "Not just a map download site, but a common home for all War3 players and creators.",
     "nav": [
       { "text": "Home", "href": "/" },
       { "text": "Maps", "href": "/maps" },
       { "text": "About", "href": "/about" },
-      { "text": "Services", "href": "/services" },
+      
       { "text": "Blog", "href": "/blog" },
-      { "text": "Contact", "href": "/contact" },
-      { "text": "Widgets", "href": "/widgets" }
+      { "text": "Contact", "href": "/contact" }
+      
     ]
   },
   "BrowseMaps":"Browse Maps"
