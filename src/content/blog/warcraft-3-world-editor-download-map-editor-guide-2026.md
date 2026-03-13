@@ -4,7 +4,7 @@ description: "Learn how to use the Warcraft 3 World Editor to create custom maps
 pubDate: 2026-03-14
 author: "Lorem"
 category: "Tech"
-tags: ["testing", "coding"]
+tags: ["Warcraft 3 World Editor", "Map Editor Guide"]
 image: "/blog/warcraft-3-world-editor-download-map-editor-guide-2026/World_Editor_ROC.webp"
 ---
 
