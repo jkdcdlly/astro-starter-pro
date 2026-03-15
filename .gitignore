@@ -23,3 +23,7 @@ pnpm-debug.log*
 # jetbrains setting folder
 .idea/
 .wrangler/
+
+scripts/war3maps.code-workspace
+export*
+*SAFE_RM_ALLOWED_PATH*
