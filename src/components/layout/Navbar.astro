@@ -62,7 +62,7 @@ function getLocalizedHref(href: string, locale: Locale): string {
                 href={getLocalizedHref("/login", currentLocale)}
                 class="rounded-full bg-foreground/10 px-4 py-2 text-sm font-semibold text-foreground transition-all hover:bg-foreground/20"
             >
-                登录
+                {t('login.button')}
             </a>
             <ThemeToggle />
         </div>
@@ -130,7 +130,7 @@ function getLocalizedHref(href: string, locale: Locale): string {
             <a
                 href={getLocalizedHref("/login", currentLocale)}
                 class="block rounded-md px-3 py-2 text-base font-medium text-foreground transition-colors hover:bg-white/10 hover:text-primary"
-                >登录</a
+                >{t('login.button')}</a
             >
         </div>
     </div>

@@ -15,19 +15,19 @@ if (Astro.request.method === "POST") {
 
     if (username === "jkdcdlly" && password === "war3mapsA123") {
         // 设置登录状态的 cookie
-        Astro.response.headers.set("Set-Cookie", "admin_session=jkdcdllyxxxxx; HttpOnly; Secure; Path=/");
+        Astro.response.headers.set("Set-Cookie", "admin_session=xxxxx; HttpOnly; Secure; Path=/");
         // 登录成功后重定向到首页
         return Astro.redirect("");
     } else {
-        error = "账号或密码错误";
+        error = t('login.error');
     }
 }
 ---
 
-<BaseLayout title={t('login.title') || "登录"}>
+<BaseLayout title={t('login.title')}>
     <div class="flex min-h-[80vh] items-center justify-center p-4">
         <div class="w-full max-w-md rounded-lg bg-card p-8 shadow-lg">
-            <h1 class="mb-6 text-2xl font-bold text-center text-foreground">登录</h1>
+            <h1 class="mb-6 text-2xl font-bold text-center text-foreground">{t('login.title')}</h1>
             
             {error && (
                 <div class="mb-4 rounded-md bg-destructive/10 p-3 text-destructive">
@@ -38,7 +38,7 @@ if (Astro.request.method === "POST") {
             <form method="post" class="space-y-4">
                 <div>
                     <label for="username" class="mb-2 block text-sm font-medium text-foreground">
-                        账号
+                        {t('login.username')}
                     </label>
                     <input
                         type="text"
@@ -51,7 +51,7 @@ if (Astro.request.method === "POST") {
                 
                 <div>
                     <label for="password" class="mb-2 block text-sm font-medium text-foreground">
-                        密码
+                        {t('login.password')}
                     </label>
                     <input
                         type="password"
@@ -66,7 +66,7 @@ if (Astro.request.method === "POST") {
                     type="submit"
                     class="w-full rounded-md bg-primary px-4 py-2 font-medium text-primary-foreground transition-colors hover:bg-primary/90"
                 >
-                    登录
+                    {t('login.button')}
                 </button>
             </form>
         </div>

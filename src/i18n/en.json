@@ -182,6 +182,13 @@
     "title":"404 - Page Not Found",
     "description":"We're sorry, we can't find the page you're looking for. It may have been moved or deleted."
   },
+  "login":{
+    "title":"Login",
+    "button":"Login",
+    "username":"Username",
+    "password":"Password",
+    "error":"Invalid username or password"
+  },
   "site": {
     "name": "A Home for War3 Players and Creators - Warcraft 3 Maps",
     "description": "Not just a map download site, but a common home for all War3 players and creators.",
