@@ -16,7 +16,7 @@ interface NavLink {
 }
 
 // Get localized navigation links
-const navLinks: NavLink[] = Array.isArray(t('site.nav')) ? t('site.nav') : siteConfig.navLinks;
+const navLinks: NavLink[] = Array.isArray(t('site.nav')) ? t('site.nav') : siteConfig.getNavLinks(currentLocale);
 
 // Helper function to get localized URL
 function getLocalizedHref(href: string, locale: Locale): string {
@@ -58,14 +58,12 @@ function getLocalizedHref(href: string, locale: Locale): string {
 
         <div class="hidden md:flex items-center gap-4">
             <LanguageToggle currentLocale={currentLocale} />
-            <!-- <a
-                href={siteConfig.socialLinks.github}
-                target="_blank"
-                rel="noopener noreferrer"
+            <a
+                href={getLocalizedHref("/login", currentLocale)}
                 class="rounded-full bg-foreground/10 px-4 py-2 text-sm font-semibold text-foreground transition-all hover:bg-foreground/20"
             >
-                GitHub
-            </a> -->
+                登录
+            </a>
             <ThemeToggle />
         </div>
 
@@ -130,10 +128,9 @@ function getLocalizedHref(href: string, locale: Locale): string {
                     </a>
                 ))}
             <a
-                href={siteConfig.socialLinks.github}
-                target="_blank"
-                class="block rounded-md px-3 py-2 text-base font-medium text-blue-400 transition-colors hover:cursor-pointer hover:bg-blue-500/10 hover:text-blue-300"
-                >GitHub</a
+                href={getLocalizedHref("/login", currentLocale)}
+                class="block rounded-md px-3 py-2 text-base font-medium text-foreground transition-colors hover:bg-white/10 hover:text-primary"
+                >登录</a
             >
         </div>
     </div>
