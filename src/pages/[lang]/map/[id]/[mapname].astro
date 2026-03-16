@@ -3,7 +3,13 @@ import BaseLayout from '../../../../layouts/BaseLayout.astro';
 import { siteConfig } from '../../../../config/site';
 import { useTranslations, getLangFromUrl, ui, defaultLang } from "@/i18n";
 import { dbService } from '../../../../services/database';
-const db = Astro.locals.runtime.env.DB;
+
+// 检查登录状态
+const adminSession = Astro.cookies.get("admin_session")?.value;
+const isLoggedIn = !!adminSession;
+
+const db = (Astro.locals as any).runtime.env.DB;
+
 // Export getStaticPaths function
 export function getStaticPaths() {
   // Filter out default language (handled by root pages)
@@ -110,6 +116,14 @@ if (mapData.author) {
       <div class="text-center mb-12">
         <h1 class="text-3xl font-bold mb-4">{mapData.name2}</h1>
         <p class="text-muted-foreground">by {mapData.author || 'Unknown'}</p>
+        {isLoggedIn && (
+          <button
+            id="edit-map-btn"
+            class="mt-4 px-6 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors"
+          >
+            编辑地图
+          </button>
+        )}
       </div>
 
       <!-- Main Content -->
@@ -319,4 +333,299 @@ if (mapData.author) {
       </div>
     </div>
   </section>
+
+  {isLoggedIn && (
+    <>
+      <!-- 编辑表单模态框 -->
+      <div id="edit-modal" class="hidden fixed inset-0 z-50 overflow-y-auto">
+        <div class="flex min-h-screen items-center justify-center p-4">
+          <!-- 背景遮罩 -->
+          <div class="fixed inset-0 bg-black/50" id="modal-backdrop"></div>
+          
+          <!-- 模态框内容 -->
+          <div class="relative z-10 w-full max-w-4xl rounded-lg bg-background p-6 shadow-lg">
+            <div class="mb-6 flex items-center justify-between">
+              <h2 class="text-2xl font-bold">编辑地图信息</h2>
+              <button
+                id="close-modal-btn"
+                class="text-muted-foreground hover:text-foreground"
+              >
+                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+
+            <form id="edit-map-form" class="space-y-6">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label class="block text-sm font-medium mb-2">地图名称</label>
+                  <input
+                    type="text"
+                    name="name2"
+                    value={mapData.name2}
+                    class="w-full rounded-md border border-border bg-input px-3 py-2 text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/50"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label class="block text-sm font-medium mb-2">作者</label>
+                  <input
+                    type="text"
+                    name="author"
+                    value={mapData.author || ''}
+                    class="w-full rounded-md border border-border bg-input px-3 py-2 text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/50"
+                  />
+                </div>
+
+                <div class="md:col-span-2">
+                  <label class="block text-sm font-medium mb-2">描述</label>
+                  <textarea
+                    name="description"
+                    rows="4"
+                    class="w-full rounded-md border border-border bg-input px-3 py-2 text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/50"
+                  >{mapData.description || ''}</textarea>
+                </div>
+
+                <div>
+                  <label class="block text-sm font-medium mb-2">游戏版本</label>
+                  <input
+                    type="text"
+                    name="build"
+                    value={mapData.build || ''}
+                    class="w-full rounded-md border border-border bg-input px-3 py-2 text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/50"
+                  />
+                </div>
+
+                <div>
+                  <label class="block text-sm font-medium mb-2">格式版本</label>
+                  <input
+                    type="text"
+                    name="format_version"
+                    value={mapData.format_version || ''}
+                    class="w-full rounded-md border border-border bg-input px-3 py-2 text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/50"
+                  />
+                </div>
+
+                <div>
+                  <label class="block text-sm font-medium mb-2">脚本类型</label>
+                  <select
+                    name="script"
+                    class="w-full rounded-md border border-border bg-input px-3 py-2 text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/50"
+                  >
+                    <option value="0" selected={mapData.script === 0}>JASS</option>
+                    <option value="1" selected={mapData.script === 1}>Lua</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label class="block text-sm font-medium mb-2">玩家数量</label>
+                  <input
+                    type="number"
+                    name="player_count"
+                    value={mapData.player_count || 1}
+                    class="w-full rounded-md border border-border bg-input px-3 py-2 text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/50"
+                  />
+                </div>
+
+                <div>
+                  <label class="block text-sm font-medium mb-2">地形</label>
+                  <input
+                    type="text"
+                    name="tileset"
+                    value={mapData.tileset || ''}
+                    class="w-full rounded-md border border-border bg-input px-3 py-2 text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/50"
+                  />
+                </div>
+
+                <div>
+                  <label class="block text-sm font-medium mb-2">宽度</label>
+                  <input
+                    type="number"
+                    name="width"
+                    value={mapData.width || 0}
+                    class="w-full rounded-md border border-border bg-input px-3 py-2 text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/50"
+                  />
+                </div>
+
+                <div>
+                  <label class="block text-sm font-medium mb-2">高度</label>
+                  <input
+                    type="number"
+                    name="height"
+                    value={mapData.height || 0}
+                    class="w-full rounded-md border border-border bg-input px-3 py-2 text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/50"
+                  />
+                </div>
+
+                <div>
+                  <label class="block text-sm font-medium mb-2">可玩宽度</label>
+                  <input
+                    type="number"
+                    name="playable_width"
+                    value={mapData.playable_width || 0}
+                    class="w-full rounded-md border border-border bg-input px-3 py-2 text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/50"
+                  />
+                </div>
+
+                <div>
+                  <label class="block text-sm font-medium mb-2">可玩高度</label>
+                  <input
+                    type="number"
+                    name="playable_height"
+                    value={mapData.playable_height || 0}
+                    class="w-full rounded-md border border-border bg-input px-3 py-2 text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/50"
+                  />
+                </div>
+
+                <div>
+                  <label class="block text-sm font-medium mb-2">图形</label>
+                  <select
+                    name="graphics"
+                    class="w-full rounded-md border border-border bg-input px-3 py-2 text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/50"
+                  >
+                    <option value="0" selected={mapData.graphics === 0}>SD & HD</option>
+                    <option value="1" selected={mapData.graphics === 1}>SD</option>
+                    <option value="2" selected={mapData.graphics === 2}>HD</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label class="block text-sm font-medium mb-2">队伍数量</label>
+                  <input
+                    type="number"
+                    name="team_count"
+                    value={mapData.team_count || 1}
+                    class="w-full rounded-md border border-border bg-input px-3 py-2 text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/50"
+                  />
+                </div>
+
+                <div class="md:col-span-2">
+                  <label class="block text-sm font-medium mb-2">标签</label>
+                  <input
+                    type="text"
+                    name="tags"
+                    value={mapData.tags || ''}
+                    class="w-full rounded-md border border-border bg-input px-3 py-2 text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/50"
+                    placeholder="用逗号分隔"
+                  />
+                </div>
+
+                <div class="flex items-center gap-4">
+                  <label class="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      name="has_triggers"
+                      checked={mapData.has_triggers ? true : false}
+                      class="h-4 w-4 rounded border-border text-primary focus:ring-primary"
+                    />
+                    <span class="text-sm">有触发器</span>
+                  </label>
+
+                  <label class="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      name="cheats"
+                      checked={mapData.cheats ? true : false}
+                      class="h-4 w-4 rounded border-border text-primary focus:ring-primary"
+                    />
+                    <span class="text-sm">允许作弊</span>
+                  </label>
+
+                  <label class="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      name="parsed"
+                      checked={mapData.parsed ? true : false}
+                      class="h-4 w-4 rounded border-border text-primary focus:ring-primary"
+                    />
+                    <span class="text-sm">已解析</span>
+                  </label>
+                </div>
+              </div>
+
+              <div class="flex justify-end gap-4">
+                <button
+                  type="button"
+                  id="cancel-btn"
+                  class="px-6 py-2 border border-border rounded-md hover:bg-muted transition-colors"
+                >
+                  取消
+                </button>
+                <button
+                  type="submit"
+                  class="px-6 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors"
+                >
+                  保存
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <script hoist>
+        const lang = "{lang}";
+        const editBtn = document.getElementById("edit-map-btn");
+        const modal = document.getElementById("edit-modal");
+        const closeBtn = document.getElementById("close-modal-btn");
+        const backdrop = document.getElementById("modal-backdrop");
+        const cancelBtn = document.getElementById("cancel-btn");
+        const form = document.getElementById("edit-map-form");
+
+        // 打开模态框
+        if (editBtn) {
+          editBtn.addEventListener("click", () => {
+            if (modal) modal.classList.remove("hidden");
+          });
+        }
+
+        // 关闭模态框
+        const closeModal = () => {
+          if (modal) modal.classList.add("hidden");
+        };
+
+        if (closeBtn) closeBtn.addEventListener("click", closeModal);
+        if (backdrop) backdrop.addEventListener("click", closeModal);
+        if (cancelBtn) cancelBtn.addEventListener("click", closeModal);
+
+        // 提交表单
+        if (form) {
+          form.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            
+            const formData = new FormData(form);
+            
+            try {
+              const response = await fetch(`/${lang}/api/update-map`, {
+                method: "POST",
+                body: formData
+              });
+              
+              const result = await response.json();
+              
+              if (result.success) {
+                alert("更新成功！");
+                closeModal();
+                window.location.reload();
+              } else {
+                alert("更新失败：" + (result.error || "未知错误"));
+              }
+            } catch (error) {
+              console.error("Error updating map:", error);
+              alert("更新失败，请重试");
+            }
+          });
+        }
+
+        // ESC 键关闭模态框
+        document.addEventListener("keydown", (e) => {
+          if (e.key === "Escape" && modal && !modal.classList.contains("hidden")) {
+            closeModal();
+          }
+        });
+      </script>
+    </>
+  )}
 </BaseLayout>
