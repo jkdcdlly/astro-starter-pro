@@ -6,22 +6,8 @@ const currentUrl = new URL(Astro.request.url);
 const currentLocale = getLangFromUrl(currentUrl);
 const t = useTranslations(currentLocale);
 
-let error = "";
-
-if (Astro.request.method === "POST") {
-    const formData = await Astro.request.formData();
-    const username = formData.get("username") as string;
-    const password = formData.get("password") as string;
-
-    if (username === "jkdcdlly" && password === "war3mapsA123") {
-        // 设置登录状态的 cookie
-        Astro.response.headers.set("Set-Cookie", "admin_session=xxxxx; HttpOnly; Secure; Path=/");
-        // 登录成功后重定向到首页
-        return Astro.redirect("");
-    } else {
-        error = t('login.error');
-    }
-}
+// 检查是否有错误参数
+const error = currentUrl.searchParams.get('error') ? t('login.error') : '';
 ---
 
 <BaseLayout title={t('login.title')}>
@@ -35,7 +21,7 @@ if (Astro.request.method === "POST") {
                 </div>
             )}
             
-            <form method="post" class="space-y-4">
+            <form action={`/${currentLocale}/api/login`} method="post" class="space-y-4">
                 <div>
                     <label for="username" class="mb-2 block text-sm font-medium text-foreground">
                         {t('login.username')}
