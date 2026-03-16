@@ -90,6 +90,17 @@ Astro.response.headers.set('Cache-Control', 'public, max-age=300, s-maxage=300')
 if (!mapData) {
   return Astro.redirect('/404');
 }
+
+// 获取作者的其他地图
+let authorMaps: any[] = [];
+if (mapData.author) {
+  try {
+    const sql = 'SELECT id, name2, author, downloads FROM wc3_maps_complete WHERE author = ? AND id != ? ORDER BY downloads DESC LIMIT 10';
+    authorMaps = await dbService.execute<any>(db, sql, [mapData.author, parseInt(mapId)]);
+  } catch (error) {
+    console.error('Error fetching author maps:', error);
+  }
+}
 ---
 
 <BaseLayout title={mapData.name2} lang={lang}>
@@ -272,13 +283,36 @@ if (!mapData) {
 
           <!-- Tags -->
           {mapData.tags && (
-            <div class="bg-card border border-border rounded-lg p-6">
+            <div class="bg-card border border-border rounded-lg p-6 mb-6">
               <h3 class="font-semibold mb-4">Tags</h3>
               <div class="flex flex-wrap gap-2">
                 {mapData.tags.split(',').map((tag: string) => (
                   <span class="px-3 py-1 bg-muted text-muted-foreground rounded-full text-sm">
                     {tag.trim()}
                   </span>
+                ))}
+              </div>
+            </div>
+          )}
+
+          <!-- Author's Other Maps -->
+          {authorMaps.length > 0 && (
+            <div class="bg-card border border-border rounded-lg p-6">
+              <h3 class="font-semibold mb-4">Other Maps by {mapData.author}</h3>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {authorMaps.map((map) => (
+                  <a 
+                    href={`/${lang}/map/${map.id}/${map.name2.toLowerCase().replace(/\s+/g, '-')}`}
+                    class="flex items-center gap-3 p-3 bg-muted/50 rounded-md hover:bg-muted transition-colors"
+                  >
+                    <div class="w-12 h-12 bg-muted rounded flex items-center justify-center">
+                      <span class="text-sm font-medium">{map.id}</span>
+                    </div>
+                    <div class="flex-1">
+                      <h4 class="font-medium text-sm">{map.name2}</h4>
+                      <p class="text-xs text-muted-foreground">{map.downloads} downloads</p>
+                    </div>
+                  </a>
                 ))}
               </div>
             </div>
