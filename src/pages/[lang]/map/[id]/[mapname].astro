@@ -119,6 +119,7 @@ if (mapData.author) {
         {isLoggedIn && (
           <button
             id="edit-map-btn"
+            data-lang={lang}
             class="mt-4 px-6 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors"
           >
             编辑地图
@@ -337,7 +338,7 @@ if (mapData.author) {
   {isLoggedIn && (
     <>
       <!-- 编辑表单模态框 -->
-      <div id="edit-modal" class="hidden fixed inset-0 z-50 overflow-y-auto">
+      <div id="edit-modal" class="hidden fixed inset-0 z-50 overflow-y-auto ">
         <div class="flex min-h-screen items-center justify-center p-4">
           <!-- 背景遮罩 -->
           <div class="fixed inset-0 bg-black/50" id="modal-backdrop"></div>
@@ -357,7 +358,8 @@ if (mapData.author) {
             </div>
 
             <form id="edit-map-form" class="space-y-6">
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <input type="hidden" name="mapId" value={mapId} />
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div>
                   <label class="block text-sm font-medium mb-2">地图名称</label>
                   <input
@@ -378,17 +380,7 @@ if (mapData.author) {
                     class="w-full rounded-md border border-border bg-input px-3 py-2 text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/50"
                   />
                 </div>
-
-                <div class="md:col-span-2">
-                  <label class="block text-sm font-medium mb-2">描述</label>
-                  <textarea
-                    name="description"
-                    rows="4"
-                    class="w-full rounded-md border border-border bg-input px-3 py-2 text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/50"
-                  >{mapData.description || ''}</textarea>
-                </div>
-
-                <div>
+                 <div>
                   <label class="block text-sm font-medium mb-2">游戏版本</label>
                   <input
                     type="text"
@@ -397,6 +389,27 @@ if (mapData.author) {
                     class="w-full rounded-md border border-border bg-input px-3 py-2 text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/50"
                   />
                 </div>
+                 <div class="md:col-span-3">
+                  <label class="block text-sm font-medium mb-2">标签</label>
+                  <input
+                    type="text"
+                    name="tags"
+                    value={mapData.tags || ''}
+                    class="w-full rounded-md border border-border bg-input px-3 py-2 text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/50"
+                    placeholder="用逗号分隔"
+                  />
+                </div>
+
+                <div class="md:col-span-3">
+                  <label class="block text-sm font-medium mb-2">描述</label>
+                  <textarea
+                    name="description"
+                    rows="4"
+                    class="w-full rounded-md border border-border bg-input px-3 py-2 text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/50"
+                  >{mapData.description || ''}</textarea>
+                </div>
+
+               
 
                 <div>
                   <label class="block text-sm font-medium mb-2">格式版本</label>
@@ -501,16 +514,7 @@ if (mapData.author) {
                   />
                 </div>
 
-                <div class="md:col-span-2">
-                  <label class="block text-sm font-medium mb-2">标签</label>
-                  <input
-                    type="text"
-                    name="tags"
-                    value={mapData.tags || ''}
-                    class="w-full rounded-md border border-border bg-input px-3 py-2 text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/50"
-                    placeholder="用逗号分隔"
-                  />
-                </div>
+               
 
                 <div class="flex items-center gap-4">
                   <label class="flex items-center gap-2">
@@ -566,8 +570,8 @@ if (mapData.author) {
       </div>
 
       <script hoist>
-        const lang = "{lang}";
         const editBtn = document.getElementById("edit-map-btn");
+        const lang = editBtn?.dataset.lang || "zh";
         const modal = document.getElementById("edit-modal");
         const closeBtn = document.getElementById("close-modal-btn");
         const backdrop = document.getElementById("modal-backdrop");

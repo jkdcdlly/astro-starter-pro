@@ -1,6 +1,6 @@
 import type { APIRoute } from "astro";
 
-export const POST: APIRoute = async ({ request, cookies, url }) => {
+export const POST: APIRoute = async ({ request, cookies, url, locals }) => {
   // 检查登录状态
   const adminSession = cookies.get("admin_session")?.value;
   if (!adminSession) {
@@ -11,15 +11,24 @@ export const POST: APIRoute = async ({ request, cookies, url }) => {
   }
 
   const form = await request.formData();
-  const db = (Astro.locals as any).runtime.env.DB;
+  const db = (locals as any).runtime.env.DB;
 
   try {
-    // 从 URL 路径中获取地图 ID
-    const pathSegments = url.pathname.split('/');
-    const mapId = pathSegments[pathSegments.indexOf('api') - 1];
+    // 从表单数据中获取地图 ID
+    const mapId = form.get("mapId");
+    const mapIdNum = parseInt(mapId as string);
+
+    // console.log("Map ID from form:", mapId);
+
+    if (!mapId || isNaN(mapIdNum)) {
+      return new Response(JSON.stringify({ error: "无效的地图ID" }), {
+        status: 400,
+        headers: { "Content-Type": "application/json" }
+      });
+    }
 
     // 获取所有字段
-    const updateData: any = {
+    const updateData: Record<string, any> = {
       name2: form.get("name2"),
       author: form.get("author"),
       description: form.get("description"),
@@ -40,21 +49,28 @@ export const POST: APIRoute = async ({ request, cookies, url }) => {
       parsed: form.get("parsed") === "on" ? 1 : 0
     };
 
+    // console.log("Update data:", updateData);
+
     // 构建 UPDATE SQL
     const fields = Object.keys(updateData).map(key => `${key} = ?`).join(", ");
     const values = Object.values(updateData);
-    values.push(parseInt(mapId));
 
     const sql = `UPDATE wc3_maps_complete SET ${fields} WHERE id = ?`;
-    
-    await db.prepare(sql).bind(...values).run();
+    values.push(mapIdNum);
 
-    return new Response(JSON.stringify({ success: true, message: "更新成功" }), {
+    // console.log("SQL:", sql);
+    // console.log("Values:", values);
+
+    const result = await db.prepare(sql).bind(...values).run();
+
+    // console.log("Update result:", result);
+
+    return new Response(JSON.stringify({ success: true, message: "更新成功", result }), {
       headers: { "Content-Type": "application/json" }
     });
   } catch (error) {
     console.error("Error updating map:", error);
-    return new Response(JSON.stringify({ error: "更新失败" }), {
+    return new Response(JSON.stringify({ error: "更新失败: " + (error as Error).message }), {
       status: 500,
       headers: { "Content-Type": "application/json" }
     });
