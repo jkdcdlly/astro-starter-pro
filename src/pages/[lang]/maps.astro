@@ -22,7 +22,7 @@ const flags = Astro.url?.searchParams?.get('flags');
 const search = Astro.url?.searchParams?.get('search');
 
 // 构建查询条件
-let whereClause = ' WHERE group_id > 0 ';
+let whereClause = ' WHERE group_id > 0 and length(tags)>0 ';
 const args: (string | number)[] = [];
 
 if (search) {
