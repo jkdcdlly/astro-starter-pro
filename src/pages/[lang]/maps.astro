@@ -312,9 +312,11 @@ const generatePageUrl = (pageNum: number) => {
                 )}
                 <!-- Page Numbers -->
                 {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                  // Calculate page number based on current page and total pages
+                  // This ensures that we show 5 pages around the current page
                   let pageNum = i + 1;
-                  if (totalPages > 5) {
-                    if (page > 3 && page < totalPages - 2) {
+                  if (totalPages > 5) { // If we have more than 5 pages
+                    if (page > 3 && page < totalPages - 1) { // If current page is not too close to the edges
                       pageNum = Math.min(page - 2 + i, totalPages);
                     }
                   }
