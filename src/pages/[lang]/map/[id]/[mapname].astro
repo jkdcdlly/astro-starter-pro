@@ -116,7 +116,9 @@ const shouldNoindex = mapData.tags.length === 0;
       <!-- Header -->
       <div class="text-center mb-12">
         <h1 class="text-3xl font-bold mb-4">{mapData.name2}</h1>
-        <p class="text-muted-foreground">by {mapData.author || 'Unknown'}</p>
+        <p class="text-muted-foreground">by {mapData.author ? (
+          <a href={`/${lang}/author/${encodeURIComponent(mapData.author)}`} class="text-primary hover:underline">{mapData.author}</a>
+        ) : 'Unknown'}</p>
         {isLoggedIn && (
           <button
             id="edit-map-btn"
@@ -256,7 +258,13 @@ const shouldNoindex = mapData.tags.length === 0;
                 <ul class="space-y-2">
                   <li class="flex justify-between">
                     <span class="text-muted-foreground">Author:</span>
-                    <span>{mapData.author || 'Unknown'}</span>
+                    <span>
+                      {mapData.author ? (
+                        <a href={`/${lang}/author/${encodeURIComponent(mapData.author)}`} class="text-primary hover:underline">
+                          {mapData.author}
+                        </a>
+                      ) : 'Unknown'}
+                    </span>
                   </li>
                   <li class="flex justify-between">
                     <span class="text-muted-foreground">Players:</span>
