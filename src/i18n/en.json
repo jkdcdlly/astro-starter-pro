@@ -195,6 +195,7 @@
     "nav": [
       { "text": "Home", "href": "/" },
       { "text": "Maps", "href": "/maps" },
+      { "text": "Authors", "href": "/authors" },
       { "text": "About", "href": "/about" },
       
       { "text": "Blog", "href": "/blog" },

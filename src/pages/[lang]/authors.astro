@@ -6,6 +6,11 @@ import { dbService } from '@/services/database';
 
 const db = Astro.locals.runtime.env.DB;
 
+interface Props {
+  lang?: string;
+}
+
+const props = Astro.props;
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 
@@ -177,7 +182,7 @@ const generatePageUrl = (pageNum: number) => {
             {authors.map((author) => (
               <a 
                 key={author.author}
-                href={`/${lang}/author/${encodeURIComponent(author.author)}`}
+                href={props.lang ? `/author/${encodeURIComponent(author.author)}` : `/${lang}/author/${encodeURIComponent(author.author)}`}
                 class="bg-card border border-border rounded-lg p-6 hover:shadow-md transition-all hover:border-primary/50"
               >
                 <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">

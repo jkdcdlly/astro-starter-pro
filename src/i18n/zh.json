@@ -195,6 +195,7 @@
     "nav": [
       { "text": "首页", "href": "/" },
       { "text": "地图", "href": "/maps" },
+      { "text": "作者", "href": "/authors" },
       { "text": "关于", "href": "/about" },
       { "text": "博客", "href": "/blog" },
       { "text": "联系我们", "href": "/contact" }

@@ -16,13 +16,13 @@ export function getStaticPaths() {
 }
 
 interface Props {
-  lang: string;
-  author: string;
+  lang?: string;
 }
+const props = Astro.props;
 const params = Astro.params;
 const authorName = decodeURIComponent(params.author || '');
 
-const lang = getLangFromUrl(Astro.url);
+const lang = props.lang || getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 
 // 尝试获取缓存
@@ -145,7 +145,7 @@ if (authorMaps.length === 0) {
         <div class="bg-card border border-border rounded-lg p-6 mb-12">
           <h3 class="font-semibold text-lg mb-4">Most Popular Map</h3>
           <a 
-            href={`/${lang}/map/${authorStats.mostDownloadedMap.id}/${authorStats.mostDownloadedMap.name2.toLowerCase().replace(/\s+/g, '-')}`}
+            href={props.lang ? `/map/${authorStats.mostDownloadedMap.id}/${authorStats.mostDownloadedMap.name2.toLowerCase().replace(/\s+/g, '-')}` : `/${lang}/map/${authorStats.mostDownloadedMap.id}/${authorStats.mostDownloadedMap.name2.toLowerCase().replace(/\s+/g, '-')}`}
             class="flex flex-col sm:flex-row gap-6 p-4 bg-muted/50 rounded-lg hover:bg-muted transition-colors"
           >
             <img 
@@ -173,7 +173,7 @@ if (authorMaps.length === 0) {
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {authorMaps.map((map) => (
             <div key={map.id} class="bg-muted/30 border border-border rounded-lg overflow-hidden hover:shadow-md transition-shadow">
-              <a href={`/${lang}/map/${map.id}/${map.name2.toLowerCase().replace(/\s+/g, '-')}`}>
+              <a href={props.lang ? `/map/${map.id}/${map.name2.toLowerCase().replace(/\s+/g, '-')}` : `/${lang}/map/${map.id}/${map.name2.toLowerCase().replace(/\s+/g, '-')}`}>
                 <div class="h-40 overflow-hidden">
                   <img 
                     src={`https://wc3maps.com/static/maps/${map.id}/archive/war3mapMap.jpg`} 
