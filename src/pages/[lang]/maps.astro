@@ -311,23 +311,33 @@ const generatePageUrl = (pageNum: number) => {
                   </a>
                 )}
                 <!-- Page Numbers -->
-                {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
-                  let pageNum = i + 1;
+                {(() => {
+                  const pageCount = Math.min(5, totalPages);
+                  let startPage = 1;
+                  
                   if (totalPages > 5) {
-                    if (page > 3) {
-                      pageNum = Math.min(page - 2 + i, totalPages); 
+                    if (page <= 3) {
+                      startPage = 1;
+                    } else if (page >= totalPages - 2) {
+                      startPage = totalPages - 4;
+                    } else {
+                      startPage = page - 2;
                     }
                   }
-                  return (
-                    <a 
-                      key={pageNum} 
-                      href={generatePageUrl(pageNum)} 
-                      class={`px-4 py-2 border border-border rounded-md ${pageNum == page ? 'bg-primary text-primary-foreground' : 'hover:bg-muted'} transition-colors`}
-                    >
-                      {pageNum}
-                    </a>
-                  );
-                })}
+                  
+                  return Array.from({ length: pageCount }, (_, i) => {
+                    const pageNum = startPage + i;
+                    return (
+                      <a 
+                        key={pageNum} 
+                        href={generatePageUrl(pageNum)} 
+                        class={`px-4 py-2 border border-border rounded-md ${pageNum == page ? 'bg-primary text-primary-foreground' : 'hover:bg-muted'} transition-colors`}
+                      >
+                        {pageNum}
+                      </a>
+                    );
+                  });
+                })()}
                 <!-- Next Page Button -->
                 {page < totalPages && (
                   <a 
