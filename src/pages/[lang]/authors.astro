@@ -58,7 +58,7 @@ if (cache) {
 if (!authors.length) {
   try {
     // 构建查询条件
-    let whereClause = ' WHERE length(tags) > 0 AND author IS NOT NULL AND author != \'\' ';
+    let whereClause = ' WHERE length(tags)>0 AND author IS NOT NULL AND author != \'\' ';
     const args: (string | number)[] = [];
 
     if (search) {
