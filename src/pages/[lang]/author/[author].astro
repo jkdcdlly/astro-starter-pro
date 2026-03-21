@@ -10,9 +10,9 @@ const db = (Astro.locals as any).runtime.env.DB;
 function generateSlug(text: string): string {
   return text
     .toLowerCase()
-    .replace(/[^\w\s-]/g, '')  // 移除非单词字符（保留空格、连字符）
-    .replace(/\s+/g, '-')      // 空格替换为连字符
-    .replace(/-+/g, '-')       // 多个连字符替换为单个
+    .replace(/[^\w\s-]/g, '')
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-')
     .trim();
 }
 
@@ -77,21 +77,17 @@ if (cache) {
 // 如果缓存中没有数据或缓存不可用，从数据库获取
 if (!cachedData) {
   try {
-    // 先获取所有作者，找到匹配 slug 的作者名
     const allAuthorsSql = 'SELECT DISTINCT author FROM wc3_maps_complete WHERE author IS NOT NULL AND author != \'\'';
     const allAuthors = await dbService.execute<any>(db, allAuthorsSql, []);
     
-    // 找到匹配 slug 的作者
     const matchedAuthor = allAuthors.find(a => generateSlug(a.author) === authorSlug);
     
     if (matchedAuthor) {
       authorName = matchedAuthor.author;
       
-      // 获取作者的所有地图
       const mapsSql = 'SELECT * FROM wc3_maps_complete WHERE author = ? ORDER BY downloads DESC';
       authorMaps = await dbService.execute<any>(db, mapsSql, [authorName]);
 
-      // 计算统计数据
       if (authorMaps.length > 0) {
         authorStats.totalMaps = authorMaps.length;
         authorStats.totalDownloads = authorMaps.reduce((sum, map) => sum + (map.downloads || 0), 0);
@@ -100,7 +96,6 @@ if (!cachedData) {
         authorStats.mostDownloadedMap = authorMaps[0];
       }
 
-      // 缓存结果（如果缓存可用）
       if (cache) {
         try {
           const response = new Response(JSON.stringify({ authorName, authorMaps, authorStats }), {
@@ -119,102 +114,195 @@ if (!cachedData) {
   }
 }
 
-// 设置响应头缓存
 Astro.response.headers.set('Cache-Control', 'public, max-age=300, s-maxage=300');
 
-// 如果没有找到作者数据，返回404
 if (!authorName || authorMaps.length === 0) {
   return Astro.redirect('/404');
 }
+
+// SEO 相关
+const cleanAuthorName = authorName.replace(/[^\w\s]/g, '');
+const pageTitle = lang === 'zh' 
+  ? `${cleanAuthorName} - Warcraft 3 地图作者 | War3Maps.net` 
+  : `${cleanAuthorName} - Warcraft 3 Map Author | War3Maps.net`;
+
+const pageDescription = lang === 'zh'
+  ? `探索 ${cleanAuthorName} 创作的顶级 Warcraft 3 地图合集。查看地图详情、下载、攻略与热门排行，一键收藏所有作者地图包。`
+  : `Discover the top Warcraft 3 maps created by ${cleanAuthorName}. View map details, downloads, guides and popular rankings. One-click to collect all author maps.`;
+
+const canonicalUrl = `${siteConfig.url}${props.lang ? '/author/' + authorSlug : '/' + lang + '/author/' + authorSlug}`;
+
+const hotMaps = authorMaps.slice(0, 3);
 ---
 
-<BaseLayout title={`${authorName} - Author Profile`} lang={lang}>
+<BaseLayout 
+  title={pageTitle}
+  description={pageDescription}
+  canonical={canonicalUrl}
+  lang={lang}
+>
+  <slot name="head">
+    <link rel="canonical" href={canonicalUrl} />
+  </slot>
+  
   <section class="py-12">
     <div class="container mx-auto px-4">
+      <!-- VIP CTA -->
+      <div class="vip-cta bg-gradient-to-r from-amber-50 to-yellow-50 border border-amber-200 rounded-lg p-6 mb-8 text-center">
+        <p class="text-lg font-semibold mb-3 text-amber-800">
+          💎 {lang === 'zh' ? `想一次性获取 ${authorName} 所有地图？` : `Want to get all maps by ${authorName} at once?`}
+        </p>
+        <a 
+          href={`/vip/${authorSlug}`} 
+          class="inline-block px-8 py-3 bg-amber-500 text-white font-semibold rounded-lg hover:bg-amber-600 transition-colors"
+        >
+          {lang === 'zh' ? '一键下载合集 / VIP 特权' : 'Download All / VIP Benefits'}
+        </a>
+      </div>
+
       <!-- Header -->
       <div class="text-center mb-12">
-        <h1 class="text-3xl font-bold mb-4">{authorName}</h1>
-        <p class="text-muted-foreground">Author Profile</p>
+        <h1 class="text-3xl font-bold mb-4">
+          {lang === 'zh' 
+            ? `${authorName} - Warcraft 3 地图作者` 
+            : `${authorName} - Warcraft 3 Map Author`}
+        </h1>
       </div>
 
       <!-- Stats Cards -->
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
         <div class="bg-card border border-border rounded-lg p-6 text-center">
           <div class="text-4xl font-bold text-primary mb-2">{authorStats.totalMaps}</div>
-          <div class="text-muted-foreground">Total Maps</div>
+          <div class="text-muted-foreground">{lang === 'zh' ? '地图数量' : 'Total Maps'}</div>
         </div>
         <div class="bg-card border border-border rounded-lg p-6 text-center">
           <div class="text-4xl font-bold text-primary mb-2">{authorStats.totalDownloads.toLocaleString()}</div>
-          <div class="text-muted-foreground">Total Downloads</div>
+          <div class="text-muted-foreground">{lang === 'zh' ? '总下载量' : 'Total Downloads'}</div>
         </div>
         <div class="bg-card border border-border rounded-lg p-6 text-center">
           <div class="text-4xl font-bold text-primary mb-2">{authorStats.totalPlayers.toLocaleString()}</div>
-          <div class="text-muted-foreground">Total Players</div>
+          <div class="text-muted-foreground">{lang === 'zh' ? '总玩家数' : 'Total Players'}</div>
         </div>
         <div class="bg-card border border-border rounded-lg p-6 text-center">
           <div class="text-4xl font-bold text-primary mb-2">{authorStats.totalHosted.toLocaleString()}</div>
-          <div class="text-muted-foreground">Total Hosted</div>
+          <div class="text-muted-foreground">{lang === 'zh' ? '总游戏次数' : 'Total Hosted'}</div>
         </div>
       </div>
 
-      <!-- Author Bio (placeholder) -->
+      <!-- Author Bio -->
       <div class="bg-card border border-border rounded-lg p-6 mb-12">
-        <h3 class="font-semibold text-lg mb-4">About {authorName}</h3>
-        <p class="text-muted-foreground">Author biography coming soon...</p>
+        <h2 class="text-2xl font-bold mb-4">{lang === 'zh' ? '作者简介' : 'About the Author'}</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          {lang === 'zh'
+            ? `${authorName} 是 Warcraft 3 社区知名地图创作者，擅长制作各种类型地图。其地图以策略性和玩法丰富著称，深受玩家喜爱。`
+            : `${authorName} is a well-known map creator in the Warcraft 3 community, specializing in various map types. Their maps are known for their strategic and rich gameplay, loved by players.`}
+        </p>
       </div>
 
-      <!-- Most Popular Map -->
-      {authorStats.mostDownloadedMap && (
+      <!-- Popular Maps -->
+      {hotMaps.length > 0 && (
         <div class="bg-card border border-border rounded-lg p-6 mb-12">
-          <h3 class="font-semibold text-lg mb-4">Most Popular Map</h3>
-          <a 
-            href={props.lang ? `/map/${authorStats.mostDownloadedMap.id}/${authorStats.mostDownloadedMap.name2.toLowerCase().replace(/\s+/g, '-')}` : `/${lang}/map/${authorStats.mostDownloadedMap.id}/${authorStats.mostDownloadedMap.name2.toLowerCase().replace(/\s+/g, '-')}`}
-            class="flex flex-col sm:flex-row gap-6 p-4 bg-muted/50 rounded-lg hover:bg-muted transition-colors"
-          >
-            <img 
-              src={`https://wc3maps.com/static/maps/${authorStats.mostDownloadedMap.id}/archive/war3mapMap.jpg`} 
-              alt={authorStats.mostDownloadedMap.name2}
-              class="w-full sm:w-64 h-40 object-cover rounded-md"
-              onerror="this.src='https://via.placeholder.com/256x160?text=No+Preview';"
-            />
-            <div class="flex-1">
-              <h4 class="font-semibold text-xl mb-2">{authorStats.mostDownloadedMap.name2}</h4>
-              <div class="grid grid-cols-2 gap-4 text-sm text-muted-foreground">
-                <div>Downloads: <span class="font-medium text-foreground">{authorStats.mostDownloadedMap.downloads}</span></div>
-                <div>Players: <span class="font-medium text-foreground">{authorStats.mostDownloadedMap.users}</span></div>
-                <div>Hosted: <span class="font-medium text-foreground">{authorStats.mostDownloadedMap.hosted_total}</span></div>
-                <div>Size: <span class="font-medium text-foreground">{authorStats.mostDownloadedMap.size ? `${(authorStats.mostDownloadedMap.size / 1024 / 1024).toFixed(2)} MB` : 'Unknown'}</span></div>
-              </div>
-            </div>
-          </a>
+          <h2 class="text-2xl font-bold mb-6">{lang === 'zh' ? '热门地图' : 'Popular Maps'}</h2>
+          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+            {hotMaps.map((map) => (
+              <a 
+                key={map.id}
+                href={props.lang ? `/map/${map.id}/${map.name2.toLowerCase().replace(/\s+/g, '-')}` : `/${lang}/map/${map.id}/${map.name2.toLowerCase().replace(/\s+/g, '-')}`}
+                class="flex items-center gap-4 p-4 bg-muted/30 rounded-lg hover:bg-muted/50 transition-colors"
+              >
+                <div class="text-primary font-semibold text-lg">{hotMaps.indexOf(map) + 1}.</div>
+                <div class="flex-1">
+                  <h3 class="font-medium">{map.name2}</h3>
+                  <p class="text-sm text-muted-foreground">{map.downloads} {lang === 'zh' ? '下载' : 'downloads'}</p>
+                </div>
+              </a>
+            ))}
+          </div>
         </div>
       )}
 
       <!-- All Maps by Author -->
-      <div class="bg-card border border-border rounded-lg p-6">
-        <h3 class="font-semibold text-lg mb-6">All Maps by {authorName}</h3>
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      <div class="bg-card border border-border rounded-lg p-6 mb-12">
+        <h2 class="text-2xl font-bold mb-6">{lang === 'zh' ? '地图作品列表' : 'All Maps by Author'}</h2>
+        <div class="space-y-4">
           {authorMaps.map((map) => (
-            <div key={map.id} class="bg-muted/30 border border-border rounded-lg overflow-hidden hover:shadow-md transition-shadow">
-              <a href={props.lang ? `/map/${map.id}/${map.name2.toLowerCase().replace(/\s+/g, '-')}` : `/${lang}/map/${map.id}/${map.name2.toLowerCase().replace(/\s+/g, '-')}`}>
-                <div class="h-40 overflow-hidden">
+            <div key={map.id} class="flex items-center gap-4 p-4 bg-muted/30 rounded-lg hover:bg-muted/50 transition-colors">
+              <a 
+                href={props.lang ? `/map/${map.id}/${map.name2.toLowerCase().replace(/\s+/g, '-')}` : `/${lang}/map/${map.id}/${map.name2.toLowerCase().replace(/\s+/g, '-')}`}
+                class="flex-1 flex items-center gap-4"
+              >
+                <div class="flex-shrink-0 w-24 h-16 overflow-hidden rounded">
                   <img 
                     src={`https://wc3maps.com/static/maps/${map.id}/archive/war3mapMap.jpg`} 
                     alt={map.name2}
-                    class="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                    onerror="this.src='https://via.placeholder.com/400x225?text=No+Preview';"
+                    class="w-full h-full object-cover"
+                    onerror="this.src='https://via.placeholder.com/96x64?text=No+Preview';"
                   />
                 </div>
-                <div class="p-4">
-                  <h4 class="font-medium mb-1 truncate">{map.name2}</h4>
-                  <div class="flex justify-between text-xs text-muted-foreground">
-                    <span>Players: {map.users || 0}</span>
-                    <span>Downloads: {map.downloads || 0}</span>
-                  </div>
+                <div class="flex-1">
+                  <h3 class="font-medium">{map.name2}</h3>
+                  <p class="text-sm text-muted-foreground">
+                    {map.description ? map.description.substring(0, 100) + '...' : (lang === 'zh' ? '暂无描述' : 'No description')}
+                  </p>
+                </div>
+                <div class="text-right">
+                  <div class="text-sm font-medium">{map.downloads} {lang === 'zh' ? '下载' : 'downloads'}</div>
                 </div>
               </a>
             </div>
           ))}
+        </div>
+      </div>
+
+      <!-- FAQ Section -->
+      <div class="bg-card border border-border rounded-lg p-6">
+        <h2 class="text-2xl font-bold mb-6">{lang === 'zh' ? '常见问题 (FAQ)' : 'Frequently Asked Questions'}</h2>
+        <div class="space-y-6">
+          <div>
+            <dt class="font-semibold text-lg mb-2">
+              {lang === 'zh' 
+                ? `${authorName} 最受欢迎的地图有哪些？` 
+                : `What are ${authorName}'s most popular maps?`}
+            </dt>
+            <dd class="text-muted-foreground pl-4">
+              {lang === 'zh'
+                ? `热门地图包括 ${hotMaps.map(m => m.name2).join('、')} 等，玩法丰富，适合不同人数和类型的玩家。`
+                : `Popular maps include ${hotMaps.map(m => m.name2).join(', ')}, offering rich gameplay suitable for players of different group sizes and preferences.`}
+            </dd>
+          </div>
+          
+          <div>
+            <dt class="font-semibold text-lg mb-2">
+              {lang === 'zh' ? '这些地图适合几人玩？' : 'How many players are these maps suitable for?'}
+            </dt>
+            <dd class="text-muted-foreground pl-4">
+              {lang === 'zh'
+                ? '根据地图类型不同，TD 地图适合 2-8 人，RPG 地图适合单人或小队，PVP 地图适合 2-12 人。'
+                : 'Depending on the map type, TD maps are suitable for 2-8 players, RPG maps for solo or small teams, and PVP maps for 2-12 players.'}
+            </dd>
+          </div>
+          
+          <div>
+            <dt class="font-semibold text-lg mb-2">
+              {lang === 'zh' ? `如何快速下载 ${authorName} 的所有地图？` : `How to quickly download all maps by ${authorName}?`}
+            </dt>
+            <dd class="text-muted-foreground pl-4">
+              {lang === 'zh'
+                ? '你可以通过我们的一键地图合集功能，下载作者所有地图，并享受 VIP 高速下载和无广告体验。'
+                : 'You can use our one-click map collection feature to download all author maps, and enjoy VIP high-speed download and ad-free experience.'}
+            </dd>
+          </div>
+          
+          <div>
+            <dt class="font-semibold text-lg mb-2">
+              {lang === 'zh' ? '如何收藏作者地图？' : 'How to bookmark author maps?'}
+            </dt>
+            <dd class="text-muted-foreground pl-4">
+              {lang === 'zh'
+                ? '点击每个地图页面的"收藏作者地图包"按钮即可一次性收藏所有地图，方便快速访问和下载。'
+                : 'Click the "Collect Author Map Pack" button on each map page to bookmark all maps at once for quick access and downloads.'}
+            </dd>
+          </div>
         </div>
       </div>
     </div>
