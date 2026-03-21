@@ -311,23 +311,34 @@ const generatePageUrl = (pageNum: number) => {
                   </a>
                 )}
                 <!-- Page Numbers -->
-                {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
-                  let pageNum = i + 1;
+                {(() => {
+                  const pages = [];
+                  const maxPages = Math.min(5, totalPages);
+                  let start = 1;
+                  
                   if (totalPages > 5) {
-                    if (page > 3) {
-                      pageNum = Math.min(page - 2 + i, totalPages); 
+                    if (page > 3 && page < totalPages - 2) {
+                      start = page - 2;
+                    } else if (page >= totalPages - 2) {
+                      start = totalPages - 4;
                     }
                   }
-                  return (
-                    <a 
-                      key={pageNum} 
-                      href={generatePageUrl(pageNum)} 
-                      class={`px-4 py-2 border border-border rounded-md ${pageNum == page ? 'bg-primary text-primary-foreground' : 'hover:bg-muted'} transition-colors`}
-                    >
-                      {pageNum}
-                    </a>
-                  );
-                })}
+                  
+                  for (let i = 0; i < maxPages; i++) {
+                    const pageNum = start + i;
+                    pages.push(
+                      <a 
+                        key={pageNum} 
+                        href={generatePageUrl(pageNum)} 
+                        class={`px-4 py-2 border border-border rounded-md ${pageNum == page ? 'bg-primary text-primary-foreground' : 'hover:bg-muted'} transition-colors`}
+                      >
+                        {pageNum}
+                      </a>
+                    );
+                  }
+                  
+                  return pages;
+                })()}
                 <!-- Next Page Button -->
                 {page < totalPages && (
                   <a 
