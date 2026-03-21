@@ -1,0 +1,275 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { siteConfig } from '../../config/site';
+import { useTranslations, getLangFromUrl, ui, defaultLang } from "@/i18n";
+import { dbService } from '@/services/database';
+
+const db = Astro.locals.runtime.env.DB;
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+// 从URL获取筛选参数
+const url = new URL(Astro.request.url);
+const page: number = parseInt(url.searchParams.get("page") || "1");
+const search = Astro.url?.searchParams?.get('search');
+
+// 计算分页
+const limit = 20;
+const offset = (page - 1) * limit;
+
+// 初始化数据变量
+let totalCount = 0;
+let authors: any[] = [];
+
+// 尝试获取缓存
+const cacheKey = new Request(url.toString());
+let cache: Cache | null = null;
+
+try {
+  if (typeof caches !== 'undefined') {
+    cache = await caches.open('astro-cache');
+  }
+} catch (e) {
+  console.log('Cache not available');
+}
+
+// 检查缓存中是否有数据
+if (cache) {
+  try {
+    const cachedResponse = await cache.match(cacheKey);
+    if (cachedResponse) {
+      const cachedData: any = await cachedResponse.json();
+      totalCount = cachedData.totalCount;
+      authors = cachedData.authors;
+      console.log('Loaded from cache');
+    }
+  } catch (e) {
+    console.log('Cache read failed, fetching fresh data');
+  }
+}
+
+// 如果缓存中没有数据或缓存不可用，从数据库获取
+if (!authors.length) {
+  try {
+    // 构建查询条件
+    let whereClause = ' WHERE author IS NOT NULL AND author != \'\' ';
+    const args: (string | number)[] = [];
+
+    if (search) {
+      whereClause += ' AND author LIKE ?';
+      args.push(`%${search}%`);
+    }
+
+    // 先获取所有符合条件的作者列表（用于统计）
+    const authorsSql = `
+      SELECT author, 
+             COUNT(*) as totalMaps,
+             SUM(downloads) as totalDownloads,
+             SUM(users) as totalPlayers,
+             SUM(hosted_total) as totalHosted
+      FROM wc3_maps_complete
+      ${whereClause}
+      GROUP BY author
+    `;
+    const allAuthors = await dbService.execute<any>(db, authorsSql, args);
+    
+    // 按总下载量降序排序
+    allAuthors.sort((a, b) => (b.totalDownloads || 0) - (a.totalDownloads || 0));
+    
+    totalCount = allAuthors.length;
+    
+    // 分页
+    authors = allAuthors.slice(offset, offset + limit);
+
+    // 缓存结果（如果缓存可用）
+    if (cache) {
+      try {
+        const cacheData = { totalCount, authors };
+        const response = new Response(JSON.stringify(cacheData), {
+          headers: {
+            'Cache-Control': 'public, max-age=300, s-maxage=300',
+          }
+        });
+        await cache.put(cacheKey, response);
+      } catch (e) {
+        console.log('Cache write failed');
+      }
+    }
+  } catch (error) {
+    console.error('Error fetching authors data:', error);
+  }
+}
+
+// 设置响应头缓存
+Astro.response.headers.set('Cache-Control', 'public, max-age=300, s-maxage=300');
+
+// 计算总页数
+const totalPages = Math.ceil(totalCount / limit);
+
+// 生成分页链接
+const generatePageUrl = (pageNum: number) => {
+  const newUrl = new URL(Astro.url.toString());
+  newUrl.searchParams.set('page', pageNum.toString());
+  return newUrl.pathname + newUrl.search;
+};
+---
+
+<BaseLayout title="Authors" lang={lang}>
+  <section class="py-12">
+    <div class="container mx-auto px-4">
+      <!-- Header -->
+      <div class="text-center mb-12">
+        <h1 class="text-3xl font-bold mb-4">Authors</h1>
+        <p class="text-muted-foreground">Discover talented map creators and their works.</p>
+      </div>
+
+      <!-- Main Content -->
+      <div class="flex flex-col lg:flex-row gap-8">
+        <!-- Filters -->
+        <div class="w-full lg:w-64 shrink-0">
+          <div class="bg-card border border-border rounded-lg p-4">
+            <h3 class="font-semibold mb-4">Filters</h3>
+            
+            <!-- Search Filter -->
+            <div class="mb-6">
+              <label class="block text-sm font-medium mb-2">Search Author</label>
+              <input
+                type="text"
+                id="author-search"
+                placeholder="Search author..."
+                value={search || ''}
+                class="w-full px-3 py-2 border border-border rounded-md bg-background"
+                onkeydown="if(event.key === 'Enter') { window.location.href = '?page=1' + (document.getElementById('author-search').value ? '&search=' + encodeURIComponent(document.getElementById('author-search').value) : ''); }"
+              />
+              <button
+                class="mt-2 w-full px-3 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors"
+                onclick="window.location.href = '?page=1' + (document.getElementById('author-search').value ? '&search=' + encodeURIComponent(document.getElementById('author-search').value) : '');"
+              >
+                Search
+              </button>
+            </div>
+
+            <!-- Quick Stats -->
+            <div class="pt-4 border-t border-border">
+              <h4 class="font-medium mb-3">Stats</h4>
+              <div class="space-y-2 text-sm text-muted-foreground">
+                <div class="flex justify-between">
+                  <span>Total Authors:</span>
+                  <span class="font-medium text-foreground">{totalCount}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Authors List -->
+        <div class="flex-1">
+          <!-- Results Info -->
+          <div class="flex justify-between items-center mb-6">
+            <div class="text-sm text-muted-foreground">
+              Showing {offset + 1}-{Math.min(offset + limit, totalCount)} of {totalCount} authors
+            </div>
+          </div>
+
+          <!-- Authors Grid -->
+          <div class="grid grid-cols-1 gap-4">
+            {authors.map((author) => (
+              <a 
+                key={author.author}
+                href={`/${lang}/author/${encodeURIComponent(author.author)}`}
+                class="bg-card border border-border rounded-lg p-6 hover:shadow-md transition-all hover:border-primary/50"
+              >
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                  <div>
+                    <h3 class="text-xl font-semibold mb-2">{author.author}</h3>
+                    <div class="flex flex-wrap gap-4 text-sm text-muted-foreground">
+                      <span>
+                        <span class="font-medium text-foreground">{author.totalMaps}</span> maps
+                      </span>
+                      <span>
+                        <span class="font-medium text-foreground">{(author.totalDownloads || 0).toLocaleString()}</span> downloads
+                      </span>
+                      <span>
+                        <span class="font-medium text-foreground">{(author.totalPlayers || 0).toLocaleString()}</span> players
+                      </span>
+                      <span>
+                        <span class="font-medium text-foreground">{(author.totalHosted || 0).toLocaleString()}</span> hosted
+                      </span>
+                    </div>
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <div class="text-right">
+                      <div class="text-2xl font-bold text-primary">
+                        {(author.totalDownloads || 0).toLocaleString()}
+                      </div>
+                      <div class="text-xs text-muted-foreground">Total Downloads</div>
+                    </div>
+                    <svg class="h-6 w-6 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                  </div>
+                </div>
+              </a>
+            ))}
+          </div>
+
+          <!-- Pagination -->
+          {totalPages > 1 && (
+            <div class="flex justify-center mt-12">
+              <div class="flex items-center space-x-2">
+                <!-- Previous Page Button -->
+                {page > 1 && (
+                  <a 
+                    href={generatePageUrl(page - 1)} 
+                    class="px-4 py-2 border border-border rounded-md hover:bg-muted transition-colors"
+                  >
+                    Previous
+                  </a>
+                )}
+                <!-- Page Numbers -->
+                {(() => {
+                  const pages = [];
+                  const maxPages = Math.min(5, totalPages);
+                  let start = 1;
+                  
+                  if (totalPages > 5) {
+                    if (page > 3 && page < totalPages - 2) {
+                      start = page - 2;
+                    } else if (page >= totalPages - 2) {
+                      start = totalPages - 4;
+                    }
+                  }
+                  
+                  for (let i = 0; i < maxPages; i++) {
+                    const pageNum = start + i;
+                    pages.push(
+                      <a 
+                        key={pageNum} 
+                        href={generatePageUrl(pageNum)} 
+                        class={`px-4 py-2 border border-border rounded-md ${pageNum == page ? 'bg-primary text-primary-foreground' : 'hover:bg-muted'} transition-colors`}
+                      >
+                        {pageNum}
+                      </a>
+                    );
+                  }
+                  
+                  return pages;
+                })()}
+                <!-- Next Page Button -->
+                {page < totalPages && (
+                  <a 
+                    href={generatePageUrl(page + 1)} 
+                    class="px-4 py-2 border border-border rounded-md hover:bg-muted transition-colors"
+                  >
+                    Next
+                  </a>
+                )}
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
