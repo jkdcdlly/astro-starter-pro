@@ -107,9 +107,10 @@ if (mapData.author) {
     console.error('Error fetching author maps:', error);
   }
 }
+const shouldNoindex = mapData.tags.length === 0;
 ---
 
-<BaseLayout title={mapData.name2} lang={lang}>
+<BaseLayout title={mapData.name2} lang={lang} noindex={shouldNoindex}>
   <section class="py-12">
     <div class="container mx-auto px-4">
       <!-- Header -->

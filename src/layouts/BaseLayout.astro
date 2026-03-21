@@ -12,6 +12,7 @@ interface Props {
         ignoreTitleTemplate?: boolean;
     };
     lang?: string;
+    noindex?: boolean;
 }
 
 import Seo from "../components/seo/Seo.astro";
@@ -22,7 +23,7 @@ import "../styles/global.css";
 
 import { siteConfig } from "../config/site";
 
-const { title, description, ogImage, canonical, metadata, lang } = Astro.props;
+const { title, description, ogImage, canonical, metadata, lang , noindex} = Astro.props;
 
 const finalTitle = metadata?.title || title;
 const finalDescription = metadata?.description || description;
@@ -30,11 +31,13 @@ const finalOgImage = metadata?.ogImage || ogImage;
 const finalCanonical = metadata?.canonical || canonical;
 const finalIgnoreTitleTemplate = metadata?.ignoreTitleTemplate || false;
 const finalLang = lang || "en";
+const finalNoindex = noindex || false;
 ---
 
 <!doctype html>
 <html lang={finalLang} class="scroll-smooth">
     <head>
+        {finalNoindex && <meta name="robots" content="noindex, follow" />}
         <Seo
             title={finalTitle}
             description={finalDescription}
