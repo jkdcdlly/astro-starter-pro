@@ -312,16 +312,10 @@ const generatePageUrl = (pageNum: number) => {
                 )}
                 <!-- Page Numbers -->
                 {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
-                  // Calculate page number based on current page and total pages
-                  // This ensures that we show 5 pages around the current page
-                  // page 是 当前页面
-                  // totalPages 是 总页面数
-                  // i 是 当前页码
-                  // pageNum 是 当前页码对应的页面编号
                   let pageNum = i + 1;
-                  if (totalPages > 5) { // If we have more than 5 pages
-                    if (page > 3 && page < totalPages) { // If current page is not too close to the edges
-                      pageNum = Math.min(page - 2 + i, totalPages); // 计算当前页码对应的页面编号 ，确保不超过总页面数
+                  if (totalPages > 5) {
+                    if (page > 3) {
+                      pageNum = Math.min(page - 2 + i, totalPages); 
                     }
                   }
                   return (
