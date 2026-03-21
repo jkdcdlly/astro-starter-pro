@@ -10,9 +10,9 @@ const db = (Astro.locals as any).runtime.env.DB;
 function generateSlug(text: string): string {
   return text
     .toLowerCase()
-    .replace(/[^\w\s-]/g, '')
-    .replace(/\s+/g, '-')
-    .replace(/-+/g, '-')
+    .replace(/[^\p{L}\p{N}\s-]/gu, '')  // 移除非字母、非数字、非空格、非连字符的字符（支持 Unicode）
+    .replace(/\s+/g, '-')      // 空格替换为连字符
+    .replace(/-+/g, '-')       // 多个连字符替换为单个
     .trim();
 }
 
@@ -147,7 +147,7 @@ const hotMaps = authorMaps.slice(0, 3);
   
   <section class="py-12">
     <div class="container mx-auto px-4">
-      <!-- VIP CTA -->
+      <!-- VIP CTA 
       <div class="vip-cta bg-gradient-to-r from-amber-50 to-yellow-50 border border-amber-200 rounded-lg p-6 mb-8 text-center">
         <p class="text-lg font-semibold mb-3 text-amber-800">
           💎 {lang === 'zh' ? `想一次性获取 ${authorName} 所有地图？` : `Want to get all maps by ${authorName} at once?`}
@@ -159,7 +159,7 @@ const hotMaps = authorMaps.slice(0, 3);
           {lang === 'zh' ? '一键下载合集 / VIP 特权' : 'Download All / VIP Benefits'}
         </a>
       </div>
-
+-->
       <!-- Header -->
       <div class="text-center mb-12">
         <h1 class="text-3xl font-bold mb-4">
