@@ -89,6 +89,16 @@ if (!mapData) {
   console.log('No map data found - db available:', !!db);
 }
 
+// Slug 生成函数
+function generateSlug(text: string): string {
+  return text
+    .toLowerCase()
+    .replace(/[^\w\s-]/g, '')  // 移除非单词字符（保留空格、连字符）
+    .replace(/\s+/g, '-')      // 空格替换为连字符
+    .replace(/-+/g, '-')       // 多个连字符替换为单个
+    .trim();
+}
+
 // 设置响应头缓存
 Astro.response.headers.set('Cache-Control', 'public, max-age=300, s-maxage=300');
 
@@ -117,7 +127,7 @@ const shouldNoindex = mapData.tags.length === 0;
       <div class="text-center mb-12">
         <h1 class="text-3xl font-bold mb-4">{mapData.name2}</h1>
         <p class="text-muted-foreground">by {mapData.author ? (
-          <a href={`/${lang}/author/${encodeURIComponent(mapData.author)}`} class="text-primary hover:underline">{mapData.author}</a>
+          <a href={`/${lang}/author/${generateSlug(mapData.author)}`} class="text-primary hover:underline">{mapData.author}</a>
         ) : 'Unknown'}</p>
         {isLoggedIn && (
           <button
@@ -260,7 +270,7 @@ const shouldNoindex = mapData.tags.length === 0;
                     <span class="text-muted-foreground">Author:</span>
                     <span>
                       {mapData.author ? (
-                        <a href={`/${lang}/author/${encodeURIComponent(mapData.author)}`} class="text-primary hover:underline">
+                        <a href={`/${lang}/author/${generateSlug(mapData.author)}`} class="text-primary hover:underline">
                           {mapData.author}
                         </a>
                       ) : 'Unknown'}

@@ -6,6 +6,16 @@ import { dbService } from '../../../services/database';
 
 const db = (Astro.locals as any).runtime.env.DB;
 
+// Slug 生成函数
+function generateSlug(text: string): string {
+  return text
+    .toLowerCase()
+    .replace(/[^\w\s-]/g, '')  // 移除非单词字符（保留空格、连字符）
+    .replace(/\s+/g, '-')      // 空格替换为连字符
+    .replace(/-+/g, '-')       // 多个连字符替换为单个
+    .trim();
+}
+
 // Export getStaticPaths function
 export function getStaticPaths() {
   const languages = Object.keys(ui).filter(lang => lang !== defaultLang);
@@ -20,7 +30,7 @@ interface Props {
 }
 const props = Astro.props;
 const params = Astro.params;
-const authorName = decodeURIComponent(params.author || '');
+const authorSlug = params.author || '';
 
 const lang = props.lang || getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
@@ -38,6 +48,7 @@ try {
 }
 
 // 查询作者的所有地图和统计数据
+let authorName: string = '';
 let authorMaps: any[] = [];
 let authorStats: any = {
   totalDownloads: 0,
@@ -54,6 +65,7 @@ if (cache) {
     const cachedResponse = await cache.match(cacheKey);
     if (cachedResponse) {
       cachedData = await cachedResponse.json();
+      authorName = cachedData.authorName;
       authorMaps = cachedData.authorMaps;
       authorStats = cachedData.authorStats;
     }
@@ -65,30 +77,41 @@ if (cache) {
 // 如果缓存中没有数据或缓存不可用，从数据库获取
 if (!cachedData) {
   try {
-    // 获取作者的所有地图
-    const mapsSql = 'SELECT * FROM wc3_maps_complete WHERE author = ? ORDER BY downloads DESC';
-    authorMaps = await dbService.execute<any>(db, mapsSql, [authorName]);
+    // 先获取所有作者，找到匹配 slug 的作者名
+    const allAuthorsSql = 'SELECT DISTINCT author FROM wc3_maps_complete WHERE author IS NOT NULL AND author != \'\'';
+    const allAuthors = await dbService.execute<any>(db, allAuthorsSql, []);
+    
+    // 找到匹配 slug 的作者
+    const matchedAuthor = allAuthors.find(a => generateSlug(a.author) === authorSlug);
+    
+    if (matchedAuthor) {
+      authorName = matchedAuthor.author;
+      
+      // 获取作者的所有地图
+      const mapsSql = 'SELECT * FROM wc3_maps_complete WHERE author = ? ORDER BY downloads DESC';
+      authorMaps = await dbService.execute<any>(db, mapsSql, [authorName]);
 
-    // 计算统计数据
-    if (authorMaps.length > 0) {
-      authorStats.totalMaps = authorMaps.length;
-      authorStats.totalDownloads = authorMaps.reduce((sum, map) => sum + (map.downloads || 0), 0);
-      authorStats.totalPlayers = authorMaps.reduce((sum, map) => sum + (map.users || 0), 0);
-      authorStats.totalHosted = authorMaps.reduce((sum, map) => sum + (map.hosted_total || 0), 0);
-      authorStats.mostDownloadedMap = authorMaps[0];
-    }
+      // 计算统计数据
+      if (authorMaps.length > 0) {
+        authorStats.totalMaps = authorMaps.length;
+        authorStats.totalDownloads = authorMaps.reduce((sum, map) => sum + (map.downloads || 0), 0);
+        authorStats.totalPlayers = authorMaps.reduce((sum, map) => sum + (map.users || 0), 0);
+        authorStats.totalHosted = authorMaps.reduce((sum, map) => sum + (map.hosted_total || 0), 0);
+        authorStats.mostDownloadedMap = authorMaps[0];
+      }
 
-    // 缓存结果（如果缓存可用）
-    if (cache) {
-      try {
-        const response = new Response(JSON.stringify({ authorMaps, authorStats }), {
-          headers: {
-            'Cache-Control': 'public, max-age=300, s-maxage=300',
-          }
-        });
-        await cache.put(cacheKey, response);
-      } catch (e) {
-        console.log('Cache write failed');
+      // 缓存结果（如果缓存可用）
+      if (cache) {
+        try {
+          const response = new Response(JSON.stringify({ authorName, authorMaps, authorStats }), {
+            headers: {
+              'Cache-Control': 'public, max-age=300, s-maxage=300',
+            }
+          });
+          await cache.put(cacheKey, response);
+        } catch (e) {
+          console.log('Cache write failed');
+        }
       }
     }
   } catch (error) {
@@ -100,7 +123,7 @@ if (!cachedData) {
 Astro.response.headers.set('Cache-Control', 'public, max-age=300, s-maxage=300');
 
 // 如果没有找到作者数据，返回404
-if (authorMaps.length === 0) {
+if (!authorName || authorMaps.length === 0) {
   return Astro.redirect('/404');
 }
 ---

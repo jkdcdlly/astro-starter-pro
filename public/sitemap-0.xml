@@ -21,6 +21,11 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://war3maps.net/map/4203/Suto's_Castle_TD_(v1.2)/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://war3maps.net/map/4128/Cube_Defense_5.2/</loc>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>

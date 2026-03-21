@@ -14,6 +14,16 @@ const props = Astro.props;
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 
+// Slug 生成函数
+function generateSlug(text: string): string {
+  return text
+    .toLowerCase()
+    .replace(/[^\w\s-]/g, '')  // 移除非单词字符（保留空格、连字符）
+    .replace(/\s+/g, '-')      // 空格替换为连字符
+    .replace(/-+/g, '-')       // 多个连字符替换为单个
+    .trim();
+}
+
 // 从URL获取筛选参数
 const url = new URL(Astro.request.url);
 const page: number = parseInt(url.searchParams.get("page") || "1");
@@ -79,13 +89,19 @@ if (!authors.length) {
     `;
     const allAuthors = await dbService.execute<any>(db, authorsSql, args);
     
-    // 按总下载量降序排序
-    allAuthors.sort((a, b) => (b.totalDownloads || 0) - (a.totalDownloads || 0));
+    // 为每个作者添加 slug
+    const authorsWithSlug = allAuthors.map(author => ({
+      ...author,
+      slug: generateSlug(author.author)
+    }));
     
-    totalCount = allAuthors.length;
+    // 按总下载量降序排序
+    authorsWithSlug.sort((a, b) => (b.totalDownloads || 0) - (a.totalDownloads || 0));
+    
+    totalCount = authorsWithSlug.length;
     
     // 分页
-    authors = allAuthors.slice(offset, offset + limit);
+    authors = authorsWithSlug.slice(offset, offset + limit);
 
     // 缓存结果（如果缓存可用）
     if (cache) {
@@ -182,7 +198,7 @@ const generatePageUrl = (pageNum: number) => {
             {authors.map((author) => (
               <a 
                 key={author.author}
-                href={props.lang ? `/author/${encodeURIComponent(author.author)}` : `/${lang}/author/${encodeURIComponent(author.author)}`}
+                href={props.lang ? `/author/${author.slug}` : `/${lang}/author/${author.slug}`}
                 class="bg-card border border-border rounded-lg p-6 hover:shadow-md transition-all hover:border-primary/50"
               >
                 <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">

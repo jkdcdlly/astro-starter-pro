@@ -13,6 +13,16 @@ interface Props {
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 
+// Slug 生成函数
+function generateSlug(text: string): string {
+  return text
+    .toLowerCase()
+    .replace(/[^\w\s-]/g, '')  // 移除非单词字符（保留空格、连字符）
+    .replace(/\s+/g, '-')      // 空格替换为连字符
+    .replace(/-+/g, '-')       // 多个连字符替换为单个
+    .trim();
+}
+
 // 从URL获取筛选参数
 const url = new URL(Astro.request.url);
 const page: number = parseInt(url.searchParams.get("page") || "1");
@@ -287,7 +297,7 @@ const generatePageUrl = (pageNum: number) => {
                 <div class="p-4">
                   <h3 class="font-medium mb-1 truncate">{map.name}</h3>
                   <p class="text-sm text-muted-foreground mb-3">by {map.author ? (
-                    <a href={`/${lang}/author/${encodeURIComponent(map.author)}`} class="text-primary hover:underline" onclick="event.stopPropagation()">
+                    <a href={`/${lang}/author/${generateSlug(map.author)}`} class="text-primary hover:underline" onclick="event.stopPropagation()">
                       {map.author}
                     </a>
                   ) : 'Unknown'}</p>
