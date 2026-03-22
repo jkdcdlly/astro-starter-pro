@@ -4,27 +4,22 @@ import { siteConfig } from "@/config/site";
 import Hero from "@/components/widgets/Hero.astro";
 import Features from "@/components/widgets/Features.astro";
 import FeatureVote from "@/components/widgets/FeatureVote.astro";
+import war31 from "@/assets/images/index-war3map/war3-1.jpg";
+import war32 from "@/assets/images/index-war3map/war3-2.jpg";
+import war33 from "@/assets/images/index-war3map/war3-3.jpg";
+import war34 from "@/assets/images/index-war3map/war3-4.jpg";
+import war35 from "@/assets/images/index-war3map/war3-5.jpg";
+import war36 from "@/assets/images/index-war3map/war3-6.jpg";
 import Content from "@/components/widgets/Content.astro";
+import Content3 from "@/components/widgets/Content3.astro";
 import ServiceList from "@/components/widgets/ServiceList.astro";
 import { useTranslations, getLangFromUrl, ui, defaultLang } from "@/i18n";
-import { dbService } from '@/services/database';
-
-let db: any = null;
-try {
-  if ((Astro.locals as any)?.runtime?.env?.DB) {
-    db = (Astro.locals as any).runtime.env.DB;
-  }
-} catch (e) {
-  console.log('DB not available in this context');
-}
-
-// 推荐的地图 ID 数组 - 在这里添加或修改推荐地图
-const featuredMapIds = [2706,1088,1307,739,4081,6];
-
 
 // Export getStaticPaths function
 export function getStaticPaths() {
+  // Filter out default language (handled by root pages)
   const languages = Object.keys(ui).filter(lang => lang !== defaultLang);
+  
   return languages.map(lang => ({
     params: { lang },
     props: { lang },
@@ -41,24 +36,6 @@ const metadata = {
         "A modern and professional template for your web projects with Astro and Tailwind CSS. Boost your development with a solid foundation.",
     ignoreTitleTemplate: true,
 };
-
-// 查询推荐地图数据
-let featuredMaps: any[] = [];
-if (db && featuredMapIds.length > 0) {
-  try {
-    const placeholders = featuredMapIds.map(() => '?').join(',');
-    const sql = `SELECT * FROM wc3_maps_complete WHERE id IN (${placeholders})`;
-    const maps = await dbService.execute<any>(db, sql, featuredMapIds);
-    
-    // 按照指定的 ID 顺序排序
-    featuredMaps = featuredMapIds
-      .map(id => maps.find(m => m.id === id))
-      .filter(Boolean);
-  } catch (error) {
-    console.error('Error fetching featured maps:', error);
-  }
-}
-
 const services = [
     {
         title: t('services.webDevelopment.title'),
@@ -155,46 +132,68 @@ const services = [
         classes={{ container: "pb-0 md:pb-0" }}
     />
    
-    <!-- Featured Maps Section -->
-    {featuredMaps.length > 0 && (
-        <section class="py-12">
-            <div class="container mx-auto px-4">
-                <div class="text-center mb-12">
-                    <h2 class="text-3xl font-bold mb-4">{t('index.featuredMaps')}</h2>
-                    <p class="text-muted-foreground">
-                        {lang === 'zh' ? '精选 Warcraft 3 地图推荐' : 'Featured Warcraft 3 Maps'}
-                    </p>
-                </div>
+    <Content3
+        items={[
+            {
+                title: t('index.mapSize'),
+                description: t('index.mapSizeValue'),
+                icon: "lucide:ruler",
+                iconClass: "bg-blue-500/10 text-blue-400",
+                image:war31,
                 
-                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-                    {featuredMaps.map((map) => (
-                        <div key={map.id} class="bg-card border border-border rounded-lg overflow-hidden hover:shadow-md transition-shadow">
-                            <a href={`/${lang}/map/${map.id}/${map.name2.toLowerCase().replace(/\s+/g, '-')}`}>
-                                <div class="h-40 overflow-hidden">
-                                    <img 
-                                        src={`https://wc3maps.com/static/maps/${map.id}/archive/war3mapMap.jpg`} 
-                                        alt={map.name2}
-                                        class="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                                        onerror="this.src='https://via.placeholder.com/400x225?text=No+Preview';"
-                                    />
-                                </div>
-                                <div class="p-4">
-                                    <h3 class="font-medium mb-1 truncate">{map.name2}</h3>
-                                    <p class="text-sm text-muted-foreground mb-2">
-                                        by {map.author || 'Unknown'}
-                                    </p>
-                                    <div class="flex justify-between text-xs text-muted-foreground">
-                                        <span>Players: {map.users || 0}</span>
-                                        <span>Downloads: {map.downloads || 0}</span>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                    ))}
-                </div>
-            </div>
-        </section>
-    )}
+            },
+            {
+                title: t('index.support'),
+                description: t('index.supportValue'),
+                icon: "lucide:zap",
+                iconClass: "bg-purple-500/10 text-purple-400",
+                image:war32,
+            }
+        ]}
+    >
+    </Content3>
+
+    <Content3
+        items={[
+            {
+                title: t('index.mapSize'),
+                description: t('index.mapSizeValue'),
+                icon: "lucide:ruler",
+                iconClass: "bg-blue-500/10 text-blue-400",
+                image:war33,
+                
+            },
+            {
+                title: t('index.support'),
+                description: t('index.supportValue'),
+                icon: "lucide:zap",
+                iconClass: "bg-purple-500/10 text-purple-400",
+                image:war34,
+            }
+        ]}
+    >
+    </Content3>
+
+    <Content3
+        items={[
+            {
+                title: t('index.mapSize'),
+                description: t('index.mapSizeValue'),
+                icon: "lucide:ruler",
+                iconClass: "bg-blue-500/10 text-blue-400",
+                image:war35,
+                
+            },
+            {
+                title: t('index.support'),
+                description: t('index.supportValue'),
+                icon: "lucide:zap",
+                iconClass: "bg-purple-500/10 text-purple-400",
+                image:war36,
+            }
+        ]}
+    >
+    </Content3>
 
     <!-- Feature Vote Section -->
     <FeatureVote lang={lang} />

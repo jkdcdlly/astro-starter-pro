@@ -1,0 +1,60 @@
+---
+import WidgetWrapper from "@/components/widgets/WidgetWrapper.astro";
+import { Image } from "astro:assets";
+import { Icon } from "astro-icon/components";
+import Headline from "@/components/ui/Headline.astro";
+import Button from "@/components/ui/Button.astro";
+import type { ContentProps } from "@/types/types";
+
+const {
+    title,
+    subtitle,
+    tagline,
+    description = [],
+    image,
+    imageAlt = "",
+    images=[],
+    actions = [],
+    isReversed = false,
+    id,
+    isDark = false,
+    classes = {},
+    bg = await Astro.slots.render("bg"),
+    items = [],
+    isAfterContent = false,
+} = Astro.props as ContentProps;
+
+const { container: containerClassProp = "", ...otherClasses } = classes;
+---
+
+<WidgetWrapper
+    id={id}
+    isDark={isDark}
+    containerClass={`max-w-7xl mx-auto ${containerClassProp}`}
+    bg={bg}
+    classes={otherClasses}
+>
+    <div
+        class={`mx-auto max-w-7xl md:flex md:gap-16`}
+    >
+                    {                        
+                    Array.isArray(items) && items.length > 0 && (
+                    items.map((item) => (
+                        <div class="md:basis-1/2 self-center mt-10 md:mt-0" aria-hidden="true">
+                    <div class="relative m-auto max-w-4xl">
+                        <Image
+                            src={(item as any).image}
+                            alt={item.title}
+                            inferSize={true}
+                            class="mx-auto w-full rounded-lg bg-gray-500 shadow-lg"
+                        />
+                    </div>
+                    </div>
+                )))
+            
+                }
+                
+            
+        
+    </div>
+</WidgetWrapper>
