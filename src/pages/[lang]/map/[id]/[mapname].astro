@@ -118,9 +118,10 @@ if (mapData.author) {
   }
 }
 const shouldNoindex = mapData.tags.length === 0;
+const map_title = mapData.name2 + " | " + "warcraft 3 maps downloads";
 ---
 
-<BaseLayout title={mapData.name2} lang={lang} noindex={shouldNoindex}>
+<BaseLayout title={map_title} lang={lang} noindex={shouldNoindex}>
   <section class="py-12">
     <div class="container mx-auto px-4">
       <!-- Header -->

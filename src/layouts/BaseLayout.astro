@@ -25,7 +25,7 @@ import { siteConfig } from "../config/site";
 
 const { title, description, ogImage, canonical, metadata, lang , noindex} = Astro.props;
 
-const finalTitle = metadata?.title || title;
+const finalTitle = title || metadata?.title;
 const finalDescription = metadata?.description || description;
 const finalOgImage = metadata?.ogImage || ogImage;
 const finalCanonical = metadata?.canonical || canonical;
